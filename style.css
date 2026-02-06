@@ -75,8 +75,8 @@ input:focus, textarea:focus {
 }
 
 .click {
-  transition: all 300ms ease;
   cursor: pointer;
+  transition: all 300ms ease;
 }
 .click:hover {
   transform: scale(1.1);
@@ -340,11 +340,11 @@ MODAL
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: -1;
 }
 .modal__overlay--loading {
   background-color: #242424;
   font-size: 80px;
-  z-index: -1;
 }
 
 .modal__overlay--success {
@@ -353,6 +353,10 @@ MODAL
   font-weight: 700;
   text-align: center;
   padding: 20px;
+}
+
+.modal__overlay--visible {
+  z-index: 1;
 }
 
 .fa-spinner {

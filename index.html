@@ -11,7 +11,19 @@
       src="https://kit.fontawesome.com/01087b1b84.js"
       crossorigin="anonymous"
     ></script>
+    <script src="index.js"></script>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+    </script>
+    <script type="text/javascript">
+      (function(){
+        emailjs.init({
+          publicKey: "jf8G_9wc-MGeb3w95",
+        });
+    })();
+  </script>
   </head>
+
   <body>
     <section id="landing-page">
       <nav>
@@ -199,7 +211,7 @@ I work across branding, UI/UX, 3D, motion, and front-end fundamentals to create 
           <h3 class="modal__sub-title modal__sub-title--contact">
             Whether you have a project in mind, want to discuss potential collaboration, or just want to connect, feel free to reach out.
           </h3>
-          <form id="contact__form"action="">
+          <form id="contact__form" onsubmit="contact(event)">
             <div class="form__item">
               <label class="form__item-label">Name</label>
               <input class="input" name="user_name" type="text" required></input>
