@@ -119,7 +119,7 @@
             </a>
           </div>
         </div>
-      </header>
+</header>
       <button class="mail__btn click">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
           <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
@@ -139,33 +139,36 @@
           <h4 class="modal__sub-title modal__sub-title--about">Senior Graphic Designer | Branding, UI/UX, 3D & Motion Graphics</h4>
           <p class="modal__para">
             Senior designer with 18+ years of experience turning complex ideas into clear, compelling visual stories.
-I work across branding, UI/UX, 3D, motion, and front-end fundamentals to create visuals that communicate with clarity and purpose.<br/>A rare hybrid creative focused on engagement and impact.
-I collaborate seamlessly with teams and use modern tools, including AI, to move fast, think strategically, and create work that genuinely connects.
+I work across branding, UI/UX, 3D, motion, and front-end fundamentals to create visuals that communicate with clarity and purpose.<br/>A rare hybrid creative focused on engagement and impact, combining 3D environments with AI-driven characters to create continuous visual narratives that connect, persuade, and perform.
           </p>
           <div class="modal__languages">
             <figure class="modal__language">
-              <img class="modal__language--img" src="./assets/_Icon_Ai_.png" alt="Illustrator">
+              <img class="modal__language--img" src="./assets/_Icon_Ai.svg" alt="Illustrator">
             <span class="language__name">Illustrator</span>
           </figure>
           <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/_Icon_Ps_.png" alt="">
+            <img class="modal__language--img" src="./assets/_Icon_Ps.svg" alt="">
             <span class="language__name">Photoshop</span>
           </figure>
           <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/_Icon_id_.png" alt="">
+            <img class="modal__language--img" src="./assets/_Icon_id.svg" alt="">
             <span class="language__name">InDesign</span>
           </figure>
           <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/_Icon_Xd_.png" alt="">
+            <img class="modal__language--img" src="./assets/_Icon_Xd.svg" alt="">
             <span class="language__name">Xd</span>
           </figure>
           <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/Ae_Icon.png" alt="">
+            <img class="modal__language--img" src="./assets/_Icon_Ae.svg" alt="">
             <span class="language__name">AfterEffects</span>
           </figure>
           <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/_Icon_Pr_.png" alt="">
+            <img class="modal__language--img" src="./assets/_Icon_Pr.svg" alt="">
             <span class="language__name">PremierePro</span>
+          </figure>
+          <figure class="modal__language">
+            <img class="modal__language--img" src="./assets/_Icon_Blender_.svg" alt="">
+            <span class="language__name">Blender</span>
           </figure>
           <figure class="modal__language">
             <img class="modal__language--img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/HTML5_Badge.svg/240px-HTML5_Badge.svg.png" alt="">
@@ -184,8 +187,8 @@ I collaborate seamlessly with teams and use modern tools, including AI, to move 
             <span class="language__name">React</span>
           </figure>
           <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/_Icon_Blender_.svg" alt="">
-            <span class="language__name">Blender</span>
+            <img class="modal__language--img" src="./assets/_Icon_PPT.svg" alt="">
+            <span class="language__name">PowerPoint</span>
           </figure>
           </div>
         </div>
@@ -194,27 +197,35 @@ I collaborate seamlessly with teams and use modern tools, including AI, to move 
             Let's have a chat!
           </h3>
           <h3 class="modal__sub-title modal__sub-title--contact">
-            I'm currently open to new opportunities and collaborations. Whether you have a project in mind, want to discuss potential partnerships, or just want to connect, feel free to reach out. I look forward to hearing from you!
+            Whether you have a project in mind, want to discuss potential collaboration, or just want to connect, feel free to reach out.
           </h3>
-<form id="contact__form"action="">
-  <div class="form__item">
-    <label class="form__item-label">Name</label>
-    <input class="input" name="user_name" type="text" required></input>
-  </div>
-  <div class="form__item">
-    <label class="form__item-label">Email</label>
-    <input class="input" name="user_email" type="email" required></input>
-  </div>
-  <div class="form__item">
-    <label class="form__item-label">Message</label>
-    <textarea class="input" name="message" type="text" required></textarea>
-  </div>
-</form>
+          <form id="contact__form"action="">
+            <div class="form__item">
+              <label class="form__item-label">Name</label>
+              <input class="input" name="user_name" type="text" required></input>
+            </div>
+          <div class="form__item">
+              <label class="form__item-label">Email</label>
+              <input class="input" name="user_email" type="email" required></input>
           </div>
+          <div class="form__item">
+              <label class="form__item-label">Message</label>
+              <textarea class="input" name="message" type="text" required></textarea>
+          </div>
+          <button id="contact__submit" class="form__submit">Send it!</button>
+        </form>
+        <div class="modal__overlay modal__overlay--loading">
+          <i class="fa-solid fa-spinner"></i>
+        </div>
+        <div class="modal__overlay modal__overlay--success">
+          Thanks for the message! Looking forward to speaking with you soon.
         </div>
       </div>
-    </section>
-    <section id="projects">
+      <i class="fa-solid fa-x modal__exit click"></i>
+    <!-- </div> -->
+  </div>
+</section>
+<section id="projects">
       <div class="container">
         <div class="row">
           <h1 class="section__title">
