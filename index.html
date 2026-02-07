@@ -25,7 +25,7 @@
   </head>
 
   <body>
-    <section id="landing-page">
+    <section id="landing-page" onmousemove="moveBackground(event)">
       <nav>
         <figure>
           <img id="personal-logo" src="./assets/M1E_icon_2.svg" alt="" />
@@ -45,27 +45,21 @@
               >Projects</a
             >
           </li>
-          <li class="nav__link">
+          <li class="nav__link" onclick="toggleModal()">
             <a
               href="#"
-              class="nav__link--anchor link__hover-effect link__hover-effect--black"
+              class="nav__link--anchor 
+              link__hover-effect 
+              link__hover-effect--black"
               >Contact</a
             >
           </li>
-          <li class="nav__link click">
-            <a
-              href="#"
-              class="nav__link--anchor link__hover-effect link__hover-effect--black"
-              ><svg
-                class="font-awesome"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 640 640"
-              >
-                <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-                <path
-                  d="M512 320C512 214 426 128 320 128L320 512C426 512 512 426 512 320zM64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320z"
-                /></svg
-            ></a>
+          <li class="nav__link click" onclick="toggleContrast()">
+            <a href="#" class="
+              nav__link--anchor 
+              link__hover-effect 
+              link__hover-effect--black"
+              ><i class="fa-solid fa-circle-half-stroke"></i></a>
           </li>
         </ul>
       </nav>
@@ -78,7 +72,7 @@
             a continually evolving skill set and a passion for creative
             innovation.
             <br />
-            Here's a bit more <b class="accent-color">about me.</b>
+            Here's a bit more <b class="accent-color click" onclick="toggleModal()">about me.</b>
           </p>
           <div class="social__list">
             <a
@@ -132,7 +126,7 @@
           </div>
         </div>
 </header>
-      <button class="mail__btn click">
+      <button class="mail__btn click" onclick="toggleModal()">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
           <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
           <path
@@ -205,6 +199,7 @@ I work across branding, UI/UX, 3D, motion, and front-end fundamentals to create 
           </div>
         </div>
         <div class="modal__half modal__contact">
+          <i class="fa-solid fa-x modal__exit click" onclick="toggleModal()"></i>
           <h3 class="modal__title modal__title--contact">
             Let's have a chat!
           </h3>
@@ -233,9 +228,16 @@ I work across branding, UI/UX, 3D, motion, and front-end fundamentals to create 
           Thanks for the message! Looking forward to speaking with you soon.
         </div>
       </div>
-      <i class="fa-solid fa-x modal__exit click"></i>
-    <!-- </div> -->
-  </div>
+    </div>
+    <img src="./assets/semi circle.svg" class="shape shape--0">
+    <img src="./assets/circle.svg" class="shape shape--1">
+    <img src="./assets/squiggly.svg" class="shape shape--2">
+    <img src="./assets/circle.svg" class="shape shape--3">
+    <img src="./assets/triangle.svg" class="shape shape--4">
+    <img src="./assets/circle.svg" class="shape shape--5">
+    <img src="./assets/squiggly.svg" class="shape shape--6">
+    <img src="./assets/circle.svg" class="shape shape--7">
+    <img src="./assets/semi circle.svg" class="shape shape--8">
 </section>
 <section id="projects">
       <div class="container">
