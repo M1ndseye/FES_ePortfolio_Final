@@ -9,6 +9,10 @@
   z-index: 1;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 li {
   list-style-type: none;
 }
@@ -30,8 +34,8 @@ section {
   background-color: rgb (245, 245, 245);
 }
 
-
-input, textarea {
+input,
+textarea {
   width: 100%;
   background-color: #242424;
   color: white;
@@ -55,11 +59,13 @@ label {
   font-weight: bold;
 }
 
-input:hover, textarea:hover {
+input:hover,
+textarea:hover {
   border-color: #dcdfe6;
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
   border-color: #56418d;
 }
 
@@ -126,7 +132,6 @@ input:focus, textarea:focus {
   width: 100%;
 }
 
-
 nav,
 .scroll,
 .header {
@@ -143,13 +148,12 @@ nav,
   transition: all 400ms;
 }
 
-.dark-theme .title, 
+.dark-theme .title,
 .dark-theme .section__title,
 .dark-theme .section__sub-title,
 .dark-theme .nav__link--anchor,
 .dark-theme .fa-circle-half-stroke,
-.dark-theme .header__para
-{
+.dark-theme .header__para {
   color: white;
 }
 .dark-theme .accent-color,
@@ -157,6 +161,9 @@ nav,
   color: #30a0f4 important;
 }
 
+.dark-theme .mail__btn {
+  fill: #242424;
+}
 .dark-theme section {
   background-color: #242424;
 }
@@ -309,9 +316,12 @@ MODAL
   display: flex;
   visibility: hidden;
   z-index: -1;
-  transition: visibility 1s, z-index 1s, box-shadow 05s ease;
+  transition:
+    visibility 1s,
+    z-index 1s,
+    box-shadow 05s ease;
 }
-.modal--open .modal{
+.modal--open .modal {
   z-index: 50;
   box-shadow: 0 20px 80px 0 rgb(0 0 0 / 0.55);
   visibility: visible;
@@ -325,10 +335,9 @@ MODAL
   transition: all 300ms ease-in;
 }
 
-.modal--open .modal__about, 
-.modal--open .modal__contact
-{
-  transform:translateX(0%); 
+.modal--open .modal__about,
+.modal--open .modal__contact {
+  transform: translateX(0%);
 }
 .modal__about {
   background-color: rgb(245, 245, 245);
@@ -341,7 +350,7 @@ MODAL
 }
 
 .modal__language {
-  width: 16.6%; 
+  width: 16.6%;
   padding: 16px;
 }
 
@@ -355,10 +364,10 @@ MODAL
   width: 100%;
 }
 
-.modal__contact { 
+.modal__contact {
   background-color: #242424;
   color: white;
-  transform: translateX(110%); 
+  transform: translateX(110%);
 }
 
 .modal__title {
@@ -390,7 +399,7 @@ MODAL
 }
 .form__submit:hover {
   border-color: #fff;
-  background-color: transparent
+  background-color: transparent;
 }
 
 .form__submit:active {
@@ -544,6 +553,7 @@ FOOTER
 */
 
 footer {
+  position: relative;
   background-color: #242424;
   display: flex;
   padding: 6% 0;
@@ -572,7 +582,6 @@ footer {
   color: white;
 }
 
-
 .social__list {
   margin-top: 16px;
   display: flex;
@@ -593,7 +602,6 @@ footer {
   align-items: center;
   border-radius: 50%;
 }
-
 
 /* 
 
@@ -619,51 +627,107 @@ footer {
   left: 0vw;
 }
 .shape--1 {
-    height: 3vh;
+  height: 3vh;
   width: 3vh;
   top: 15vh;
- left: 50vw;
+  left: 50vw;
 }
 .shape--2 {
-    height: 5vh;
+  height: 5vh;
   width: 5vh;
   top: 15vh;
- left: 80vw;
+  left: 80vw;
 }
 .shape--3 {
-    height: 3vh;
+  height: 3vh;
   width: 3vh;
   top: 50vh;
- left: 5vw;
+  left: 5vw;
 }
 .shape--4 {
-    height: 6vh;
+  height: 6vh;
   width: 6vh;
   top: 50vh;
- left: 50vw;
+  left: 50vw;
 }
 .shape--5 {
-    height: 3vh;
+  height: 3vh;
   width: 3vh;
   top: 50vh;
- left: 80vw;
+  left: 80vw;
 }
 .shape--6 {
-    height: 5vh;
+  height: 5vh;
   width: 5vh;
   top: 80vh;
- left: 5vw;
+  left: 5vw;
 }
 .shape--7 {
-    height: 3vh;
+  height: 3vh;
   width: 3vh;
   top: 80vh;
- left: 50vw;
+  left: 50vw;
 }
 .shape--8 {
-    height: 12vh;
+  height: 12vh;
   width: 12vh;
   top: 80vh;
- left: 80vw;
+  left: 80vw;
 }
 
+/* Smartphones, tablets, large smarte phones */
+@media (max-width: 768px) {
+  .title {
+    font-size: 80px;
+  }
+  .header__para {
+    font-size: 18px;
+  }
+  .modal {
+    top: 0;
+    left: 0;
+    transform: none;
+    height: auto;
+    width: 100%;
+    flex-direction: column-reverse;
+    border-radius: 0;
+  }
+  .project__description {
+    left: 0;
+    padding: 40px;
+    width: 100%;
+    text-align: center;
+  }
+  .project__description--para {
+    display: none;
+  }
+  .project__description--subtitle {
+    margin-bottom: 8px;
+  }
+  .modal__half {
+    width: 100%;
+  }
+}
+
+/* small phones */
+@media (max-width: 480px) {
+  .title {
+    font-size: 52px;
+  }
+  .header__para {
+    font-size: 16px;
+  }
+  .nav__link:first-child {
+    display: none;
+  }
+  .project__description--para {
+    display: none;
+  }
+
+  .project__description--subtitle {
+    margin-bottom: 8px;
+  }
+  .modal__half {
+    padding: 40px;
+  }
+}
