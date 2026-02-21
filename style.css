@@ -744,6 +744,9 @@ footer {
   .project__description--para {
     display: none;
   }
+  .project__description--title {
+    font-size: 28px;
+  }
   .project__description--subtitle {
     margin-bottom: 8px;
   }
@@ -766,7 +769,9 @@ footer {
   .project__description--para {
     display: none;
   }
-
+.project__description--title {
+    font-size: 18px;
+  }
   .project__description--subtitle {
     margin-bottom: 8px;
   }
