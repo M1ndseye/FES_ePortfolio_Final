@@ -9,6 +9,11 @@
   z-index: 1;
 }
 
+/* img.full-height {
+  height: 100vh;
+  width: auto;
+} */
+
 html {
   scroll-behavior: smooth;
 }
@@ -48,6 +53,9 @@ textarea {
   transition: all 300ms ease;
 }
 
+.accent-color {
+  height: 100%;
+}
 textarea {
   resize: vertical;
   height: 100px;
@@ -473,19 +481,37 @@ PROJECTS
   margin-bottom: 135px;
 }
 
+/* .project__img {
+  width: 100%;
+  height: 100%;
+  transition: all 600ms ease;
+} */
+
 .project__img {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
   transition: all 600ms ease;
 }
 
-.project__wrapper {
+/* .project__wrapper {
   position: relative;
+  height: max-content;
   border-radius: 20px;
-  max-height: 600px;
-  max-width: 1000px;
   box-shadow: 0 20px 20px rgba(0, 0, 0, 0.45);
   overflow: hidden;
+} */
+
+.project__wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.45);
 }
+
 
 .project__wrapper:hover .project__description {
   opacity: 1;
