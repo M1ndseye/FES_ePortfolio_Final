@@ -525,6 +525,7 @@ PROJECTS
 .project__description {
   position: absolute;
   top: 50%;
+  left: 90px;
   transform: translateY(100%);
   opacity: 0;
   transition:
@@ -738,6 +739,7 @@ footer {
     padding: 40px;
     width: 100%;
     text-align: center;
+    left: 0px;
   }
   .project__description--para {
     display: none;
