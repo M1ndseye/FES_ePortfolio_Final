@@ -29,6 +29,11 @@ a {
   text-decoration: none;
 }
 
+.language__name {
+  font-size: 8px;
+  text-align: center;
+}
+
 button {
   cursor: pointer;
 }
@@ -356,11 +361,13 @@ MODAL
 }
 
 .modal__language {
-  width: 16.6%;
+  width: 25%;
   padding: 16px;
 }
 
 .language__name {
+  flex-direction: column;
+  align-items: center;
   margin-top: 8px;
   font-size: 8px;
   text-align: center;
@@ -761,6 +768,24 @@ footer {
   }
   .modal__half {
     width: 100%;
+  }
+  .modal__language {
+    width: 25%;
+    padding: 16px;
+  }
+  .social__link {
+    width: 18px;
+    height: 18px;
+    padding: 6px;
+    margin-right: 12px;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    fill: white;
+    background-color: #56418d;
+    border-radius: 50%;
   }
 }
 
