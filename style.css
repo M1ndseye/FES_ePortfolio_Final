@@ -1,7 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
 * {
-  border: 1px solid linear-gradient(to right, red, blue);
   font-family: "Roboto", sans-serif;
   padding: 0;
   margin: 0;
@@ -619,21 +618,24 @@ footer {
     width: 20px; */
 }
 
-/* .social__link {
-  background-color: #56418d;
-  fill: white;
-  padding: 6px;
-  width: 32px;
-  font-size: 14px;
-  margin-right: 12px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-} */
-
 .social__link {
+  width: 32px;
+  height: 32px;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #56418d;
+  border-radius: 50%;
+}
+
+.social__link svg {
+  width: 18px;
+  height: 18px;
+  fill: white;
+}
+
+/* .social__link {
   width: 32px;
   height: 32px;
   padding: 6px;
@@ -646,7 +648,7 @@ footer {
   fill: white;
   background-color: #56418d;
   border-radius: 50%;
-}
+} */
 
 /* 
 
@@ -773,7 +775,7 @@ footer {
     width: 25%;
     padding: 16px;
   }
-  .social__link {
+  /* .social__link {
     width: 32px;
     height: 32px;
     padding: 2px;
@@ -786,7 +788,7 @@ footer {
     fill: white;
     background-color: #56418d;
     border-radius: 50%;
-  }
+  } */
 }
 
 /* small phones */
