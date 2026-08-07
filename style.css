@@ -849,15 +849,18 @@ footer {
   overflow: hidden;
 }
 
-#network-canvas {
-  position: absolute;
-  inset: 0;
+#network-canvas{
+    position:fixed;
 
-  width: 100%;
-  height: 100%;
+    top:0;
+    left:0;
 
-  z-index: 0;
-  pointer-events: none;
+    width:100vw;
+    height:100vh;
+
+    z-index:-1;
+
+    pointer-events:none;
 }
 
 /* Keep your actual website content above the animation */
@@ -879,4 +882,14 @@ footer {
 #landing-page .mail__btn,
 #landing-page .scroll {
   position: absolute;
+}
+
+body{
+    position:relative;
+    background:white;
+}
+
+#landing-page,
+#projects{
+    position:relative;
 }

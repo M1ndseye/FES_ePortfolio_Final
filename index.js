@@ -86,8 +86,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function resizeCanvas() {
     const rect = section.getBoundingClientRect();
 
-    width = rect.width;
-    height = rect.height;
+    width = window.innerWidth;
+    height = window.innerHeight;
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
