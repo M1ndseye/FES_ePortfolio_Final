@@ -4,51 +4,6 @@
 //global scale variables at top
 let isModalOpen = false;
 let contrastToggle = false;
-const scaleFactor = 10;
-
-let rotation = 0;
-let velocity = 0;
-
-const friction = 0.95;     // higher = longer spin
-const spinStrength = 250;  // higher = more rotations per move
-
-
-// function moveBackground(event) {
-//   const shapes = document.querySelectorAll(".shape");
-//   const x = event.clientX * scaleFactor;
-//   const y = event.clientY * scaleFactor;
-
-//   for (let i = 0; i < shapes.length; ++i) {
-//     const isOdd = i % 2 !== 0;
-//     const boolInt = isOdd ? -1 : 1;
-//     shapes[i].style.transform =
-//       `translate(${x * oddInteger}px, ${y * oddInteger}px)`;
-//   }
-// }
-
-function moveBackground(event) {
-  const xRatio = event.clientX / window.innerWidth - 0.5;
-  velocity += xRatio * spinStrength;
-}
-
-function animate() {
-  const shapes = document.querySelectorAll(".shape");
-
-  rotation += velocity;
-  velocity *= friction;
-
-  shapes.forEach((shape, i) => {
-    const direction = i % 2 ? -1 : 1;
-
-    shape.style.transform = `
-      rotate(${rotation * direction}deg)
-    `;
-  });
-
-  requestAnimationFrame(animate);
-}
-
-animate();
 
 // function moveBackground(event) {
 //   const shapes = document.querySelectorAll(".shape");
@@ -68,8 +23,6 @@ animate();
 //     shapes[i].style.transform = `rotate(${rotateZ}deg)`;
 //   }
 // }
-
-window.addEventListener("mousemove", moveBackground);
 
 function toggleContrast() {
   contrastToggle = !contrastToggle;
@@ -112,3 +65,134 @@ function toggleModal() {
   isModalOpen = true;
   document.body.classList += " modal--open";
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const canvas = document.getElementById("network-canvas");
+  const section = document.getElementById("landing-page");
+
+  if (!canvas || !section) return;
+
+  const ctx = canvas.getContext("2d");
+
+  let width;
+  let height;
+  let nodes = [];
+
+  const mouse = {
+    x: null,
+    y: null,
+  };
+
+  function resizeCanvas() {
+    const rect = section.getBoundingClientRect();
+
+    width = rect.width;
+    height = rect.height;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    createNodes();
+  }
+
+  function createNodes() {
+    nodes = [];
+
+    const count = window.innerWidth < 768 ? 55 : 130;
+
+    for (let i = 0; i < count; i++) {
+      nodes.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: (Math.random() - 0.5) * 0.15,
+        radius: Math.random() * 1.8 + 1.8,
+      });
+    }
+  }
+
+  section.addEventListener("mousemove", (event) => {
+    const rect = section.getBoundingClientRect();
+
+    mouse.x = event.clientX - rect.left;
+    mouse.y = event.clientY - rect.top;
+  });
+
+  section.addEventListener("mouseleave", () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+
+    const isDark = document.body.classList.contains("dark-theme");
+
+    const nodeColor = isDark
+      ? "rgba(255,255,255,0.45)"
+      : "rgba(86,65,141,0.40)";
+
+    const lineColor = isDark ? "rgba(255,255,255," : "rgba(86,65,141,";
+
+    nodes.forEach((node) => {
+      node.x += node.vx;
+      node.y += node.vy;
+
+      if (node.x < 0 || node.x > width) node.vx *= -1;
+      if (node.y < 0 || node.y > height) node.vy *= -1;
+
+      if (mouse.x !== null) {
+        const dx = node.x - mouse.x;
+        const dy = node.y - mouse.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < 260 && distance > 0) {
+          const force = (260 - distance) / 260;
+
+          node.x += (dx / distance) * force * 1.8;
+          node.y += (dy / distance) * force * 1.8;
+        }
+      }
+
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+      ctx.fillStyle = nodeColor;
+      ctx.fill();
+    });
+
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < 145) {
+          const opacity = (1 - distance / 145) * 0.18;
+
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+
+          ctx.strokeStyle = lineColor + opacity + ")";
+
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener("resize", resizeCanvas);
+
+  resizeCanvas();
+  animate();
+});

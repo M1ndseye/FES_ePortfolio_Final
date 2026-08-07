@@ -661,6 +661,67 @@ footer {
   perspective: 1000px;
 } */
 
+.shape {
+  position: fixed;
+  transition: transform 0.1s ease-out;
+  z-index: 0;
+}
+
+.shape--0 {
+  height: 12vh;
+  width: 12vh;
+  top: 15vh;
+  left: 0vw;
+}
+.shape--1 {
+  height: 3vh;
+  width: 3vh;
+  top: 30vh;
+  left: 40vw;
+}
+.shape--2 {
+  height: 5vh;
+  width: 5vh;
+  top: 15vh;
+  left: 70vw;
+}
+.shape--3 {
+  height: 3vh;
+  width: 3vh;
+  top: 50vh;
+  left: 5vw;
+}
+.shape--4 {
+  height: 6vh;
+  width: 6vh;
+  top: 50vh;
+  left: 50vw;
+}
+.shape--5 {
+  height: 3vh;
+  width: 3vh;
+  top: 50vh;
+  left: 90vw;
+}
+.shape--6 {
+  height: 5vh;
+  width: 5vh;
+  top: 80vh;
+  left: 5vw;
+}
+.shape--7 {
+  height: 3vh;
+  width: 3vh;
+  top: 80vh;
+  left: 50vw;
+}
+.shape--8 {
+  height: 12vh;
+  width: 12vh;
+  top: 80vh;
+  left: 80vw;
+}
+
 /* Smartphones, tablets, large smart phones */
 @media (max-width: 768px) {
   .title {
@@ -824,59 +885,18 @@ footer {
 }
 
 .footerProject {
-  height: 42px;
+    height: 42px;
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-  padding: 0 24px;
+    padding: 0 24px;
 
-  background: #262626;
-  border-radius: 0 0 20px 20px;
+    background: #262626;
+    border-radius: 0 0 20px 20px;
 
-  color: #8a8a8a;
-  font-size: 13px;
-  font-weight: 400;
-}
-
-/* ==============================
-   Neural Network Background
-   ============================== */
-
-#landing-page {
-  position: relative;
-  overflow: hidden;
-}
-
-#network-canvas {
-  position: absolute;
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Keep your actual website content above the animation */
-
-#landing-page nav,
-#landing-page .header,
-#landing-page .mail__btn,
-#landing-page .scroll,
-#landing-page .modal {
-  z-index: 2;
-}
-
-/* Your header needs to remain absolute */
-#landing-page .header {
-  position: absolute;
-}
-
-/* Keep controls positioned exactly as before */
-#landing-page .mail__btn,
-#landing-page .scroll {
-  position: absolute;
+    color: #8a8a8a;
+    font-size: 13px;
+    font-weight: 400;
 }
