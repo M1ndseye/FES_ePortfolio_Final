@@ -883,3 +883,20 @@ footer {
   border-color: #a7a7a7;
   transform: translateY(-1px);
 }
+
+.footerProject {
+    height: 42px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 24px;
+
+    background: #262626;
+    border-radius: 0 0 20px 20px;
+
+    color: #8a8a8a;
+    font-size: 13px;
+    font-weight: 400;
+}
