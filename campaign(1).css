@@ -1,0 +1,197 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap");
+
+:root {
+  --bg: #080809;
+  --surface: #111214;
+  --text: #f5f5f7;
+  --muted: #a8a8ad;
+  --line: #4a4a4f;
+  --radius: 20px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+}
+
+.campaign-nav {
+  width: min(1500px, 100%);
+  margin: 0 auto;
+  padding: 26px clamp(18px, 4vw, 64px) 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.campaign-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+}
+
+.campaign-logo img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.campaign-logo span {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.portfolio-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 20px;
+  background: #000;
+  color: #fff;
+  border: 1px solid #666;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.portfolio-button:hover {
+  background: #111;
+  border-color: #aaa;
+  transform: translateY(-1px);
+}
+
+.portfolio-button:focus-visible,
+.campaign-logo:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+.page {
+  width: min(1500px, 100%);
+  margin: 0 auto;
+  padding: 0 clamp(18px, 4vw, 64px) 64px;
+}
+
+.eyebrow {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.video-shell {
+  overflow: hidden;
+  border: 1px solid #202024;
+  border-radius: var(--radius);
+  background: #000;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.42);
+}
+
+.video-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  background: #000;
+}
+
+.video-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+  gap: clamp(30px, 5vw, 84px);
+  padding: clamp(36px, 5vw, 74px) 4px 0;
+}
+
+h1 {
+  max-width: 940px;
+  font-size: clamp(2.35rem, 5vw, 5.25rem);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.description {
+  align-self: end;
+  color: var(--muted);
+  font-size: clamp(1.02rem, 1.35vw, 1.24rem);
+  line-height: 1.7;
+}
+
+.divider {
+  height: 1px;
+  margin-top: clamp(42px, 6vw, 78px);
+  background: #252529;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 20px;
+  color: #77777c;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 780px) {
+  .campaign-nav {
+    padding-top: 18px;
+  }
+
+  .campaign-logo span {
+    display: none;
+  }
+
+  .portfolio-button {
+    min-height: 40px;
+    padding: 0 16px;
+    font-size: 0.82rem;
+  }
+
+  .video-shell {
+    border-radius: 14px;
+  }
+
+  .content {
+    grid-template-columns: 1fr;
+  }
+
+  .description {
+    max-width: 720px;
+  }
+
+  .footer {
+    flex-direction: column;
+  }
+}
