@@ -821,16 +821,18 @@
 
 }
 
+
+
 /* =========================================================
    PROJECT PAGE NAVIGATION
-   Shared by all portfolio case-study pages
+   Aligns with the project page content
    ========================================================= */
 
 .project-page-nav {
   width: 100%;
-  max-width: 1500px;
-  margin: 0 auto;
-  padding: 28px clamp(20px, 4vw, 60px);
+  max-width: none;
+  margin: 0 0 clamp(42px, 6vw, 78px);
+  padding: 0;
 
   display: flex;
   align-items: center;
@@ -840,9 +842,6 @@
   position: relative;
   z-index: 100;
 }
-
-
-/* Brand / logo */
 
 .project-page-brand {
   display: inline-flex;
@@ -859,14 +858,11 @@
   flex-shrink: 0;
 }
 
-
-/* IMPORTANT — prevents giant logo */
 .project-page-brand img {
   display: block;
 
   width: 42px !important;
   height: 42px !important;
-
   max-width: 42px !important;
   max-height: 42px !important;
 
@@ -874,16 +870,13 @@
   flex: 0 0 42px;
 }
 
-
-/* Right-side navigation */
-
 .project-page-actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
+  margin-left: auto;
 }
-
 
 .project-page-btn {
   display: inline-flex;
@@ -895,7 +888,6 @@
 
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 12px;
-
   background: rgba(0, 0, 0, 0.35);
 
   color: #f5f5f7;
@@ -904,48 +896,16 @@
   font-size: 0.86rem;
   font-weight: 650;
 
+  white-space: nowrap;
+
   transition:
     background 160ms ease,
     border-color 160ms ease,
     transform 160ms ease;
 }
 
-
 .project-page-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.4);
   transform: translateY(-1px);
-}
-
-
-/* Tablet / mobile */
-
-@media (max-width: 720px) {
-
-  .project-page-nav {
-    padding: 20px;
-    gap: 16px;
-  }
-
-  .project-page-brand span {
-    display: none;
-  }
-
-  .project-page-actions {
-    gap: 7px;
-  }
-
-  .project-page-btn {
-    min-height: 40px;
-    padding: 0 12px;
-    font-size: 0.78rem;
-  }
-
-  .project-page-brand img {
-    width: 36px !important;
-    height: 36px !important;
-    max-width: 36px !important;
-    max-height: 36px !important;
-    flex-basis: 36px;
-  }
 }
