@@ -1,0 +1,23 @@
+
+/* =========================================================
+   HEALTHCARE CASE STUDY — SPACING MODIFIERS
+   Keep these small and reusable.
+   ========================================================= */
+
+.healthcare-page .hc-space-md {
+  margin-top: clamp(62px, 7vw, 96px);
+}
+
+.healthcare-page .hc-space-lg {
+  margin-top: clamp(82px, 9vw, 126px);
+}
+
+@media (max-width: 700px) {
+  .healthcare-page .hc-space-md {
+    margin-top: 48px;
+  }
+
+  .healthcare-page .hc-space-lg {
+    margin-top: 64px;
+  }
+}

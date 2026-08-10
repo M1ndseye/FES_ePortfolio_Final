@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      name="description"
+      content="Healthcare Editorial Systems — branded patient materials, guidebooks, flyers, publications, custom illustration, and editorial design for Torrance Memorial Medical Center and MemorialCare."
+    />
+
+    <title>Healthcare Editorial Systems | M1ndseye</title>
+
+    <!-- Existing portfolio styles -->
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="mos-edw.css" />
+
+    <!-- Page-specific layout only — no additional stylesheet required -->
+    <style>
+      .healthcare-page {
+        background:
+          radial-gradient(
+            circle at 80% 4%,
+            rgba(255, 255, 255, 0.045),
+            transparent 24%
+          ),
+          linear-gradient(180deg, #111114 0%, #09090a 48%, #070708 100%);
+        color: #f5f5f7;
+      }
+
+      .healthcare-page .healthcare-shell {
+        width: min(1500px, 100%);
+        margin: 0 auto;
+        padding: 32px clamp(18px, 4vw, 64px) 70px;
+      }
+
+      .healthcare-page .healthcare-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.18fr) minmax(360px, 0.82fr);
+        gap: clamp(38px, 6vw, 92px);
+        align-items: end;
+        margin-top: clamp(34px, 5vw, 70px);
+      }
+
+      .healthcare-page .healthcare-video {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.11);
+        border-radius: 24px;
+        background: #000;
+        box-shadow: 0 30px 90px rgba(0, 0, 0, 0.38);
+      }
+
+      .healthcare-page .healthcare-video iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+
+      .healthcare-page .healthcare-hero-copy h1 {
+        margin: 0;
+        max-width: 720px;
+        font-size: clamp(3.2rem, 5.8vw, 6.3rem);
+        line-height: 0.92;
+        letter-spacing: -0.06em;
+        text-wrap: balance;
+      }
+
+      .healthcare-page .healthcare-hero-copy .healthcare-lede {
+        max-width: 620px;
+        margin: 28px 0 0;
+        color: #a7a7ad;
+        font-size: clamp(1.02rem, 1.3vw, 1.22rem);
+        line-height: 1.72;
+      }
+
+      .healthcare-page .healthcare-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 28px;
+      }
+
+      .healthcare-page .healthcare-meta span {
+        padding: 8px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 999px;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 0.76rem;
+      }
+
+      .healthcare-page .healthcare-section {
+        padding-top: clamp(76px, 8vw, 120px);
+      }
+
+      .healthcare-page .healthcare-section-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(300px, 0.55fr);
+        gap: clamp(38px, 7vw, 110px);
+        align-items: end;
+        margin-bottom: clamp(30px, 4vw, 52px);
+      }
+
+      .healthcare-page .healthcare-section-head h2,
+      .healthcare-page .healthcare-split-copy h2,
+      .healthcare-page .healthcare-outcome h2 {
+        margin: 0;
+        font-size: clamp(2.5rem, 4.6vw, 5.2rem);
+        line-height: 0.98;
+        letter-spacing: -0.055em;
+        text-wrap: balance;
+      }
+
+      .healthcare-page .healthcare-section-head > p,
+      .healthcare-page .healthcare-split-copy > p:last-child,
+      .healthcare-page .healthcare-outcome p {
+        margin: 0;
+        color: #a7a7ad;
+        font-size: clamp(1rem, 1.2vw, 1.16rem);
+        line-height: 1.72;
+      }
+
+      .healthcare-page .healthcare-gallery {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: clamp(16px, 2vw, 28px);
+      }
+
+      .healthcare-page .healthcare-gallery figure,
+      .healthcare-page .healthcare-feature figure,
+      .healthcare-page .healthcare-split figure {
+        margin: 0;
+      }
+
+      .healthcare-page .healthcare-gallery img,
+      .healthcare-page .healthcare-feature img,
+      .healthcare-page .healthcare-split img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 22px;
+        box-shadow: 0 24px 65px rgba(0, 0, 0, 0.22);
+      }
+
+      .healthcare-page .healthcare-gallery figcaption,
+      .healthcare-page .healthcare-feature figcaption,
+      .healthcare-page .healthcare-split figcaption {
+        margin-top: 12px;
+        color: rgba(255, 255, 255, 0.68);
+        font-size: 0.84rem;
+        line-height: 1.45;
+      }
+
+      .healthcare-page .healthcare-gallery .span-4 {
+        grid-column: span 4;
+      }
+      .healthcare-page .healthcare-gallery .span-5 {
+        grid-column: span 5;
+      }
+      .healthcare-page .healthcare-gallery .span-6 {
+        grid-column: span 6;
+      }
+      .healthcare-page .healthcare-gallery .span-7 {
+        grid-column: span 7;
+      }
+      .healthcare-page .healthcare-gallery .span-8 {
+        grid-column: span 8;
+      }
+      .healthcare-page .healthcare-gallery .span-12 {
+        grid-column: span 12;
+      }
+
+      .healthcare-page .healthcare-feature {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.55fr);
+        gap: clamp(38px, 6vw, 90px);
+        align-items: center;
+      }
+
+      .healthcare-page .healthcare-split {
+        display: grid;
+        grid-template-columns: minmax(300px, 0.62fr) minmax(0, 1.38fr);
+        gap: clamp(38px, 6vw, 90px);
+        align-items: center;
+      }
+
+      .healthcare-page .healthcare-split-copy {
+        max-width: 520px;
+      }
+
+      .healthcare-page .healthcare-split-copy > p:last-child {
+        margin-top: 24px;
+      }
+
+      .healthcare-page .healthcare-outcome {
+        margin-top: clamp(100px, 11vw, 160px);
+        padding: clamp(42px, 6vw, 78px);
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+        column-gap: clamp(48px, 7vw, 110px);
+        row-gap: 20px;
+        align-items: end;
+        border: 1px solid rgba(255, 255, 255, 0.11);
+        border-radius: 28px;
+        background: #111113;
+      }
+
+      .healthcare-page .healthcare-outcome .eyebrow {
+        grid-column: 1 / -1;
+        margin-bottom: 4px;
+      }
+
+      .healthcare-page .healthcare-outcome p:last-child {
+        max-width: 520px;
+      }
+
+      .healthcare-page .healthcare-footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        margin-top: 28px;
+        padding: 18px 4px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.11);
+        color: #77777d;
+        font-size: 0.78rem;
+      }
+
+      @media (max-width: 1000px) {
+        .healthcare-page .healthcare-hero,
+        .healthcare-page .healthcare-feature,
+        .healthcare-page .healthcare-split,
+        .healthcare-page .healthcare-section-head,
+        .healthcare-page .healthcare-outcome {
+          grid-template-columns: 1fr;
+        }
+
+        .healthcare-page .healthcare-outcome .eyebrow,
+        .healthcare-page .healthcare-outcome p:last-child {
+          grid-column: auto;
+        }
+
+        .healthcare-page .healthcare-gallery .span-4,
+        .healthcare-page .healthcare-gallery .span-5,
+        .healthcare-page .healthcare-gallery .span-7,
+        .healthcare-page .healthcare-gallery .span-8 {
+          grid-column: span 6;
+        }
+      }
+
+      @media (max-width: 700px) {
+        .healthcare-page .healthcare-shell {
+          padding: 18px 16px 46px;
+        }
+
+        .healthcare-page .healthcare-hero {
+          margin-top: 38px;
+        }
+
+        .healthcare-page .healthcare-hero-copy h1 {
+          font-size: clamp(3rem, 15vw, 4.8rem);
+        }
+
+        .healthcare-page .healthcare-gallery {
+          grid-template-columns: 1fr;
+        }
+
+        .healthcare-page .healthcare-gallery .span-4,
+        .healthcare-page .healthcare-gallery .span-5,
+        .healthcare-page .healthcare-gallery .span-6,
+        .healthcare-page .healthcare-gallery .span-7,
+        .healthcare-page .healthcare-gallery .span-8,
+        .healthcare-page .healthcare-gallery .span-12 {
+          grid-column: auto;
+        }
+
+        .healthcare-page .healthcare-outcome {
+          padding: 30px 22px;
+        }
+
+        .healthcare-page .healthcare-footer {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="healthcare-page">
+    <main class="healthcare-shell">
+      <!-- SHARED PROJECT NAV -->
+      <header class="project-page-nav">
+        <a href="https://m1ndseye.com/" class="project-page-brand">
+          <img src="./assets/M1E_icon_2.svg" alt="M1ndseye" />
+          <span>M1ndseye</span>
+        </a>
+
+        <div class="project-page-actions">
+          <a href="https://m1ndseye.com/" class="project-page-btn"
+            >Portfolio →</a
+          >
+          <a href="./2024-ndm-sizzle-reel.html" class="project-page-btn"
+            >Next →</a
+          >
+          <a href="./2022-mos-edw-case-study.html" class="project-page-btn"
+            >Prev →</a
+          >
+        </div>
+      </header>
+
+      <!-- HERO -->
+      <section class="healthcare-hero">
+        <div class="healthcare-video">
+          <iframe
+            title="Healthcare Editorial Systems"
+            src="https://player.vimeo.com/video/1057744540?h=8a52d4ee9a"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="
+              autoplay;
+              fullscreen;
+              picture-in-picture;
+              clipboard-write;
+              encrypted-media;
+              web-share;
+            "
+            allowfullscreen
+          >
+          </iframe>
+        </div>
+
+        <div class="healthcare-hero-copy">
+          <p class="eyebrow">Healthcare Editorial Systems</p>
+          <h1>Design systems built for clarity, care, and trust.</h1>
+
+          <p class="healthcare-lede">
+            This collection showcases a comprehensive series of branded patient
+            materials for Torrance Memorial Medical Center and MemorialCare,
+            spanning flyers, guidebooks, seasonal publications, and custom
+            illustration. The goal was to elevate every touchpoint with cohesive
+            visual systems, clear information hierarchy, and thoughtful
+            adaptations for diverse audiences.
+          </p>
+
+          <div class="healthcare-meta">
+            <span>Editorial Design</span>
+            <span>Healthcare Branding</span>
+            <span>Information Design</span>
+            <span>Illustration</span>
+            <span>Patient Education</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="healthcare-opening-work">
+
+  <div class="healthcare-opening-intro">
+    <p class="eyebrow">Torrance Memorial Medical Center</p>
+
+    <h2>
+      Turning complex clinical information into clear,
+      approachable patient experiences.
+    </h2>
+
+    <p>
+      For Torrance Memorial Medical Center, I developed patient-facing
+      editorial systems that combined clear information hierarchy,
+      custom illustration, 3D visualization, wayfinding, and branded
+      publication design. The goal was to make highly technical
+      healthcare information easier to understand without sacrificing
+      visual sophistication.
+    </p>
+  </div>
+
+  <!-- Large feature image -->
+  <figure class="healthcare-opening-hero">
+    <img
+      src="./assets/TMMC_Spin_Book_3d_Hero.jpg"
+      alt="Torrance Memorial Spine Surgery Guidebook and 3D campus map"
+    />
+    <figcaption>
+      Spine Surgery Guidebook · editorial design, custom mapping, and patient education
+    </figcaption>
+  </figure>
+
+  <!-- Two-up details -->
+  <div class="healthcare-opening-grid">
+
+    <figure>
+      <img
+        src="./assets/TMMC_Spin_Book_Angle.jpg"
+        alt="Torrance Memorial Spine Surgery Guidebook detail"
+      />
+      <figcaption>
+        Custom 3D wayfinding and information design
+      </figcaption>
+    </figure>
+
+    <figure>
+      <img
+        src="./assets/TMMC_Spin_Book_Port.jpg"
+        alt="Torrance Memorial Spine Surgery Guidebook editorial spreads"
+      />
+      <figcaption>
+        Patient-focused editorial system
+      </figcaption>
+    </figure>
+
+  </div>
+
+  <!-- Full publication system -->
+  <figure class="healthcare-opening-wide">
+    <img
+      src="./assets/TMMC_Spin_Book_All.jpg"
+      alt="Complete Torrance Memorial Spine Surgery Guidebook system"
+    />
+    <figcaption>
+      Complete Spine Surgery Guidebook system
+    </figcaption>
+  </figure>
+
+  <!-- Optional second full-width detail -->
+  <figure class="healthcare-opening-wide">
+    <img
+      src="./assets/TMMC_Spin_Book_All-bottom.jpg"
+      alt="Torrance Memorial Spine Surgery Guidebook interior spreads"
+    />
+    <figcaption>
+      Interior spreads · education, recovery, preparation, and patient guidance
+    </figcaption>
+  </figure>
+
+  <!-- Joint replacement feature -->
+  <section class="healthcare-joint-feature">
+
+    <div class="healthcare-joint-copy">
+      <p class="eyebrow">Joint Replacement Patient Guide</p>
+
+      <h2>
+        A second system built around confidence and clarity.
+      </h2>
+
+      <p>
+        The joint replacement guide extended the same editorial principles
+        into a distinct visual system, combining patient education,
+        anatomical illustration, timelines, FAQs, and procedural guidance
+        into a clear, reassuring experience.
+      </p>
+    </div>
+
+    <figure>
+      <img
+        src="./assets/TMMC-Joint-Book-Hero-Port.jpg"
+        alt="Torrance Memorial Joint Replacement Surgery Patient Guidebook"
+      />
+    </figure>
+
+  </section>
+
+</section>
+
+      <!-- SYSTEM OVERVIEW -->
+      <section class="healthcare-section">
+        <div class="healthcare-section-head">
+          <div>
+            <p class="eyebrow">A scalable editorial system</p>
+            <h2>Consistency across every patient-facing touchpoint.</h2>
+          </div>
+
+          <p>
+            The work needed to feel unified without becoming repetitive.
+            Flexible typography, modular page structures, coordinated color
+            systems, and reusable illustration styles made it possible to adapt
+            the brand across different service lines while keeping the
+            experience recognizable and easy to navigate.
+          </p>
+        </div>
+
+       <div class="healthcare-feature-image">
+    <figure>
+        <img src="./assets/MC-Care-Con-Fal-21-Spreads_all.jpg" alt="">
+        <figcaption>
+            CareConnection · seasonal editorial system and publication spreads
+        </figcaption>
+    </figure>
+</div>
+      </section>
+
+      <!-- PATIENT GUIDES -->
+      <section class="healthcare-section healthcare-feature">
+        <div>
+          <p class="eyebrow">Patient guidebooks</p>
+          <h2>Complex information made calm and approachable.</h2>
+          <p
+            style="
+              margin-top: 24px;
+              color: #a7a7ad;
+              font-size: clamp(1rem, 1.2vw, 1.16rem);
+              line-height: 1.72;
+              max-width: 620px;
+            "
+          >
+            Guidebooks were designed to help patients move through unfamiliar
+            medical experiences with greater confidence. Clear hierarchy,
+            generous spacing, supportive photography, diagrams, and consistent
+            navigation reduced visual friction while preserving a premium brand
+            experience.
+          </p>
+        </div>
+
+        <figure>
+          <img
+            src="./assets/MC-Guide-Preg-Whole.jpg"
+            alt="MemorialCare pregnancy guidebook"
+            loading="lazy"
+          />
+          <figcaption>Pregnancy guide · complete publication system</figcaption>
+        </figure>
+      </section>
+
+      <section class="healthcare-section">
+        <div class="healthcare-gallery">
+          <figure class="span-4">
+            <img
+              src="./assets/MC-Guide-Preg-Hero.jpg"
+              alt="Pregnancy guide editorial spread"
+              loading="lazy"
+            />
+            <figcaption>Guidebook feature spread</figcaption>
+          </figure>
+
+          <figure class="span-4">
+            <img
+              src="./assets/MC-Guide-Preg-Sleep.jpg"
+              alt="Pregnancy sleep guide spread"
+              loading="lazy"
+            />
+            <figcaption>Patient education content</figcaption>
+          </figure>
+
+          <figure class="span-4">
+            <img
+              src="./assets/MC-Guide-Preg-Beach_Spread.jpg"
+              alt="Pregnancy guide lifestyle spread"
+              loading="lazy"
+            />
+            <figcaption>
+              Lifestyle storytelling within the clinical brand
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- SERVICE LINE COLLATERAL -->
+      <section class="healthcare-section healthcare-split">
+        <figure>
+          <img
+            src="./assets/MC-Flyers-six.jpg"
+            alt="MemorialCare branded flyers and campaign collateral"
+            loading="lazy"
+          />
+          <figcaption>Service-line flyers · modular brand system</figcaption>
+        </figure>
+
+        <div class="healthcare-split-copy">
+          <p class="eyebrow">Modular campaign collateral</p>
+          <h2>One system, many audiences.</h2>
+          <p>
+            Flyers, event materials, service-line campaigns, and patient
+            education pieces were designed from a common visual foundation, then
+            adjusted for tone, audience, and clinical context. The result was a
+            system that felt coordinated at scale without sacrificing relevance.
+          </p>
+        </div>
+      </section>
+
+      <section class="healthcare-section">
+        <div class="healthcare-gallery">
+          <figure class="span-4">
+            <img
+              src="./assets/MC-Flyers-Hero.jpg"
+              alt="MemorialCare flyer campaign"
+              loading="lazy"
+            />
+            <figcaption>Multi-format campaign collateral</figcaption>
+          </figure>
+
+          <figure class="span-4">
+            <img
+              src="./assets/MC-Flyers-Map.jpg"
+              alt="MemorialCare map and patient materials"
+              loading="lazy"
+            />
+            <figcaption>Information design and wayfinding support</figcaption>
+          </figure>
+
+          <figure class="span-4">
+            <img
+              src="./assets/MC-Flyers-Pelvis.jpg"
+              alt="MemorialCare pelvic health collateral"
+              loading="lazy"
+            />
+            <figcaption>Service-line adaptation</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- TORRANCE MEMORIAL -->
+      <section class="healthcare-section">
+        <div class="healthcare-section-head">
+          <div>
+            <p class="eyebrow">Torrance Memorial Medical Center</p>
+            <h2>Editorial storytelling supported by custom 3D illustration.</h2>
+          </div>
+
+          <p>
+            For orthopedic and joint-care materials, I developed a visual system
+            that paired editorial layouts with custom anatomical imagery. The
+            illustrations created a clearer bridge between clinical information
+            and patient understanding while giving the brand a distinctive
+            visual voice.
+          </p>
+        </div>
+
+        <div class="healthcare-gallery">
+          <figure class="span-7">
+            <img
+              src="./assets/TMMC-Joint-Book-Whole.jpg"
+              alt="Torrance Memorial joint replacement guidebook"
+              loading="lazy"
+            />
+            <figcaption>
+              Joint replacement guide · complete editorial system
+            </figcaption>
+          </figure>
+
+          <figure class="span-5">
+            <img
+              src="./assets/TMMC-Joint-Book-Hero.jpg"
+              alt="Torrance Memorial joint replacement guide cover"
+              loading="lazy"
+            />
+            <figcaption>
+              Patient guidebook cover and supporting spreads
+            </figcaption>
+          </figure>
+
+          <figure class="span-6">
+            <img
+              src="./assets/TMMC-Joint-Book-Hip.jpg"
+              alt="3D hip replacement illustration"
+              loading="lazy"
+            />
+            <figcaption>Custom 3D hip illustration</figcaption>
+          </figure>
+
+          <figure class="span-6">
+            <img
+              src="./assets/TMMC-Joint-Book-Knee.jpg"
+              alt="3D knee replacement illustration"
+              loading="lazy"
+            />
+            <figcaption>Custom 3D knee illustration</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- BRAND FLYERS -->
+      <section class="healthcare-section">
+        <div class="healthcare-section-head">
+          <div>
+            <p class="eyebrow">Campaign extensions</p>
+            <h2>
+              Flexible enough for wellness, rehabilitation, events, and
+              education.
+            </h2>
+          </div>
+
+          <p>
+            The same design discipline extended into branded flyers and program
+            materials, allowing each topic to feel distinct while maintaining
+            the trust, clarity, and consistency expected from a healthcare
+            system.
+          </p>
+        </div>
+
+        <div class="healthcare-gallery">
+          <figure class="span-4">
+            <img
+              src="./assets/TMMC_Brand_Flyer_Hero.jpg"
+              alt="Torrance Memorial branded flyers"
+              loading="lazy"
+            />
+            <figcaption>Branded campaign family</figcaption>
+          </figure>
+
+          <figure class="span-4">
+            <img
+              src="./assets/TMMC_Brand_Flyer_Rehab.jpg"
+              alt="Torrance Memorial rehabilitation flyer"
+              loading="lazy"
+            />
+            <figcaption>Rehabilitation program materials</figcaption>
+          </figure>
+
+          <figure class="span-4">
+            <img
+              src="./assets/TMMC_Brand_Flyer_Yoga.jpg"
+              alt="Torrance Memorial yoga flyer"
+              loading="lazy"
+            />
+            <figcaption>Wellness program collateral</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- OUTCOME -->
+      <section class="healthcare-outcome">
+        <p class="eyebrow">Outcome</p>
+
+        <h2>
+          A cohesive editorial language that makes healthcare information easier
+          to understand.
+        </h2>
+
+        <p>
+          Across publications, patient guides, flyers, illustrations, and
+          digital touchpoints, the system balanced brand consistency with
+          empathy and usability — creating materials that felt polished,
+          accessible, and appropriate for the people relying on them.
+        </p>
+      </section>
+
+      <footer class="healthcare-footer">
+        <span
+          >Healthcare Branding · Editorial Design · Illustration · Information
+          Design</span
+        >
+        <span>Torrance Memorial Medical Center · MemorialCare</span>
+      </footer>
+    </main>
+  </body>
+</html>

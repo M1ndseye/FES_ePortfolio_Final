@@ -1,0 +1,822 @@
+/* =========================================================
+   M1NDSEYE — PORTFOLIO PROJECT SYSTEM
+   Load AFTER style.css on all 7 project pages.
+   Shared layout classes use the .case-* namespace.
+   Page-specific changes should be small modifier classes only.
+   ========================================================= */
+
+/* ---------- TOKENS ---------- */
+
+:root {
+  --case-bg: #09090a;
+  --case-panel: #111113;
+  --case-text: #f5f5f7;
+  --case-muted: #a7a7ad;
+  --case-soft: rgba(255, 255, 255, 0.68);
+  --case-line: rgba(255, 255, 255, 0.11);
+  --case-radius: 22px;
+  --case-gap: clamp(18px, 2vw, 28px);
+  --case-section: clamp(82px, 9vw, 138px);
+  --case-shadow: 0 28px 78px rgba(0, 0, 0, 0.3);
+}
+
+/* ---------- PAGE FRAME ---------- */
+
+.case-page {
+  margin: 0;
+  color: var(--case-text);
+  background:
+    radial-gradient(
+      circle at 82% 2%,
+      rgba(255, 255, 255, 0.04),
+      transparent 25%
+    ),
+    linear-gradient(180deg, #101012 0%, var(--case-bg) 42%, #070708 100%);
+}
+
+.case-page *,
+.case-page *::before,
+.case-page *::after {
+  box-sizing: border-box;
+}
+
+.case-shell {
+  width: min(1500px, 100%);
+  margin-inline: auto;
+  padding: 32px clamp(18px, 4vw, 64px) 70px;
+}
+
+.case-page .project-page-nav {
+  margin-bottom: clamp(42px, 6vw, 78px);
+}
+
+/* ---------- TYPE ---------- */
+
+.case-eyebrow {
+  margin: 0 0 16px;
+  color: var(--case-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.case-title,
+.case-heading {
+  margin: 0;
+  color: var(--case-text);
+  line-height: 0.96;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.case-title {
+  font-size: clamp(3.3rem, 5.7vw, 6.4rem);
+}
+
+.case-heading {
+  font-size: clamp(2.6rem, 4.7vw, 5.35rem);
+}
+
+.case-body,
+.case-lede {
+  margin: 0;
+  color: var(--case-muted);
+  line-height: 1.72;
+}
+
+.case-lede {
+  font-size: clamp(1.03rem, 1.28vw, 1.22rem);
+}
+
+.case-body {
+  font-size: clamp(1rem, 1.15vw, 1.16rem);
+}
+
+.case-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+}
+
+.case-tags span {
+  padding: 8px 12px;
+  border: 1px solid var(--case-line);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.76rem;
+}
+
+/* ---------- HERO ---------- */
+
+.case-hero {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.82fr) minmax(0, 1.18fr);
+  gap: clamp(44px, 6.5vw, 100px);
+  align-items: end;
+}
+
+.case-hero__media {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--case-line);
+  border-radius: var(--case-radius);
+  background: var(--case-panel);
+  box-shadow: var(--case-shadow);
+}
+
+.case-hero__media--crop {
+  height: clamp(500px, 49vw, 640px);
+}
+
+.case-hero__media--crop img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.case-hero__copy {
+  max-width: 690px;
+  padding-bottom: 8px;
+}
+
+.case-hero__copy .case-lede {
+  max-width: 620px;
+  margin-top: 28px;
+}
+
+/* ---------- VIDEO ---------- */
+
+.case-video-section {
+  width: 100%;
+  margin-top: clamp(72px, 8vw, 112px);
+}
+
+.case-video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid var(--case-line);
+  border-radius: var(--case-radius);
+  background: #000;
+  box-shadow: var(--case-shadow);
+}
+
+.case-video iframe,
+.case-video video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.case-caption {
+  margin: 12px 4px 0;
+  color: var(--case-soft);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+/* ---------- SECTIONS ---------- */
+
+.case-section {
+  padding-top: var(--case-section);
+}
+
+.case-section__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.62fr);
+  gap: clamp(42px, 7vw, 110px);
+  align-items: end;
+  margin-bottom: clamp(34px, 4.5vw, 58px);
+}
+
+.case-section__head .case-body {
+  max-width: 580px;
+}
+
+/* ---------- MEDIA ---------- */
+
+.case-figure {
+  margin: 0;
+}
+
+.case-figure img,
+.case-figure video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--case-radius);
+  box-shadow: 0 22px 62px rgba(0, 0, 0, 0.22);
+}
+
+.case-figure figcaption {
+  margin-top: 12px;
+  color: var(--case-soft);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.case-feature {
+  width: min(100%, 1260px);
+  margin-inline: auto;
+}
+
+/* ---------- GRIDS ---------- */
+
+.case-grid {
+  display: grid;
+  gap: var(--case-gap);
+}
+
+.case-grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.case-grid--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.case-grid--12 {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.case-span-4 {
+  grid-column: span 4;
+}
+.case-span-5 {
+  grid-column: span 5;
+}
+.case-span-6 {
+  grid-column: span 6;
+}
+.case-span-7 {
+  grid-column: span 7;
+}
+.case-span-8 {
+  grid-column: span 8;
+}
+.case-span-12 {
+  grid-column: span 12;
+}
+
+/* ---------- SPLIT STORY ---------- */
+
+.case-split {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.58fr) minmax(0, 1.42fr);
+  gap: clamp(42px, 7vw, 100px);
+  align-items: center;
+}
+
+.case-split--media-first {
+  grid-template-columns: minmax(0, 1.42fr) minmax(300px, 0.58fr);
+}
+
+.case-split__copy {
+  max-width: 520px;
+}
+
+.case-split__copy .case-body {
+  margin-top: 24px;
+}
+
+/* ---------- OUTCOME ---------- */
+
+.case-outcome {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+  column-gap: clamp(48px, 7vw, 110px);
+  row-gap: 18px;
+  align-items: end;
+  margin-top: clamp(100px, 11vw, 165px);
+  padding: clamp(42px, 6vw, 78px);
+  border: 1px solid var(--case-line);
+  border-radius: 28px;
+  background: var(--case-panel);
+}
+
+.case-outcome .case-eyebrow {
+  grid-column: 1 / -1;
+  margin-bottom: 0;
+}
+
+.case-outcome .case-body {
+  max-width: 520px;
+}
+
+/* =========================================================
+   UNIVERSAL PORTFOLIO FOOTER
+   Used across all project / case-study pages
+   ========================================================= */
+
+.case-footer {
+  width: 100%;
+  min-height: 72px;
+  margin: clamp(72px, 9vw, 120px) 0 32px;
+  padding: 20px 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+
+  background: #252525;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 0 0 32px 32px;
+
+  color: rgba(255, 255, 255, 0.5);
+  font-size: clamp(14px, 1.1vw, 18px);
+  font-weight: 400;
+  line-height: 1.4;
+
+  box-sizing: border-box;
+}
+
+.case-footer span {
+  display: block;
+  margin: 0;
+}
+
+.case-footer span:last-child {
+  margin-left: auto;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 700px) {
+  .case-footer {
+    min-height: auto;
+    margin-top: 64px;
+    padding: 20px 24px;
+
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+
+    border-radius: 0 0 24px 24px;
+
+    font-size: 13px;
+  }
+
+  .case-footer span:last-child {
+    margin-left: 0;
+    text-align: left;
+    white-space: normal;
+  }
+}
+
+/* =========================================================
+   HEALTHCARE — SMALL PAGE-SPECIFIC MODIFIERS
+   ========================================================= */
+
+.healthcare-page .spine-pair {
+  margin-top: clamp(70px, 8vw, 110px);
+}
+
+.healthcare-page .spine-system {
+  margin-top: clamp(78px, 9vw, 126px);
+}
+
+.healthcare-page .joint-feature {
+  margin-top: clamp(94px, 10vw, 150px);
+}
+
+.healthcare-page .editorial-system {
+  margin-top: clamp(88px, 9vw, 135px);
+}
+
+/* ---------- TABLET ---------- */
+
+@media (max-width: 1000px) {
+  .case-hero,
+  .case-section__head,
+  .case-split,
+  .case-split--media-first,
+  .case-outcome {
+    grid-template-columns: 1fr;
+  }
+
+  .case-hero {
+    align-items: start;
+  }
+
+  .case-hero__copy {
+    max-width: 780px;
+  }
+
+  .case-outcome .case-eyebrow {
+    grid-column: auto;
+  }
+
+  .case-grid--12 .case-span-4,
+  .case-grid--12 .case-span-5,
+  .case-grid--12 .case-span-7,
+  .case-grid--12 .case-span-8 {
+    grid-column: span 6;
+  }
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 700px) {
+  :root {
+    --case-radius: 16px;
+    --case-section: 76px;
+  }
+
+  .case-shell {
+    padding: 18px 16px 46px;
+  }
+
+  .case-page .project-page-nav {
+    margin-bottom: 42px;
+  }
+
+  .case-title {
+    font-size: clamp(3rem, 14.5vw, 4.8rem);
+  }
+
+  .case-heading {
+    font-size: clamp(2.5rem, 11.5vw, 4rem);
+  }
+
+  .case-hero__media--crop {
+    height: 500px;
+  }
+
+  .case-video-section {
+    margin-top: 58px;
+  }
+
+  .case-grid--2,
+  .case-grid--3,
+  .case-grid--12 {
+    grid-template-columns: 1fr;
+  }
+
+  .case-grid--12 [class*="case-span-"] {
+    grid-column: auto;
+  }
+
+  .case-outcome {
+    padding: 30px 22px;
+  }
+
+  .case-footer {
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-page * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+
+/* =========================================================
+   HEALTHCARE — MEMORIALCARE EDITORIAL DETAIL GRID
+   Add to the bottom of portfolio-projects.css
+   ========================================================= */
+
+.healthcare-page .hc-editorial-details {
+  margin-top: clamp(46px, 6vw, 82px);
+}
+
+.healthcare-page .hc-editorial-detail img {
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.healthcare-page .hc-editorial-detail--wide img {
+  aspect-ratio: 16 / 9;
+}
+
+@media (max-width: 700px) {
+  .healthcare-page .hc-editorial-details {
+    margin-top: 40px;
+  }
+
+  .healthcare-page .hc-editorial-detail img,
+  .healthcare-page .hc-editorial-detail--wide img {
+    aspect-ratio: auto;
+    object-fit: contain;
+  }
+}
+
+/* =========================================================
+   ENZOANI — IMAGE GRID / CAPTION SPACING FIX
+   ========================================================= */
+
+.enzo-masonry {
+  align-items: start;
+}
+
+/* Keep image + caption together */
+.enzo-masonry .case-figure {
+  margin: 0;
+  align-self: start;
+}
+
+/* Remove inherited spacing around captions */
+.enzo-masonry .case-figure figcaption {
+  margin: 0;
+  padding-top: 10px;
+  line-height: 1.35;
+}
+
+/* Prevent the next row from feeling disconnected */
+.enzo-year .enzo-masonry {
+  row-gap: 28px;
+}
+
+/* Table/menu image = 2/3 of available grid */
+.enzo-span-8 {
+  grid-column: span 8;
+}
+
+/* Don't force every image to the same tall height */
+.enzoani-page .enzo-card img {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  display: block;
+  object-fit: cover;
+}
+
+/* Images that need cropping can opt into it separately */
+.enzoani-page .enzo-card--crop img {
+  aspect-ratio: 16 / 10;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 1000px) {
+  .enzo-masonry .enzo-span-8 {
+    grid-column: span 12;
+  }
+}
+
+@media (max-width: 700px) {
+  .enzo-year .enzo-masonry {
+    row-gap: 22px;
+  }
+
+  .enzo-masonry .case-figure figcaption {
+    padding-top: 8px;
+  }
+}
+
+/* =========================================================
+   2016 SPEAKEASY — MATCH IMAGE HEIGHTS
+   ========================================================= */
+
+/* TOP TWO — same height */
+.enzo-2016-top .enzo-card img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+/* BOTTOM THREE — same height */
+.enzo-2016-bottom .enzo-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+
+/* =========================================================
+   HOLIDAY STORY SECTIONS
+   Text + still left / vertical video right
+   Text and video TOP aligned
+   Still pushed toward bottom
+   ========================================================= */
+
+.edu-holiday {
+  margin-top: clamp(100px, 11vw, 155px);
+}
+
+.edu-holiday__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(380px, 1.08fr);
+  gap: clamp(42px, 5vw, 72px);
+
+  /* Both columns begin at exactly the same height */
+  align-items: stretch;
+}
+
+
+/* LEFT COLUMN */
+
+.edu-holiday__copy {
+  max-width: 620px;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
+/* tighten spacing in text */
+
+.edu-holiday__copy .case-eyebrow {
+  margin-bottom: 14px;
+}
+
+.edu-holiday__copy .case-heading {
+  margin-bottom: 18px;
+}
+
+.edu-holiday__copy .case-body + .case-body {
+  margin-top: 18px;
+}
+
+
+/* STILL IMAGE
+   pushed to bottom of left column */
+
+.edu-holiday__still {
+  width: min(100%, 540px);
+
+  /* fills remaining vertical space */
+  margin: auto 0 0;
+
+  padding-top: 36px;
+}
+
+.edu-holiday__still img {
+  display: block;
+  width: 100%;
+  height: auto;
+
+  /* keeps square artwork from getting too huge */
+  max-height: 540px;
+
+  object-fit: cover;
+  border-radius: 24px;
+}
+
+.edu-holiday__still figcaption {
+  margin: 0;
+  padding-top: 10px;
+}
+
+
+/* RIGHT VIDEO COLUMN */
+
+.edu-holiday__video {
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  /* THIS is the important change */
+  justify-content: flex-start;
+
+  height: 100%;
+}
+
+
+/* VIDEO FRAME */
+
+.edu-holiday__video-frame {
+  position: relative;
+  width: 100%;
+
+  overflow: hidden;
+  border-radius: 24px;
+  background: #111113;
+
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.28);
+}
+
+
+/* Both Valentine + Halloween are vertical */
+
+.edu-holiday__video-frame--vertical {
+  aspect-ratio: 9 / 16;
+
+  width: min(100%, 520px);
+
+  /* center video inside right column */
+  margin-inline: auto;
+}
+
+
+/* keep this only if another project needs landscape later */
+
+.edu-holiday__video-frame--landscape {
+  aspect-ratio: 4 / 3;
+}
+
+
+/* Vimeo iframe */
+
+.edu-holiday__video iframe {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  border: 0;
+}
+
+
+.edu-holiday__video figcaption {
+  width: min(100%, 520px);
+  margin: 0 auto;
+  padding-top: 10px;
+}
+
+
+/* =========================================================
+   TABLET / MOBILE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+  .edu-holiday__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .edu-holiday__copy {
+    max-width: none;
+    display: block;
+  }
+
+  .edu-holiday__still {
+    width: min(100%, 560px);
+    margin-top: 32px;
+    padding-top: 0;
+  }
+
+  .edu-holiday__video {
+    display: block;
+    height: auto;
+
+    margin-top: 36px;
+  }
+
+  .edu-holiday__video-frame--vertical {
+    max-width: 440px;
+  }
+}
+
+/* =========================================================
+   MESSAGE ARCHITECTURE — STACKED CAMPAIGN IMAGES
+   ========================================================= */
+
+.edu-message-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.edu-message-card {
+  margin: 0;
+  width: 100%;
+}
+
+.edu-message-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 22px;
+  object-fit: contain;
+}
+
+
+/* Keep text and first image aligned at the top */
+
+.edu-copy-grid {
+  align-items: start;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 1000px) {
+
+  .edu-message-stack {
+    margin-top: 36px;
+    gap: 18px;
+  }
+
+}

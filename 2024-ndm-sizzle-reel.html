@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A seven-month integrated content campaign for TrialSupport.us, spanning digital marketing, brand storytelling, and motion design."
+    />
+    <title>NDM Sizzle Reel</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="mos-edw.css" />
+
+    <style>
+      :root {
+        --bg: #0a0a0b;
+        --surface: #141416;
+        --surface-2: #1d1d20;
+        --text: #f5f5f7;
+        --muted: #a7a7ad;
+        --line: rgba(255, 255, 255, 0.12);
+        --accent: #ffffff;
+        --shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+        --radius: 22px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(255, 255, 255, 0.06),
+            transparent 30%
+          ),
+          linear-gradient(180deg, #111114 0%, var(--bg) 48%, #070708 100%);
+        color: var(--text);
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .page {
+        width: min(1500px, 100%);
+        margin: 0 auto;
+        padding: 32px clamp(18px, 4vw, 64px) 64px;
+      }
+
+      .eyebrow {
+        margin: 0 0 18px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .video-shell {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #000;
+        box-shadow: var(--shadow);
+        isolation: isolate;
+      }
+
+      .video-wrap {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%;
+        background: #000;
+      }
+
+      .video-wrap iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+
+      .controls {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 5;
+        display: grid;
+        grid-template-columns: auto 1fr auto auto;
+        align-items: center;
+        gap: 14px;
+        padding: 26px 22px 18px;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.9) 0%,
+          rgba(0, 0, 0, 0.56) 55%,
+          transparent 100%
+        );
+        opacity: 0;
+        transform: translateY(10px);
+        transition:
+          opacity 180ms ease,
+          transform 180ms ease;
+      }
+
+      .video-shell:hover .controls,
+      .video-shell:focus-within .controls,
+      .video-shell.controls-visible .controls {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .icon-button {
+        width: 44px;
+        height: 44px;
+        display: inline-grid;
+        place-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 999px;
+        background: rgba(20, 20, 22, 0.68);
+        color: #fff;
+        cursor: pointer;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        transition:
+          transform 160ms ease,
+          background 160ms ease,
+          border-color 160ms ease;
+      }
+
+      .icon-button:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.16);
+        border-color: rgba(255, 255, 255, 0.42);
+      }
+
+      .icon-button:focus-visible,
+      .seek:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 3px;
+      }
+
+      .icon-button svg {
+        width: 19px;
+        height: 19px;
+        fill: currentColor;
+      }
+
+      .timeline {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .seek {
+        width: 100%;
+        height: 5px;
+        appearance: none;
+        border-radius: 999px;
+        cursor: pointer;
+        background: linear-gradient(
+          to right,
+          #fff 0%,
+          #fff var(--progress, 0%),
+          rgba(255, 255, 255, 0.28) var(--progress, 0%),
+          rgba(255, 255, 255, 0.28) 100%
+        );
+      }
+
+      .seek::-webkit-slider-thumb {
+        appearance: none;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+      }
+
+      .seek::-moz-range-thumb {
+        width: 15px;
+        height: 15px;
+        border: 0;
+        border-radius: 50%;
+        background: #fff;
+      }
+
+      .time {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.78rem;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+
+      .content {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+        gap: clamp(28px, 5vw, 80px);
+        padding: clamp(34px, 5vw, 72px) 4px 0;
+      }
+
+      h1 {
+        max-width: 950px;
+        margin: 0;
+        font-size: clamp(1.25rem, 5vw, 5.2rem);
+        line-height: 0.98;
+        letter-spacing: -0.055em;
+        text-wrap: balance;
+      }
+
+      .description {
+        align-self: end;
+        margin: 0;
+        color: var(--muted);
+        font-size: clamp(1.04rem, 1.4vw, 1.3rem);
+        line-height: 1.72;
+      }
+
+      .divider {
+        height: 1px;
+        margin-top: clamp(40px, 6vw, 80px);
+        background: var(--line);
+      }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        padding-top: 20px;
+        color: #77777d;
+        font-size: 0.82rem;
+      }
+
+      @media (max-width: 780px) {
+        .page {
+          padding-top: 18px;
+        }
+
+        .video-shell {
+          border-radius: 14px;
+        }
+
+        .controls {
+          grid-template-columns: auto 1fr auto;
+          gap: 10px;
+          padding: 22px 12px 12px;
+        }
+
+        .timeline {
+          grid-template-columns: 1fr;
+        }
+
+        .time {
+          display: none;
+        }
+
+        #muteButton {
+          display: none;
+        }
+
+        .content {
+          grid-template-columns: 1fr;
+        }
+
+        .description {
+          max-width: 720px;
+        }
+
+        .footer {
+          flex-direction: column;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="ndm-page">
+    <main class="page">
+      <header class="project-page-nav">
+        <a href="https://m1ndseye.com/" class="project-page-brand">
+          <img src="./assets/M1E_icon_2.svg" alt="M1ndseye" />
+          <span>M1ndseye</span>
+        </a>
+
+        <div class="project-page-actions">
+          <a href="https://m1ndseye.com/" class="project-page-btn"
+            >Portfolio →</a
+          >
+          <a
+            href="./2026-multi-channel-brand-campaign-showcase.html"
+            class="project-page-btn"
+            >← Prev</a
+          >
+          <a href="./providence-histotripsy-campaign.html" class="project-page-btn"
+            >Next →</a
+          >
+
+        </div>
+      </header>
+      <p class="eyebrow">NDM Communications · Social Campaign · 2024</p>
+
+      <section class="video-shell" aria-label="Campaign showcase video">
+        <div class="video-wrap">
+          <iframe
+            src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fndmcomm%2Fvideos%2F603579752542952%2F&show_text=0&width=560"
+            width="560"
+            height="315"
+            style="border: none; overflow: hidden"
+            scrolling="no"
+            frameborder="0"
+            allowfullscreen="true"
+            allow="
+              autoplay;
+              clipboard-write;
+              encrypted-media;
+              picture-in-picture;
+              web-share;
+            "
+            allowfullscreen="true"
+          ></iframe>
+        </div>
+      </section>
+
+      <section class="content">
+        <h1>NDM Brand Identity Social Media Campaign 2024</h1>
+
+        <p class="description">
+          Working alongside our in-house writer, I translated NDM’s messaging
+          into a cohesive visual campaign spanning social content, motion
+          design, 3D animation, and brand storytelling.
+        </p>
+      </section>
+      <section class="video-shell">
+        <div class="video-wrap">
+          <iframe
+            src="https://player.vimeo.com/video/1058503859?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+            frameborder="0"
+            allow="
+              autoplay;
+              fullscreen;
+              picture-in-picture;
+              clipboard-write;
+              encrypted-media;
+              web-share;
+            "
+            referrerpolicy="strict-origin-when-cross-origin"
+            title="NDM Brand Identity Social Media Campaign 2024"
+          ></iframe>
+        </div>
+      </section>
+      <section class="campaign-showcase">
+        <div class="section-intro">
+          <p class="eyebrow">Campaign Ecosystem</p>
+
+          <h2>One visual language across every touchpoint.</h2>
+
+          <p>
+            Working alongside our in-house writer, I developed a cohesive visual
+            system spanning motion graphics, social media, digital advertising,
+            email marketing, and branded collateral—ensuring every touchpoint
+            felt unmistakably part of the same brand.
+          </p>
+        </div>
+
+        <figure class="ndm-feature-image">
+          <img
+            src="./assets/FES_ePort_NDM_Sizzle_Reel.jpg"
+            alt="NDM Campaign Showcase"
+          />
+        </figure>
+      </section>
+
+      <section class="campaign-grid">
+        <figure class="campaign-grid-image">
+          <img
+            src="./assets/FES_ePort_NDM_Social.jpg"
+            alt="Social Media Campaign"
+          />
+        </figure>
+
+        <div class="campaign-copy">
+          <p class="eyebrow">Social Media System</p>
+
+          <h3>Consistency at scale.</h3>
+
+          <p>
+            Designed dozens of branded social assets that balanced educational
+            content, thought leadership, recruiting, event promotion, company
+            culture, and campaign messaging. Every post followed a flexible
+            visual system that allowed content to evolve without sacrificing
+            brand recognition.
+          </p>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <footer class="footerProject">
+        <span>Creative Direction · Brand Identity · Motion Design · 3D</span>
+        <span>NDM Communications · 2024</span>
+      </footer>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="A seven-month integrated content campaign for TrialSupport.us, spanning digital marketing, brand storytelling, and motion design."
+  />
+  <title>2026 Multi-Channel Brand Campaign Showcase</title>
+      <link rel="stylesheet" href="style.css" />
+
+  <style>
+    :root {
+      --bg: #0a0a0b;
+      --surface: #141416;
+      --surface-2: #1d1d20;
+      --text: #f5f5f7;
+      --muted: #a7a7ad;
+      --line: rgba(255, 255, 255, 0.12);
+      --accent: #ffffff;
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.06), transparent 30%),
+        linear-gradient(180deg, #111114 0%, var(--bg) 48%, #070708 100%);
+      color: var(--text);
+      font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      width: min(1500px, 100%);
+      margin: 0 auto;
+      padding: 32px clamp(18px, 4vw, 64px) 64px;
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .video-shell {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #000;
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      background: #000;
+    }
+
+    .video-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .controls {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: auto 1fr auto auto;
+      align-items: center;
+      gap: 14px;
+      padding: 26px 22px 18px;
+      background:
+        linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.9) 0%,
+          rgba(0, 0, 0, 0.56) 55%,
+          transparent 100%
+        );
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .video-shell:hover .controls,
+    .video-shell:focus-within .controls,
+    .video-shell.controls-visible .controls {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .icon-button {
+      width: 44px;
+      height: 44px;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 999px;
+      background: rgba(20, 20, 22, 0.68);
+      color: #fff;
+      cursor: pointer;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition:
+        transform 160ms ease,
+        background 160ms ease,
+        border-color 160ms ease;
+    }
+
+    .icon-button:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.16);
+      border-color: rgba(255,255,255,0.42);
+    }
+
+    .icon-button:focus-visible,
+    .seek:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 3px;
+    }
+
+    .icon-button svg {
+      width: 19px;
+      height: 19px;
+      fill: currentColor;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .seek {
+      width: 100%;
+      height: 5px;
+      appearance: none;
+      border-radius: 999px;
+      cursor: pointer;
+      background:
+        linear-gradient(
+          to right,
+          #fff 0%,
+          #fff var(--progress, 0%),
+          rgba(255,255,255,0.28) var(--progress, 0%),
+          rgba(255,255,255,0.28) 100%
+        );
+    }
+
+    .seek::-webkit-slider-thumb {
+      appearance: none;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    }
+
+    .seek::-moz-range-thumb {
+      width: 15px;
+      height: 15px;
+      border: 0;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .time {
+      color: rgba(255,255,255,0.8);
+      font-size: 0.78rem;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+      gap: clamp(28px, 5vw, 80px);
+      padding: clamp(34px, 5vw, 72px) 4px 0;
+    }
+
+    h1 {
+      max-width: 950px;
+      margin: 0;
+      font-size: clamp(1.25rem, 5vw, 5.2rem);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+      text-wrap: balance;
+    }
+
+    .description {
+      align-self: end;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(1.04rem, 1.4vw, 1.3rem);
+      line-height: 1.72;
+    }
+
+    .divider {
+      height: 1px;
+      margin-top: clamp(40px, 6vw, 80px);
+      background: var(--line);
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      padding-top: 20px;
+      color: #77777d;
+      font-size: 0.82rem;
+    }
+
+    @media (max-width: 780px) {
+      .page {
+        padding-top: 18px;
+      }
+
+      .video-shell {
+        border-radius: 14px;
+      }
+
+      .controls {
+        grid-template-columns: auto 1fr auto;
+        gap: 10px;
+        padding: 22px 12px 12px;
+      }
+
+      .timeline {
+        grid-template-columns: 1fr;
+      }
+
+      .time {
+        display: none;
+      }
+
+      #muteButton {
+        display: none;
+      }
+
+      .content {
+        grid-template-columns: 1fr;
+      }
+
+      .description {
+        max-width: 720px;
+      }
+
+      .footer {
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+<header class="project-page-nav">
+  <a href="https://m1ndseye.com/" class="project-page-brand">
+    <img src="./assets/M1E_icon_2.svg" alt="M1ndseye" />
+    <span>M1ndseye</span>
+  </a>
+
+  <div class="project-page-actions">
+    <a href="https://m1ndseye.com/" class="project-page-btn">Portfolio →</a>
+    <a href="./2022-mos-edw-case-study.html" class="project-page-btn">Next →</a>
+    <a href="./2024-providence-histotripsy.html" class="project-page-btn">Prev →</a>
+  </div>
+</header>
+    <p class="eyebrow">Integrated Campaign Reel · 2026</p>
+    
+
+    <section class="video-shell controls-visible" id="videoShell" aria-label="Campaign showcase video">
+      <div class="video-wrap">
+        <iframe
+          id="vimeoPlayer"
+          src="https://player.vimeo.com/video/1216124603?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;controls=0&amp;title=0&amp;byline=0&amp;portrait=0"
+          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          title="2026 Multi-Channel Brand Campaign Showcase">
+        </iframe>
+      </div>
+
+      <div class="controls" aria-label="Video controls">
+        <button class="icon-button" id="playButton" type="button" aria-label="Play video">
+          <svg id="playIcon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8 5v14l11-7z"></path>
+          </svg>
+        </button>
+
+        <div class="timeline">
+          <input
+            class="seek"
+            id="seekBar"
+            type="range"
+            min="0"
+            max="100"
+            step="0.1"
+            value="0"
+            aria-label="Seek video"
+          />
+          <span class="time" id="timeDisplay">0:00 / 0:00</span>
+        </div>
+
+        <button class="icon-button" id="muteButton" type="button" aria-label="Mute video">
+          <svg id="volumeIcon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.05A4.5 4.5 0 0 0 16.5 12zm0-8.2v2.06A7 7 0 0 1 20 12a7 7 0 0 1-3.5 6.14v2.06A9 9 0 0 0 22 12a9 9 0 0 0-5.5-8.2z"></path>
+          </svg>
+        </button>
+
+        <button class="icon-button" id="fullscreenButton" type="button" aria-label="Enter fullscreen">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zm-3-12v2h3v3h2V5h-5z"></path>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <section class="content">
+      <h1>2026 Multi-Channel Brand Campaign Showcase</h1>
+
+      <p class="description">
+        This reel showcases a seven-month integrated content campaign I concepted,
+        designed, and produced for TrialSupport.us, spanning digital marketing,
+        brand storytelling, and motion design across multiple platforms.
+      </p>
+    </section>
+
+    <div class="divider"></div>
+
+    <footer class="footerProject">
+      <span>Creative Direction · Campaign Strategy · Motion Design</span>
+      <span>TrialSupport.us · 2026</span>
+    </footer>
+  </main>
+
+  <script src="https://player.vimeo.com/api/player.js"></script>
+  <script>
+    const iframe = document.getElementById("vimeoPlayer");
+    const player = new Vimeo.Player(iframe);
+
+    const videoShell = document.getElementById("videoShell");
+    const playButton = document.getElementById("playButton");
+    const playIcon = document.getElementById("playIcon");
+    const muteButton = document.getElementById("muteButton");
+    const volumeIcon = document.getElementById("volumeIcon");
+    const fullscreenButton = document.getElementById("fullscreenButton");
+    const seekBar = document.getElementById("seekBar");
+    const timeDisplay = document.getElementById("timeDisplay");
+
+    let duration = 0;
+    let isSeeking = false;
+    let controlsTimer;
+
+    const icons = {
+      play: '<path d="M8 5v14l11-7z"></path>',
+      pause: '<path d="M6 5h4v14H6zm8 0h4v14h-4z"></path>',
+      volume:
+        '<path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.05A4.5 4.5 0 0 0 16.5 12zm0-8.2v2.06A7 7 0 0 1 20 12a7 7 0 0 1-3.5 6.14v2.06A9 9 0 0 0 22 12a9 9 0 0 0-5.5-8.2z"></path>',
+      muted:
+        '<path d="M3 9v6h4l5 4V5L7 9H3zm13.6 3 2.2-2.2-1.4-1.4-2.2 2.2-2.2-2.2-1.4 1.4 2.2 2.2-2.2 2.2 1.4 1.4 2.2-2.2 2.2 2.2 1.4-1.4z"></path>'
+    };
+
+    function formatTime(seconds) {
+      if (!Number.isFinite(seconds)) return "0:00";
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60).toString().padStart(2, "0");
+      return `${mins}:${secs}`;
+    }
+
+    function updateProgress(currentTime) {
+      if (!duration || isSeeking) return;
+      const progress = (currentTime / duration) * 100;
+      seekBar.value = progress;
+      seekBar.style.setProperty("--progress", `${progress}%`);
+      timeDisplay.textContent = `${formatTime(currentTime)} / ${formatTime(duration)}`;
+    }
+
+    function showControls() {
+      videoShell.classList.add("controls-visible");
+      clearTimeout(controlsTimer);
+      controlsTimer = setTimeout(() => {
+        videoShell.classList.remove("controls-visible");
+      }, 2400);
+    }
+
+    player.ready().then(async () => {
+      duration = await player.getDuration();
+      timeDisplay.textContent = `0:00 / ${formatTime(duration)}`;
+      showControls();
+    });
+
+    player.on("play", () => {
+      playIcon.innerHTML = icons.pause;
+      playButton.setAttribute("aria-label", "Pause video");
+    });
+
+    player.on("pause", () => {
+      playIcon.innerHTML = icons.play;
+      playButton.setAttribute("aria-label", "Play video");
+      showControls();
+    });
+
+    player.on("ended", () => {
+      playIcon.innerHTML = icons.play;
+      playButton.setAttribute("aria-label", "Play video");
+      seekBar.value = 0;
+      seekBar.style.setProperty("--progress", "0%");
+      showControls();
+    });
+
+    player.on("timeupdate", ({ seconds }) => updateProgress(seconds));
+
+    player.on("volumechange", ({ volume }) => {
+      const muted = volume === 0;
+      volumeIcon.innerHTML = muted ? icons.muted : icons.volume;
+      muteButton.setAttribute("aria-label", muted ? "Unmute video" : "Mute video");
+    });
+
+    playButton.addEventListener("click", async () => {
+      const paused = await player.getPaused();
+      paused ? player.play() : player.pause();
+      showControls();
+    });
+
+    muteButton.addEventListener("click", async () => {
+      const volume = await player.getVolume();
+      await player.setVolume(volume === 0 ? 1 : 0);
+      showControls();
+    });
+
+    fullscreenButton.addEventListener("click", async () => {
+      try {
+        await player.requestFullscreen();
+      } catch (error) {
+        if (videoShell.requestFullscreen) {
+          await videoShell.requestFullscreen();
+        }
+      }
+      showControls();
+    });
+
+    seekBar.addEventListener("input", () => {
+      isSeeking = true;
+      seekBar.style.setProperty("--progress", `${seekBar.value}%`);
+      const previewTime = duration * (seekBar.value / 100);
+      timeDisplay.textContent = `${formatTime(previewTime)} / ${formatTime(duration)}`;
+    });
+
+    seekBar.addEventListener("change", async () => {
+      const targetTime = duration * (seekBar.value / 100);
+      await player.setCurrentTime(targetTime);
+      isSeeking = false;
+      showControls();
+    });
+
+    videoShell.addEventListener("mousemove", showControls);
+    videoShell.addEventListener("touchstart", showControls, { passive: true });
+
+    document.addEventListener("keydown", async (event) => {
+      if (event.target.tagName === "INPUT") return;
+
+      if (event.code === "Space") {
+        event.preventDefault();
+        const paused = await player.getPaused();
+        paused ? player.play() : player.pause();
+      }
+
+      if (event.key.toLowerCase() === "m") {
+        const volume = await player.getVolume();
+        await player.setVolume(volume === 0 ? 1 : 0);
+      }
+
+      if (event.key.toLowerCase() === "f") {
+        try {
+          await player.requestFullscreen();
+        } catch (_) {}
+      }
+
+      showControls();
+    });
+  </script>
+</body>
+</html>

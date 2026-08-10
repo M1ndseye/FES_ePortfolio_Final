@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Providence Histotripsy Campaign — motion design, 3D visualization, healthcare storytelling, and social campaign creative." />
+  <title>Providence Histotripsy Campaign | M1ndseye</title>
+
+  <link rel="stylesheet" href="style.css?v=3" />
+  <link rel="stylesheet" href="portfolio-projects.css?v=2" />
+
+  <style>
+    .histotripsy-page {
+      --histotripsy-panel: #131416;
+      --histotripsy-line: rgba(255,255,255,.1);
+    }
+
+    .histotripsy-page .case-eyebrow { color: #9fcab7; }
+    .histotripsy-page .case-tags span { border-color: rgba(159,202,183,.28); }
+
+    .histotripsy-page .case-hero__media {
+      height: auto;
+      min-height: 0;
+      align-self: center;
+    }
+
+    .histotripsy-video {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border-radius: 24px;
+      background: #111;
+      box-shadow: 0 30px 80px rgba(0,0,0,.35);
+    }
+
+    .histotripsy-video iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .histotripsy-feature {
+      margin-top: clamp(90px, 10vw, 145px);
+    }
+
+    .histotripsy-feature figure { margin: 0; }
+
+    .histotripsy-feature img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 760px;
+      object-fit: cover;
+      border-radius: 26px;
+    }
+
+    .histotripsy-feature figcaption { padding-top: 12px; }
+
+    .histotripsy-story {
+      margin-top: clamp(100px, 11vw, 155px);
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: clamp(44px, 7vw, 100px);
+      align-items: start;
+    }
+
+    .histotripsy-story__copy { max-width: 660px; }
+    .histotripsy-story__copy .case-body + .case-body { margin-top: 18px; }
+
+    .histotripsy-story__panel {
+      padding: clamp(30px, 4vw, 48px);
+      border: 1px solid var(--histotripsy-line);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(242,95,92,.08), transparent 34%),
+        var(--histotripsy-panel);
+    }
+
+    .histotripsy-story__panel h3 {
+      margin: 0 0 14px;
+      font-size: clamp(1.35rem, 2vw, 2rem);
+      line-height: 1.08;
+    }
+
+    .histotripsy-story__panel p + p { margin-top: 18px; }
+
+    .histotripsy-process {
+      margin-top: clamp(95px, 10vw, 150px);
+    }
+
+    .histotripsy-process__head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, .72fr);
+      gap: clamp(42px, 7vw, 100px);
+      align-items: start;
+      margin-bottom: clamp(42px, 6vw, 70px);
+    }
+
+    .histotripsy-process__grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--case-gap);
+      align-items: start;
+    }
+
+    .histotripsy-card { margin: 0; }
+
+    .histotripsy-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 24px;
+    }
+
+    .histotripsy-card figcaption {
+      padding-top: 10px;
+      line-height: 1.4;
+    }
+
+    .histotripsy-social {
+      margin-top: clamp(100px, 11vw, 155px);
+    }
+
+    .histotripsy-social__grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(320px, .82fr);
+      gap: clamp(36px, 5vw, 70px);
+      align-items: center;
+    }
+
+    .histotripsy-social__media { margin: 0; }
+
+    .histotripsy-social__media img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 760px;
+      object-fit: cover;
+      border-radius: 26px;
+    }
+
+    .histotripsy-social__copy { max-width: 580px; }
+
+    .histotripsy-outcome {
+      margin-top: clamp(110px, 12vw, 165px);
+    }
+
+    @media (max-width: 1000px) {
+      .histotripsy-process__head,
+      .histotripsy-story,
+      .histotripsy-social__grid {
+        grid-template-columns: 1fr;
+      }
+
+      .histotripsy-story__copy,
+      .histotripsy-social__copy {
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .histotripsy-process__grid { grid-template-columns: 1fr; }
+
+      .histotripsy-feature,
+      .histotripsy-process,
+      .histotripsy-story,
+      .histotripsy-social,
+      .histotripsy-outcome {
+        margin-top: 72px;
+      }
+
+      .histotripsy-feature img,
+      .histotripsy-card img,
+      .histotripsy-social__media img,
+      .histotripsy-video {
+        border-radius: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body class="case-page histotripsy-page">
+  <main class="case-shell">
+
+    <header class="project-page-nav">
+      <a href="https://m1ndseye.com/" class="project-page-brand">
+        <img src="./assets/M1E_icon_2.svg" alt="M1ndseye" />
+        <span>M1ndseye</span>
+      </a>
+
+      <div class="project-page-actions">
+        <a href="https://m1ndseye.com/" class="project-page-btn">Portfolio →</a>
+                <a href="./2024-ndm-sizzle-reel.html" class="project-page-btn">Prev →</a>
+        <a href="./healthcare-editorial-systems-complete.html" class="project-page-btn">Next →</a>
+
+      </div>
+    </header>
+
+    <section class="case-hero">
+      <div class="case-hero__media">
+        <div class="histotripsy-video">
+          <iframe
+            src="https://www.youtube.com/embed/RJOpfjCFITc?si=oS8LLcXf5EDIUniW"
+            title="Providence Histotripsy Campaign"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+
+      <div class="case-hero__copy">
+        <p class="case-eyebrow">Providence · Advanced Cancer Care</p>
+
+        <h1 class="case-title">
+          Making breakthrough medical innovation feel clear, human, and credible.
+        </h1>
+
+        <p class="case-lede">
+          To support the launch of a groundbreaking non-invasive cancer treatment—the first of its kind in California—I created a high-impact motion piece designed to educate, inspire confidence, and reinforce Providence’s leadership in advanced care.
+        </p>
+
+        <div class="case-tags">
+          <span>Creative Direction</span>
+          <span>Motion Design</span>
+          <span>3D Visualization</span>
+          <span>Healthcare</span>
+          <span>Campaign Design</span>
+          <span>Social Media</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="histotripsy-feature">
+      <figure class="case-figure">
+        <img
+          src="./assets/FES_ePort_PRO_Histor_Vid_3d_2.png"
+          alt="Providence Histotripsy campaign 3D visualization"
+          loading="lazy"
+        />
+        <figcaption>
+          3D visualization developed to translate an unfamiliar medical procedure into an understandable visual story
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="histotripsy-story">
+      <div class="histotripsy-story__copy">
+        <p class="case-eyebrow">The Challenge</p>
+
+        <h2 class="case-heading">
+          Explain something technically complex without making it feel clinical or intimidating.
+        </h2>
+
+        <p class="case-body">
+          The challenge wasn’t simply explaining the technology. Histotripsy is a sophisticated medical innovation, and the creative needed to communicate what made the treatment remarkable while remaining understandable to a broad audience.
+        </p>
+
+        <p class="case-body">
+          The story had to balance scientific credibility with emotional clarity—giving patients and families enough context to understand the treatment while reinforcing the trust, expertise, and humanity associated with Providence.
+        </p>
+      </div>
+
+      <div class="histotripsy-story__panel">
+        <p class="case-eyebrow">Creative Approach</p>
+
+        <h3>Build the explanation visually first.</h3>
+
+        <p class="case-body">
+          I led the project end-to-end, developing the concept, visual language, 3D treatment imagery, and motion system. Rather than relying on dense technical explanation, the campaign used simplified spatial storytelling, selective color, controlled pacing, and cinematic framing to guide the viewer through the technology.
+        </p>
+
+        <p class="case-body">
+          The result was designed to feel advanced without becoming abstract—and sophisticated without losing accessibility.
+        </p>
+      </div>
+    </section>
+
+    <section class="histotripsy-process">
+      <div class="histotripsy-process__head">
+        <div>
+          <p class="case-eyebrow">3D + Motion System</p>
+
+          <h2 class="case-heading">
+            A visual language built around precision, focus, and treatment without incision.
+          </h2>
+        </div>
+
+        <p class="case-body">
+          The 3D system gave the campaign a visual vocabulary for something patients could not otherwise see. By reducing surrounding information and directing attention to the treatment area, the animation made the process easier to understand while retaining a premium healthcare aesthetic.
+        </p>
+      </div>
+
+      <div class="histotripsy-process__grid">
+        <figure class="histotripsy-card">
+          <img
+            src="./assets/FES_ePort_PRO_Histor_Vid_3d.jpg"
+            alt="Histotripsy treatment visualization detail"
+            loading="lazy"
+          />
+          <figcaption>
+            Treatment visualization · interface, targeting, and procedural context
+          </figcaption>
+        </figure>
+
+        <figure class="histotripsy-card">
+          <img
+            src="./assets/FES_ePort_PRO_Histor_Vid_3d_2.png"
+            alt="Providence Histotripsy motion campaign across digital devices"
+            loading="lazy"
+          />
+          <figcaption>
+            Motion system translated across patient-facing digital formats
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="histotripsy-social">
+      <div class="histotripsy-social__grid">
+        <figure class="histotripsy-social__media">
+          <img
+            src="./assets/FES_ePort_PRO_Social.png"
+            alt="Providence social campaign across mobile devices"
+            loading="lazy"
+          />
+          <figcaption>
+            Providence campaign system extended across paid and organic social touchpoints
+          </figcaption>
+        </figure>
+
+        <div class="histotripsy-social__copy">
+          <p class="case-eyebrow">Campaign Extension</p>
+
+          <h2 class="case-heading">
+            One story, adapted across every digital touchpoint.
+          </h2>
+
+          <p class="case-body">
+            The campaign extended beyond the hero motion piece into Providence’s broader digital ecosystem. The visual system needed to remain recognizable across different placements while adapting to shorter attention spans, mobile formats, and social-first communication.
+          </p>
+
+          <p class="case-body">
+            Consistent typography, restrained color, medical imagery, and human-centered messaging helped reinforce Providence as both technically advanced and deeply compassionate.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-outcome histotripsy-outcome">
+      <p class="case-eyebrow">Outcome</p>
+
+      <h2 class="case-heading">
+        A cornerstone campaign asset that helped position Providence at the forefront of innovative cancer care.
+      </h2>
+
+      <p class="case-body">
+        Delivered on an aggressive production timeline, the final video became a central digital campaign asset across Providence channels, earning millions of views. More importantly, it translated a complex new treatment into a story audiences could quickly understand—supporting awareness of the technology while strengthening Providence’s position as a leader in advanced, patient-centered care.
+      </p>
+    </section>
+
+    <footer class="case-footer">
+      <span>Creative Direction · Motion Design · 3D Visualization · Healthcare Campaign</span>
+      <span>Providence · Histotripsy</span>
+    </footer>
+
+  </main>
+</body>
+</html>
