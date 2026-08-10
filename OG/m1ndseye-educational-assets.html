@@ -34,6 +34,21 @@
       border-color: rgba(216,196,107,.28);
     }
 
+    .education-page .edu-hero__media {
+      height: auto;
+      min-height: 0;
+      align-self: center;
+    }
+
+    .education-page .edu-hero__media .case-video {
+      width: 100%;
+      margin: 0;
+    }
+
+    .education-page .edu-hero__media iframe {
+      border-radius: 24px;
+    }
+
     .edu-grid {
       display: grid;
       grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -304,86 +319,6 @@
         padding: 24px;
       }
     }
-
-    /* =========================================================
-       UNIFIED VIDEO PROJECT HEADER
-       Matches the 2026 Multi-Channel page structure
-       ========================================================= */
-    .project-video-header__eyebrow {
-      margin: 0 0 18px;
-      color: var(--muted, #a7a7ad);
-      font-size: .78rem;
-      font-weight: 700;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-    }
-
-    .project-video-header__media {
-      position: relative;
-      width: 100%;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 22px;
-      background: #000;
-      box-shadow: 0 30px 80px rgba(0,0,0,.45);
-      isolation: isolate;
-    }
-
-    .project-video-header__video {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      background: #000;
-    }
-
-    .project-video-header__video iframe {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .project-video-header__content {
-      display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(260px, .85fr);
-      gap: clamp(28px, 5vw, 80px);
-      padding: clamp(34px, 5vw, 72px) 4px 0;
-      align-items: end;
-    }
-
-    .project-video-header__title {
-      max-width: 950px;
-      margin: 0;
-      color: var(--text, #f5f5f7);
-      font-size: clamp(2.8rem, 5vw, 5.2rem);
-      line-height: .98;
-      letter-spacing: -.055em;
-      text-wrap: balance;
-    }
-
-    .project-video-header__copy {
-      align-self: end;
-      min-width: 0;
-    }
-
-    .project-video-header__lede {
-      margin: 0;
-      color: var(--muted, #a7a7ad);
-      font-size: clamp(1.04rem, 1.4vw, 1.3rem);
-      line-height: 1.72;
-    }
-
-    .project-video-header__copy .case-tags {
-      margin-top: 28px;
-    }
-
-    @media (max-width: 780px) {
-      .project-video-header__media { border-radius: 14px; }
-      .project-video-header__content { grid-template-columns: 1fr; }
-      .project-video-header__copy { align-self: auto; }
-    }
-
   </style>
 </head>
 
@@ -408,30 +343,33 @@
     </header>
 
     <!-- =====================================================
-         UNIFIED VIDEO HEADER
+         HERO
          ===================================================== -->
-    <p class="project-video-header__eyebrow">M1ndseye · Educational Assets</p>
-
-    <section class="project-video-header__media" aria-label="M1ndseye Educational Assets video">
-      <div class="project-video-header__video">
-        <iframe
-          src="https://player.vimeo.com/video/1061083069?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
-          title="Educational Assets You Can Count On!"
-          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen>
-        </iframe>
+    <section class="case-hero">
+      <div class="case-hero__media edu-hero__media">
+        <div class="case-video">
+          <iframe
+            src="https://player.vimeo.com/video/1061083069?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+            title="Educational Assets You Can Count On!"
+            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+          </iframe>
+        </div>
       </div>
-    </section>
 
-    <section class="project-video-header__content">
-      <h1 class="project-video-header__title">
-        Educational assets you can count on.
-      </h1>
+      <div class="case-hero__copy">
+        <p class="case-eyebrow">M1ndseye Educational Assets</p>
 
-      <div class="project-video-header__copy">
-        <p class="project-video-header__lede">
-          Unlock your child’s potential and get ahead of the curve with the M1ndseye Illustrated Alphabet Tracing Workbook—a playful learning system designed to build early literacy, manual dexterity, confidence, and curiosity through progressive exercises and visual storytelling.
+        <h1 class="case-title">
+          Educational assets you can count on.
+        </h1>
+
+        <p class="case-lede">
+          Unlock your child’s potential and get ahead of the curve with the
+          M1ndseye Illustrated Alphabet Tracing Workbook—a playful learning
+          system designed to build early literacy, manual dexterity, confidence,
+          and curiosity through progressive exercises and visual storytelling.
         </p>
 
         <div class="case-tags">
@@ -459,7 +397,7 @@
           class="edu-download__btn"
           href="https://www.amazon.com/gp/product/B0DM65745Y?ref_=dbs_m_mng_rwt_calw_tpbk_2&storeType=ebooks&qid=1772216582&sr=8-3#detailBullets_feature_div"
           target="_blank"
-          rel="noopener noreferrer">
+          class="edu-download__btn">
           Purchase the workbook on Amazon
         </a>
         </div>
@@ -539,7 +477,7 @@
 
         <figure class="case-figure edu-card">
           <img
-            src="./assets/ME_Sesame_Hol_Halloween_PUmpkin_Maze_.png"
+            src="./assets/ME_Sesame_Hol_Halloween_PUmpkin_Maze_.png.png"
             alt="M1ndseye maze workbook social asset"
             loading="lazy"
           />

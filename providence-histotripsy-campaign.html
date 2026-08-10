@@ -18,12 +18,6 @@
     .histotripsy-page .case-eyebrow { color: #9fcab7; }
     .histotripsy-page .case-tags span { border-color: rgba(159,202,183,.28); }
 
-    .histotripsy-page .case-hero__media {
-      height: auto;
-      min-height: 0;
-      align-self: center;
-    }
-
     .histotripsy-video {
       position: relative;
       width: 100%;
@@ -179,6 +173,86 @@
         border-radius: 18px;
       }
     }
+
+    /* =========================================================
+       UNIFIED VIDEO PROJECT HEADER
+       Matches the 2026 Multi-Channel page structure
+       ========================================================= */
+    .project-video-header__eyebrow {
+      margin: 0 0 18px;
+      color: var(--muted, #a7a7ad);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .project-video-header__media {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 22px;
+      background: #000;
+      box-shadow: 0 30px 80px rgba(0,0,0,.45);
+      isolation: isolate;
+    }
+
+    .project-video-header__video {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+
+    .project-video-header__video iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .project-video-header__content {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(260px, .85fr);
+      gap: clamp(28px, 5vw, 80px);
+      padding: clamp(34px, 5vw, 72px) 4px 0;
+      align-items: end;
+    }
+
+    .project-video-header__title {
+      max-width: 950px;
+      margin: 0;
+      color: var(--text, #f5f5f7);
+      font-size: clamp(2.8rem, 5vw, 5.2rem);
+      line-height: .98;
+      letter-spacing: -.055em;
+      text-wrap: balance;
+    }
+
+    .project-video-header__copy {
+      align-self: end;
+      min-width: 0;
+    }
+
+    .project-video-header__lede {
+      margin: 0;
+      color: var(--muted, #a7a7ad);
+      font-size: clamp(1.04rem, 1.4vw, 1.3rem);
+      line-height: 1.72;
+    }
+
+    .project-video-header__copy .case-tags {
+      margin-top: 28px;
+    }
+
+    @media (max-width: 780px) {
+      .project-video-header__media { border-radius: 14px; }
+      .project-video-header__content { grid-template-columns: 1fr; }
+      .project-video-header__copy { align-self: auto; }
+    }
+
   </style>
 </head>
 
@@ -193,33 +267,32 @@
 
       <div class="project-page-actions">
         <a href="https://m1ndseye.com/" class="project-page-btn">Portfolio</a>
-                <a href="./2024-ndm-sizzle-reel.html" class="project-page-btn">← Prev</a>
-        <a href="./healthcare-editorial-systems-complete.html" class="project-page-btn">Next →</a>
-
+        <a href="./2024-ndm-sizzle-reel.html" class="project-page-btn">← Prev</a>
+        <a href="./m1ndseye-educational-assets.html" class="project-page-btn">Next →</a>
       </div>
     </header>
 
-    <section class="case-hero">
-      <div class="case-hero__media">
-        <div class="histotripsy-video">
-          <iframe
-            src="https://www.youtube.com/embed/RJOpfjCFITc?si=oS8LLcXf5EDIUniW"
-            title="Providence Histotripsy Campaign"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen>
-          </iframe>
-        </div>
+    <p class="project-video-header__eyebrow">Providence · Advanced Cancer Care</p>
+
+    <section class="project-video-header__media" aria-label="Providence Histotripsy campaign video">
+      <div class="project-video-header__video">
+        <iframe
+          src="https://www.youtube.com/embed/RJOpfjCFITc?si=oS8LLcXf5EDIUniW"
+          title="Providence Histotripsy Campaign"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
       </div>
+    </section>
 
-      <div class="case-hero__copy">
-        <p class="case-eyebrow">Providence · Advanced Cancer Care</p>
+    <section class="project-video-header__content">
+      <h1 class="project-video-header__title">
+        Making breakthrough medical innovation feel clear, human, and credible.
+      </h1>
 
-        <h1 class="case-title">
-          Making breakthrough medical innovation feel clear, human, and credible.
-        </h1>
-
-        <p class="case-lede">
+      <div class="project-video-header__copy">
+        <p class="project-video-header__lede">
           To support the launch of a groundbreaking non-invasive cancer treatment—the first of its kind in California—I created a high-impact motion piece designed to educate, inspire confidence, and reinforce Providence’s leadership in advanced care.
         </p>
 
