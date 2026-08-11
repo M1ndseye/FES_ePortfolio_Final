@@ -945,7 +945,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
   gap: clamp(28px, 5vw, 80px);
-  padding: clamp(34px, 5vw, 72px) 4px 0;
+  padding: 28px 4px 0;
 }
 
 .video-header-content h1 {
@@ -972,4 +972,20 @@
   .video-header-content {
     grid-template-columns: 1fr;
   }
+}
+
+
+/* =========================================================
+   PROJECT HEADER SPACING
+   Keeps nav close to project eyebrow / video header
+   ========================================================= */
+
+.case-page .project-page-nav,
+.project-page-nav {
+  margin-bottom: 28px;
+}
+
+.case-hero,
+.video-header {
+  margin-top: 0;
 }
