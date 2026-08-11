@@ -1002,3 +1002,104 @@
   background: transparent;
   color: var(--edu-gold, #d8c46b);
 }
+
+
+/* /* =========================================================
+   MESSAGE ARCHITECTURE
+   ========================================================= */
+
+/* .education-page .edu-copy-grid > div:first-child {
+  padding-bottom: clamp(32px, 4vw, 56px);
+}
+
+.education-page .edu-copy-grid .case-heading {
+  margin-bottom: 0;
+  max-width: 760px;
+} */ 
+
+/* =========================================================
+   EDUCATION — MESSAGE ARCHITECTURE
+   ========================================================= */
+
+.education-page .edu-section-space {
+  width: 100%;
+  max-width: none;
+}
+
+/* IMPORTANT: remove inherited 2-column parent layout */
+.education-page .edu-copy-grid {
+  display: block;
+  width: 100%;
+  max-width: none;
+}
+
+/* Keep headline from becoming excessively wide */
+.education-page .edu-copy-grid > div:first-child {
+  max-width: 900px;
+}
+
+/* Full-width 2 x 2 image grid */
+.education-page .edu-message-stack {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px 32px;
+
+  width: 100%;
+  max-width: none;
+
+  margin-top: 64px;
+}
+
+.education-page .edu-message-card {
+  margin: 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.education-page .edu-message-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 24px;
+}
+
+.education-page .edu-message-card figcaption {
+  margin-top: 14px;
+
+  font-size: 17px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* MOBILE */
+@media (max-width: 760px) {
+  .education-page .edu-message-stack {
+    grid-template-columns: 1fr;
+    gap: 34px;
+    margin-top: 40px;
+  }
+
+  .education-page .edu-message-card img {
+    aspect-ratio: auto;
+  }
+}
+
+
+@media (max-width: 760px) {
+  .education-page .edu-message-stack {
+    grid-template-columns: 1fr;
+    gap: 34px;
+    margin-top: 34px;
+  }
+
+  .education-page .edu-message-card img {
+    aspect-ratio: auto;
+  }
+
+  .education-page .edu-section-space {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
