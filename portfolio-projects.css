@@ -599,7 +599,6 @@
   display: block;
 }
 
-
 /* =========================================================
    M1NDSEYE EDUCATIONAL ASSETS — HOLIDAY STORY SECTIONS
    Text + still left / vertical video right.
@@ -663,7 +662,10 @@
   font-weight: 700;
   letter-spacing: 0.02em;
   text-decoration: none;
-  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .education-page .edu-inline-download:hover {
@@ -776,7 +778,6 @@
   }
 }
 
-
 /* =========================================================
    MESSAGE ARCHITECTURE — STACKED CAMPAIGN IMAGES
    ========================================================= */
@@ -801,26 +802,20 @@
   object-fit: contain;
 }
 
-
 /* Keep text and first image aligned at the top */
 
 .edu-copy-grid {
   align-items: start;
 }
 
-
 /* MOBILE */
 
 @media (max-width: 1000px) {
-
   .edu-message-stack {
     margin-top: 36px;
     gap: 18px;
   }
-
 }
-
-
 
 /* =========================================================
    PROJECT PAGE NAVIGATION
@@ -909,7 +904,6 @@
   transform: translateY(-1px);
 }
 
-
 /* =========================================================
    STANDARD VIDEO PROJECT HEADER
    ========================================================= */
@@ -973,7 +967,6 @@
   }
 }
 
-
 /* Tighter spacing between project nav and hero */
 .project-page-nav {
   margin-bottom: 48px;
@@ -1003,7 +996,6 @@
   color: var(--edu-gold, #d8c46b);
 }
 
-
 /* /* =========================================================
    MESSAGE ARCHITECTURE
    ========================================================= */
@@ -1015,7 +1007,7 @@
 .education-page .edu-copy-grid .case-heading {
   margin-bottom: 0;
   max-width: 760px;
-} */ 
+} */
 
 /* =========================================================
    EDUCATION — MESSAGE ARCHITECTURE
@@ -1026,42 +1018,48 @@
   max-width: none;
 }
 
-/* IMPORTANT: remove inherited 2-column parent layout */
+/* Main wrapper */
 .education-page .edu-copy-grid {
   display: block;
   width: 100%;
   max-width: none;
 }
 
-/* Keep headline from becoming excessively wide */
+/* Keep headline controlled */
 .education-page .edu-copy-grid > div:first-child {
   max-width: 900px;
 }
 
-/* Full-width 2 x 2 image grid */
+/* FULL WIDTH 2-COLUMN IMAGE GRID */
 .education-page .edu-message-stack {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 48px 32px;
 
   width: 100%;
   max-width: none;
 
+  gap: 48px 32px;
   margin-top: 64px;
 }
 
+/* Each card fills its grid column */
 .education-page .edu-message-card {
-  margin: 0;
   width: 100%;
+  max-width: none;
   min-width: 0;
+  margin: 0;
 }
 
+/* Image fills entire card */
 .education-page .edu-message-card img {
   display: block;
   width: 100%;
+  max-width: none;
   height: auto;
+
   aspect-ratio: 16 / 9;
   object-fit: cover;
+
   border-radius: 24px;
 }
 
@@ -1073,7 +1071,10 @@
   color: rgba(255, 255, 255, 0.72);
 }
 
-/* MOBILE */
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
 @media (max-width: 760px) {
   .education-page .edu-message-stack {
     grid-template-columns: 1fr;
@@ -1086,20 +1087,18 @@
   }
 }
 
+/* Message Architecture — force full portfolio content width */
+.education-page .case-section.edu-section-space {
+  width: 100%;
+  max-width: none;
+}
 
-@media (max-width: 760px) {
-  .education-page .edu-message-stack {
-    grid-template-columns: 1fr;
-    gap: 34px;
-    margin-top: 34px;
-  }
+.education-page .case-section.edu-section-space .edu-copy-grid {
+  width: 100%;
+  max-width: none;
+}
 
-  .education-page .edu-message-card img {
-    aspect-ratio: auto;
-  }
-
-  .education-page .edu-section-space {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
+.education-page .case-section.edu-section-space .edu-message-stack {
+  width: 100%;
+  max-width: none;
 }
