@@ -599,182 +599,182 @@
   display: block;
 }
 
-
 /* =========================================================
-   HOLIDAY STORY SECTIONS
-   Text + still left / vertical video right
-   Text and video TOP aligned
-   Still pushed toward bottom
+   M1NDSEYE EDUCATIONAL ASSETS — HOLIDAY STORY SECTIONS
+   Text + still left / vertical video right.
+   Each left column is constrained to the height of the video.
    ========================================================= */
 
-.edu-holiday {
+.education-page .edu-holiday {
   margin-top: clamp(100px, 11vw, 155px);
 }
 
-.edu-holiday__grid {
+.education-page .edu-holiday__grid {
+  --edu-holiday-height: clamp(760px, 59vw, 920px);
   display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(380px, 1.08fr);
+  grid-template-columns: minmax(0, 0.92fr) minmax(400px, 1.08fr);
   gap: clamp(42px, 5vw, 72px);
-
-  /* Both columns begin at exactly the same height */
-  align-items: stretch;
+  align-items: start;
 }
 
+.education-page .edu-holiday__copy,
+.education-page .edu-holiday__video {
+  height: var(--edu-holiday-height);
+  min-height: 0;
+}
 
-/* LEFT COLUMN */
-
-.edu-holiday__copy {
+.education-page .edu-holiday__copy {
   max-width: 620px;
-
   display: flex;
   flex-direction: column;
-  height: 100%;
 }
 
-
-/* tighten spacing in text */
-
-.edu-holiday__copy .case-eyebrow {
+.education-page .edu-holiday__copy .case-eyebrow {
   margin-bottom: 14px;
 }
 
-.edu-holiday__copy .case-heading {
+.education-page .edu-holiday__copy .case-heading {
   margin-bottom: 18px;
 }
 
-.edu-holiday__copy .case-body + .case-body {
+.education-page .edu-holiday__copy .case-body + .case-body {
   margin-top: 18px;
 }
 
-
-/* STILL IMAGE
-   pushed to bottom of left column */
-
-.edu-holiday__still {
-  width: min(100%, 540px);
-
-  /* fills remaining vertical space */
-  margin: auto 0 0;
-
-  padding-top: 36px;
+.education-page .edu-holiday__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
 }
 
-.edu-holiday__still img {
-  display: block;
+.education-page .edu-inline-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 10px 16px;
+  border: 1px solid rgba(216, 196, 107, 0.48);
+  border-radius: 999px;
+  background: rgba(216, 196, 107, 0.08);
+  color: #f4e79b;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.education-page .edu-inline-download:hover {
+  background: rgba(216, 196, 107, 0.16);
+  border-color: rgba(216, 196, 107, 0.75);
+  transform: translateY(-1px);
+}
+
+.education-page .edu-holiday__still {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: min(100%, 520px);
+  margin: 24px 0 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.education-page .edu-holiday__still img {
+  flex: 1 1 auto;
+  min-height: 0;
   width: 100%;
-  height: auto;
-
-  /* keeps square artwork from getting too huge */
-  max-height: 540px;
-
+  height: 0;
+  display: block;
   object-fit: cover;
+  object-position: center;
   border-radius: 24px;
 }
 
-.edu-holiday__still figcaption {
+.education-page .edu-holiday__still figcaption,
+.education-page .edu-holiday__video figcaption {
+  flex: 0 0 auto;
   margin: 0;
   padding-top: 10px;
+  line-height: 1.35;
 }
 
-
-/* RIGHT VIDEO COLUMN */
-
-.edu-holiday__video {
+.education-page .edu-holiday__video {
   margin: 0;
-
   display: flex;
   flex-direction: column;
-
-  /* THIS is the important change */
-  justify-content: flex-start;
-
-  height: 100%;
+  align-items: center;
 }
 
-
-/* VIDEO FRAME */
-
-.edu-holiday__video-frame {
+.education-page .edu-holiday__video-frame {
+  flex: 1 1 auto;
+  min-height: 0;
   position: relative;
-  width: 100%;
-
   overflow: hidden;
   border-radius: 24px;
   background: #111113;
-
   box-shadow: 0 30px 70px rgba(0, 0, 0, 0.28);
 }
 
-
-/* Both Valentine + Halloween are vertical */
-
-.edu-holiday__video-frame--vertical {
+.education-page .edu-holiday__video-frame--vertical {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
   aspect-ratio: 9 / 16;
-
-  width: min(100%, 520px);
-
-  /* center video inside right column */
-  margin-inline: auto;
 }
 
-
-/* keep this only if another project needs landscape later */
-
-.edu-holiday__video-frame--landscape {
+.education-page .edu-holiday__video-frame--landscape {
+  width: 100%;
   aspect-ratio: 4 / 3;
 }
 
-
-/* Vimeo iframe */
-
-.edu-holiday__video iframe {
+.education-page .edu-holiday__video iframe {
   position: absolute;
   inset: 0;
-
   width: 100%;
   height: 100%;
-
   border: 0;
 }
 
-
-.edu-holiday__video figcaption {
+.education-page .edu-holiday__video figcaption {
   width: min(100%, 520px);
-  margin: 0 auto;
-  padding-top: 10px;
 }
 
-
-/* =========================================================
-   TABLET / MOBILE
-   ========================================================= */
-
 @media (max-width: 1000px) {
-
-  .edu-holiday__grid {
+  .education-page .edu-holiday__grid {
     grid-template-columns: 1fr;
   }
 
-  .edu-holiday__copy {
-    max-width: none;
-    display: block;
-  }
-
-  .edu-holiday__still {
-    width: min(100%, 560px);
-    margin-top: 32px;
-    padding-top: 0;
-  }
-
-  .edu-holiday__video {
-    display: block;
+  .education-page .edu-holiday__copy,
+  .education-page .edu-holiday__video {
     height: auto;
+  }
 
+  .education-page .edu-holiday__copy {
+    max-width: none;
+  }
+
+  .education-page .edu-holiday__still {
+    width: min(100%, 560px);
+    min-height: auto;
+    margin-top: 32px;
+  }
+
+  .education-page .edu-holiday__still img {
+    height: auto;
+    max-height: 560px;
+  }
+
+  .education-page .edu-holiday__video {
     margin-top: 36px;
   }
 
-  .edu-holiday__video-frame--vertical {
-    max-width: 440px;
+  .education-page .edu-holiday__video-frame--vertical {
+    width: min(100%, 440px);
+    height: auto;
   }
 }
 
@@ -802,26 +802,20 @@
   object-fit: contain;
 }
 
-
 /* Keep text and first image aligned at the top */
 
 .edu-copy-grid {
   align-items: start;
 }
 
-
 /* MOBILE */
 
 @media (max-width: 1000px) {
-
   .edu-message-stack {
     margin-top: 36px;
     gap: 18px;
   }
-
 }
-
-
 
 /* =========================================================
    PROJECT PAGE NAVIGATION
@@ -910,7 +904,6 @@
   transform: translateY(-1px);
 }
 
-
 /* =========================================================
    STANDARD VIDEO PROJECT HEADER
    ========================================================= */
@@ -945,7 +938,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
   gap: clamp(28px, 5vw, 80px);
-  padding: 28px 4px 0;
+  padding: clamp(34px, 5vw, 72px) 4px 0;
 }
 
 .video-header-content h1 {
@@ -974,18 +967,341 @@
   }
 }
 
+/* Tighter spacing between project nav and hero */
+.project-page-nav {
+  margin-bottom: 48px;
+}
+
+.case-hero {
+  margin-top: 0;
+}
 
 /* =========================================================
-   PROJECT HEADER SPACING
-   Keeps nav close to project eyebrow / video header
+   M1NDSEYE EDUCATIONAL ASSETS — DOWNLOAD BUTTON GROUPS
    ========================================================= */
 
-.case-page .project-page-nav,
-.project-page-nav {
+.education-page .edu-download__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.education-page .edu-download__actions .edu-download__btn {
+  margin-top: 0;
+}
+
+.education-page .edu-download__btn--secondary {
+  background: transparent;
+  color: var(--edu-gold, #d8c46b);
+}
+
+/* /* =========================================================
+   MESSAGE ARCHITECTURE
+   ========================================================= */
+
+/* .education-page .edu-copy-grid > div:first-child {
+  padding-bottom: clamp(32px, 4vw, 56px);
+}
+
+.education-page .edu-copy-grid .case-heading {
+  margin-bottom: 0;
+  max-width: 760px;
+} */
+
+/* =========================================================
+   EDUCATION — MESSAGE ARCHITECTURE
+   ========================================================= */
+
+.education-page .edu-section-space {
+  width: 100%;
+  max-width: none;
+}
+
+/* Main wrapper */
+.education-page .edu-copy-grid {
+  display: block;
+  width: 100%;
+  max-width: none;
+}
+
+/* Keep headline controlled */
+.education-page .edu-copy-grid > div:first-child {
+  max-width: 900px;
+}
+
+/* FULL WIDTH 2-COLUMN IMAGE GRID */
+.education-page .edu-message-stack {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  width: 100%;
+  max-width: none;
+
+  gap: 48px 32px;
+  margin-top: 64px;
+}
+
+/* Each card fills its grid column */
+.education-page .edu-message-card {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
+}
+
+/* Image fills entire card */
+.education-page .edu-message-card img {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+
+  border-radius: 24px;
+}
+
+.education-page .edu-message-card figcaption {
+  margin-top: 14px;
+
+  font-size: 17px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .education-page .edu-message-stack {
+    grid-template-columns: 1fr;
+    gap: 34px;
+    margin-top: 40px;
+  }
+
+  .education-page .edu-message-card img {
+    aspect-ratio: auto;
+  }
+}
+
+/* Message Architecture — force full portfolio content width */
+.education-page .case-section.edu-section-space {
+  width: 100%;
+  max-width: none;
+}
+
+.education-page .case-section.edu-section-space .edu-copy-grid {
+  width: 100%;
+  max-width: none;
+}
+
+.education-page .case-section.edu-section-space .edu-message-stack {
+  width: 100%;
+  max-width: none;
+}
+
+
+/* =========================================================
+   MAPS HERO — MATCH IMAGE HEIGHT TO TEXT COLUMN
+   ========================================================= */
+
+.case-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 80px;
+  align-items: stretch; /* important */
+}
+
+.case-hero__media {
+  height: 100%;
+  margin: 0;
+}
+
+.case-hero__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 24px;
+}
+
+.case-hero__copy {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.maps-hero {
+  align-items: stretch;
+}
+
+.maps-hero .case-hero__media {
+  align-self: stretch;
+  height: auto;
+  margin: 0;
+}
+
+.maps-hero .case-hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* =========================================================
+   EDUCATION — VIDEO HEADER
+   ========================================================= */
+
+.education-page .project-video-header {
+  width: 100%;
+  margin: 42px 0 72px;
+}
+
+.education-page .project-video-header__eyebrow {
+  margin: 0 0 20px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.education-page .project-video-header .case-video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 22px;
+  background: #111;
+}
+
+.education-page .project-video-header .case-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Project intro below video */
+
+.education-page .education-intro {
+  width: 100%;
+  padding: 0 0 100px;
+}
+
+.education-page .case-intro__copy {
+  max-width: 1050px;
+}
+
+.education-page .education-intro .case-title {
+  max-width: 900px;
   margin-bottom: 28px;
 }
 
-.case-hero,
-.video-header {
+.education-page .education-intro .case-lede {
+  max-width: 850px;
+}
+
+@media (max-width: 760px) {
+  .education-page .project-video-header {
+    margin-top: 28px;
+    margin-bottom: 52px;
+  }
+
+  .education-page .project-video-header__eyebrow {
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+
+  .education-page .project-video-header .case-video {
+    border-radius: 16px;
+  }
+
+  .education-page .education-intro {
+    padding-bottom: 70px;
+  }
+}
+
+/* =========================================================
+   EDUCATION — FINAL SECTION SPACING
+   ========================================================= */
+
+.education-page .edu-section-space {
   margin-top: 0;
+  padding-top: clamp(56px, 6vw, 82px);
+  padding-bottom: 0;
+}
+
+/* Less space after the insight panel */
+.education-page .edu-highlight {
+  margin-bottom: 0;
+}
+
+/* Learning System header to image grid */
+.education-page .edu-message-stack {
+  margin-top: clamp(34px, 4vw, 50px);
+}
+
+/* Hero image → Insight panel */
+.education-page .edu-main-hero + .edu-highlight {
+  margin-top: clamp(46px, 5vw, 70px);
+}
+
+/* Insight → Learning System */
+.education-page .edu-highlight + .edu-section-space {
+  padding-top: clamp(56px, 6vw, 80px);
+}
+
+/* Prevent stacked section spacing */
+.education-page .case-section .case-section {
+  padding-top: 0;
+}
+
+@media (max-width: 760px) {
+  .education-page .edu-section-space {
+    padding-top: 52px;
+  }
+
+  .education-page .edu-highlight + .edu-section-space {
+    padding-top: 52px;
+  }
+}
+
+
+/* =========================================================
+   STANDARDIZE VIDEO HEADER POSITION
+   Match Multi-Channel Campaign
+   ========================================================= */
+
+.project-video-header {
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 88px;
+}
+
+.project-video-header__eyebrow {
+  margin-top: 0;
+  margin-bottom: 22px;
+}
+
+
+/* Education currently has its own override — neutralize it */
+.education-page .project-video-header {
+  margin-top: 0;
+  margin-bottom: 72px;
+}
+
+
+/* Mobile */
+@media (max-width: 760px) {
+  .project-video-header,
+  .education-page .project-video-header {
+    margin-top: 0;
+    margin-bottom: 52px;
+  }
 }
