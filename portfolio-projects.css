@@ -434,7 +434,7 @@
   }
 
   .case-page .project-page-nav {
-    margin-bottom: 42px;
+    margin-bottom: 24px;
   }
 
   .case-title {
@@ -1090,7 +1090,6 @@
   max-width: none;
 }
 
-
 /* =========================================================
    MAPS HERO — MATCH IMAGE HEIGHT TO TEXT COLUMN
    ========================================================= */
@@ -1376,5 +1375,60 @@
     max-width: 36px !important;
     max-height: 36px !important;
     flex-basis: 36px;
+  }
+}
+
+/* =========================================================
+   UNIFIED VIDEO HEADER TITLE
+   Matches Multi-Channel / desired project header treatment
+   ========================================================= */
+
+.case-page .project-video-header__eyebrow,
+.case-page .project-video-header .case-eyebrow,
+.case-page .project-video-header .project-video-header__title-label,
+.case-page .project-video-eyebrow {
+  display: block;
+
+  margin: 0 0 24px !important;
+  padding: 0 !important;
+
+  color: rgba(255, 255, 255, 0.62) !important;
+
+  font-size: clamp(0.76rem, 0.85vw, 0.9rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+
+  max-width: none !important;
+}
+
+/* Keep video header close to nav */
+.case-page .project-video-header {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Video begins directly beneath title */
+.case-page .project-video-header .case-video,
+.case-page .project-video-header__media {
+  margin-top: 0 !important;
+}
+
+/* Remove accidental large heading styling */
+.case-page .project-video-header__eyebrow {
+  font-family: inherit !important;
+  text-wrap: pretty;
+}
+
+/* Mobile */
+@media (max-width: 760px) {
+  .case-page .project-video-header__eyebrow,
+  .case-page .project-video-header .case-eyebrow,
+  .case-page .project-video-eyebrow {
+    margin-bottom: 16px !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.13em !important;
   }
 }
