@@ -595,6 +595,12 @@
   display: block;
 }
 
+.two-column-portrait {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+
 /* =========================================================
    M1NDSEYE EDUCATIONAL ASSETS — HOLIDAY STORY SECTIONS
    Text + still left / vertical video right.
