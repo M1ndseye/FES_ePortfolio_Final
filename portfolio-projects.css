@@ -597,7 +597,7 @@
 
 .two-column-portrait {
   padding-top: 12px;
-  padding-bottom: 12px;
+  padding-
 }
 
 
@@ -1437,4 +1437,12 @@
     font-size: 0.72rem !important;
     letter-spacing: 0.13em !important;
   }
+}
+
+
+
+
+
+.brand-strategy-copy {
+  padding-bottom: 50px;
 }
