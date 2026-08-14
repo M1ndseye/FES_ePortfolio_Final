@@ -8,9 +8,8 @@
       content="A seven-month integrated content campaign for TrialSupport.us, spanning digital marketing, brand storytelling, and motion design."
     />
     <title>NDM Sizzle Reel</title>
-    <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="./portfolio-projects.css">
-    <link rel="stylesheet" href="mos-edw.css" />
+    <link rel="stylesheet" href="style.css?v=3" />
+    <link rel="stylesheet" href="portfolio-projects.css?v=2" />
 
     <style>
       :root {
@@ -298,6 +297,18 @@
       }
 
     /* =========================================================
+       NDM WIDTH ALIGNMENT
+       Uses the same outer case-shell as the Healthcare project.
+       ========================================================= */
+    .ndm-page .project-page-nav,
+    .ndm-page .project-video-header__eyebrow,
+    .ndm-page .project-video-header__media,
+    .ndm-page .project-video-header__content {
+      width: 100%;
+      max-width: none;
+    }
+
+    /* =========================================================
        UNIFIED VIDEO PROJECT HEADER
        Matches the 2026 Multi-Channel page structure
        ========================================================= */
@@ -379,8 +390,8 @@
     </style>
   </head>
 
-  <body class="ndm-page">
-    <main class="page">
+  <body class="case-page ndm-page">
+    <main class="case-shell">
       <header class="project-page-nav">
         <a href="https://m1ndseye.com/" class="project-page-brand">
           <img src="./assets/M1E_icon_2.svg" alt="M1ndseye" />
