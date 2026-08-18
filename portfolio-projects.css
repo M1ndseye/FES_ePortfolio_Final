@@ -1446,3 +1446,200 @@
 .brand-strategy-copy {
   padding-bottom: 50px;
 }
+.branded-print-img {
+  margin-top: 28px;
+  padding-bottom: 0px;
+}
+
+/* =========================================================
+   TRIALSUPPORT / MULTI-CHANNEL — CLEAN SECTION RHYTHM
+   Scoped so the other portfolio project pages are unchanged.
+   ========================================================= */
+
+.ts-page .case-study-content {
+  width: 100%;
+  padding-top: clamp(42px, 4.5vw, 68px);
+}
+
+.ts-page .case-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.72fr);
+  gap: clamp(34px, 6vw, 86px);
+  align-items: start;
+}
+
+.ts-page .case-intro h1 {
+  max-width: 900px;
+  margin: 0;
+  font-size: clamp(2.8rem, 6vw, 6.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.ts-page .case-intro-copy {
+  align-self: end;
+}
+
+.ts-page .case-intro-copy > p {
+  margin: 0;
+  color: var(--case-muted, #a7a7ad);
+  font-size: clamp(1.02rem, 1.35vw, 1.25rem);
+  line-height: 1.7;
+}
+
+/* Remove the old double-spacing behavior on this page only. */
+.ts-page .case-study-content .case-section {
+  margin-top: 0 !important;
+  padding-top: clamp(58px, 5.8vw, 88px);
+}
+
+/* A media block that follows copy should sit closer to that copy. */
+.ts-page .case-study-content .case-section--media {
+  padding-top: clamp(28px, 2.8vw, 44px);
+}
+
+.ts-page .case-section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.72fr);
+  gap: clamp(36px, 6vw, 84px);
+  align-items: start;
+  margin: 0;
+}
+
+.ts-page .case-section-head--with-media {
+  grid-template-columns: minmax(320px, 0.9fr) minmax(0, 0.82fr) minmax(300px, 0.72fr);
+  gap: clamp(28px, 4vw, 58px);
+  align-items: center;
+}
+
+.ts-page .case-section h2 {
+  max-width: 850px;
+  margin: 0;
+  font-size: clamp(2.3rem, 4.7vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.ts-page .case-body {
+  margin: 0;
+  color: var(--case-muted, #a7a7ad);
+  font-size: clamp(1rem, 1.25vw, 1.18rem);
+  line-height: 1.72;
+}
+
+.ts-page .case-image {
+  width: 100%;
+  margin: 0;
+}
+
+.ts-page .case-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--case-line, rgba(255,255,255,0.11));
+  border-radius: var(--case-radius, 22px);
+  box-shadow: 0 22px 62px rgba(0, 0, 0, 0.22);
+}
+
+.ts-page .case-image figcaption {
+  margin: 0;
+  padding-top: 11px;
+  color: #85858c;
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.ts-page .case-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+  gap: clamp(36px, 6vw, 78px);
+  align-items: center;
+}
+
+.ts-page .case-split-copy h2 {
+  margin-bottom: 24px;
+}
+
+.ts-page .brand-strategy-copy {
+  padding-bottom: 0;
+}
+
+.ts-page .branded-print-img {
+  margin-top: 0;
+  padding-bottom: 0;
+}
+
+.ts-page .ts-inline-link {
+  margin-top: 18px;
+}
+
+.ts-page .ts-inline-link a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.ts-page .case-outcome {
+  margin-top: clamp(72px, 7vw, 108px);
+}
+
+.ts-page .ts-impact-tags {
+  margin-top: 30px;
+}
+
+/* Keep the video title close to the player, matching the other projects. */
+.ts-page .project-page-nav {
+  margin-bottom: 48px;
+}
+
+.ts-page .project-video-header__eyebrow {
+  margin: 0 0 18px !important;
+}
+
+/* The custom player uses padding-top rather than aspect-ratio. Avoid stacking both. */
+.ts-page .video-wrap {
+  aspect-ratio: auto;
+}
+
+@media (max-width: 1050px) {
+  .ts-page .case-section-head--with-media {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ts-page .case-section-head--with-media .case-body {
+    grid-column: 1 / -1;
+    max-width: 760px;
+  }
+}
+
+@media (max-width: 850px) {
+  .ts-page .case-intro,
+  .ts-page .case-section-head,
+  .ts-page .case-section-head--with-media,
+  .ts-page .case-split {
+    grid-template-columns: 1fr;
+  }
+
+  .ts-page .case-intro-copy {
+    align-self: auto;
+  }
+
+  .ts-page .case-section-head--with-media .case-body {
+    grid-column: auto;
+  }
+
+  .ts-page .case-study-content .case-section {
+    padding-top: 56px;
+  }
+
+  .ts-page .case-study-content .case-section--media {
+    padding-top: 28px;
+  }
+
+  .ts-page .case-outcome {
+    margin-top: 72px;
+  }
+}
+

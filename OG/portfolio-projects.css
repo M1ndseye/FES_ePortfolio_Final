@@ -46,10 +46,6 @@
   padding: 32px clamp(18px, 4vw, 64px) 70px;
 }
 
-.case-page .project-page-nav {
-  margin-bottom: clamp(42px, 6vw, 78px);
-}
-
 /* ---------- TYPE ---------- */
 
 .case-eyebrow {
@@ -438,7 +434,7 @@
   }
 
   .case-page .project-page-nav {
-    margin-bottom: 42px;
+    margin-bottom: 24px;
   }
 
   .case-title {
@@ -598,6 +594,12 @@
   object-fit: cover;
   display: block;
 }
+
+.two-column-portrait {
+  padding-top: 12px;
+  padding-
+}
+
 
 /* =========================================================
    M1NDSEYE EDUCATIONAL ASSETS — HOLIDAY STORY SECTIONS
@@ -967,15 +969,6 @@
   }
 }
 
-/* Tighter spacing between project nav and hero */
-.project-page-nav {
-  margin-bottom: 48px;
-}
-
-.case-hero {
-  margin-top: 0;
-}
-
 /* =========================================================
    M1NDSEYE EDUCATIONAL ASSETS — DOWNLOAD BUTTON GROUPS
    ========================================================= */
@@ -1103,7 +1096,6 @@
   max-width: none;
 }
 
-
 /* =========================================================
    MAPS HERO — MATCH IMAGE HEIGHT TO TEXT COLUMN
    ========================================================= */
@@ -1152,82 +1144,6 @@
 }
 
 /* =========================================================
-   EDUCATION — VIDEO HEADER
-   ========================================================= */
-
-.education-page .project-video-header {
-  width: 100%;
-  margin: 42px 0 72px;
-}
-
-.education-page .project-video-header__eyebrow {
-  margin: 0 0 20px;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.3;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.62);
-}
-
-.education-page .project-video-header .case-video {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  border-radius: 22px;
-  background: #111;
-}
-
-.education-page .project-video-header .case-video iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-/* Project intro below video */
-
-.education-page .education-intro {
-  width: 100%;
-  padding: 0 0 100px;
-}
-
-.education-page .case-intro__copy {
-  max-width: 1050px;
-}
-
-.education-page .education-intro .case-title {
-  max-width: 900px;
-  margin-bottom: 28px;
-}
-
-.education-page .education-intro .case-lede {
-  max-width: 850px;
-}
-
-@media (max-width: 760px) {
-  .education-page .project-video-header {
-    margin-top: 28px;
-    margin-bottom: 52px;
-  }
-
-  .education-page .project-video-header__eyebrow {
-    font-size: 12px;
-    margin-bottom: 16px;
-  }
-
-  .education-page .project-video-header .case-video {
-    border-radius: 16px;
-  }
-
-  .education-page .education-intro {
-    padding-bottom: 70px;
-  }
-}
-
-/* =========================================================
    EDUCATION — FINAL SECTION SPACING
    ========================================================= */
 
@@ -1272,36 +1188,265 @@
   }
 }
 
-
 /* =========================================================
-   STANDARDIZE VIDEO HEADER POSITION
-   Match Multi-Channel Campaign
+   CANONICAL PROJECT HEADER + VIDEO HEADER
+   One source of truth for navigation and video-project spacing.
+   This intentionally lives LAST so page-specific legacy rules
+   cannot move the header vertically.
    ========================================================= */
 
+/* Same content frame relationship on every project page */
+.project-page-nav,
+.case-page .project-page-nav {
+  width: 100%;
+  max-width: none;
+  margin: 0 0 48px;
+  padding: 0;
+}
+
+/* Eyebrow/title line directly below navigation */
+.project-video-header__eyebrow,
+.project-video-header .project-video-header__eyebrow,
+.case-shell > .project-video-header__eyebrow,
+.page > .eyebrow {
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+
+/* Wrapper used by Maps / Education style video headers */
 .project-video-header {
   width: 100%;
-  margin-top: 0;
-  margin-bottom: 88px;
+  margin: 0 0 72px;
 }
 
-.project-video-header__eyebrow {
-  margin-top: 0;
-  margin-bottom: 22px;
+/* Standard 16:9 project video treatment */
+.project-video-header .case-video,
+.project-video-header__media,
+.video-shell {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--case-radius, 22px);
+  background: #000;
+  box-shadow: var(--case-shadow, 0 28px 78px rgba(0, 0, 0, 0.3));
 }
 
+.project-video-header .case-video,
+.project-video-header__video,
+.video-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
 
-/* Education currently has its own override — neutralize it */
+.project-video-header .case-video iframe,
+.project-video-header__video iframe,
+.video-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Copy directly below video — same rhythm as Multi-Channel */
+.project-video-header__content,
+.video-header-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+  gap: clamp(28px, 5vw, 80px);
+  align-items: end;
+  width: 100%;
+  margin: 0;
+  padding: clamp(34px, 5vw, 72px) 4px 0;
+}
+
+.project-video-header__title,
+.video-header-content h1 {
+  max-width: 950px;
+  margin: 0;
+  color: var(--case-text, #f5f5f7);
+  font-size: clamp(2.8rem, 5vw, 5.2rem);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.project-video-header__lede,
+.video-header-description {
+  margin: 0;
+  color: var(--case-muted, #a7a7ad);
+  font-size: clamp(1.04rem, 1.4vw, 1.3rem);
+  line-height: 1.72;
+}
+
+/* Maps: video ends, then the split hero begins without a giant dead zone */
+.maps-page .project-video-header {
+  margin-bottom: clamp(56px, 6vw, 82px);
+}
+
+.maps-page .maps-hero {
+  margin-top: 0;
+}
+
+/* Education: match the same top position as the other video pages */
 .education-page .project-video-header {
   margin-top: 0;
-  margin-bottom: 72px;
+  margin-bottom: clamp(48px, 5vw, 68px);
 }
 
+.education-page .education-intro {
+  width: 100%;
+  padding: 0 0 clamp(56px, 6vw, 82px);
+}
+
+.education-page .case-intro__copy {
+  max-width: 1050px;
+}
+
+.education-page .education-intro .case-title {
+  max-width: 900px;
+  margin-bottom: 28px;
+}
+
+.education-page .education-intro .case-lede {
+  max-width: 850px;
+}
+
+/* =========================================================
+   RESPONSIVE HEADER
+   ========================================================= */
+
+@media (max-width: 780px) {
+  .project-page-nav,
+  .case-page .project-page-nav {
+    margin-bottom: 36px;
+  }
+
+  .project-video-header {
+    margin-bottom: 52px;
+  }
+
+  .project-video-header__content,
+  .video-header-content {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding-top: 30px;
+  }
+
+  .project-video-header__title,
+  .video-header-content h1 {
+    font-size: clamp(2.5rem, 11vw, 4rem);
+  }
+
+  .project-video-header .case-video,
+  .project-video-header__media,
+  .video-shell {
+    border-radius: 16px;
+  }
+
+  .education-page .project-video-header {
+    margin-top: 0;
+    margin-bottom: 48px;
+  }
+
+  .education-page .education-intro {
+    padding-bottom: 56px;
+  }
+}
+
+@media (max-width: 560px) {
+  .project-page-nav {
+    gap: 16px;
+  }
+
+  .project-page-actions {
+    gap: 6px;
+  }
+
+  .project-page-btn {
+    min-height: 40px;
+    padding-inline: 12px;
+    font-size: 0.78rem;
+  }
+
+  .project-page-brand {
+    gap: 8px;
+    font-size: 0.9rem;
+  }
+
+  .project-page-brand img {
+    width: 36px !important;
+    height: 36px !important;
+    max-width: 36px !important;
+    max-height: 36px !important;
+    flex-basis: 36px;
+  }
+}
+
+/* =========================================================
+   UNIFIED VIDEO HEADER TITLE
+   Matches Multi-Channel / desired project header treatment
+   ========================================================= */
+
+.case-page .project-video-header__eyebrow,
+.case-page .project-video-header .case-eyebrow,
+.case-page .project-video-header .project-video-header__title-label,
+.case-page .project-video-eyebrow {
+  display: block;
+
+  margin: 0 0 24px !important;
+  padding: 0 !important;
+
+  color: rgba(255, 255, 255, 0.62) !important;
+
+  font-size: clamp(0.76rem, 0.85vw, 0.9rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+
+  max-width: none !important;
+}
+
+/* Keep video header close to nav */
+.case-page .project-video-header {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Video begins directly beneath title */
+.case-page .project-video-header .case-video,
+.case-page .project-video-header__media {
+  margin-top: 0 !important;
+}
+
+/* Remove accidental large heading styling */
+.case-page .project-video-header__eyebrow {
+  font-family: inherit !important;
+  text-wrap: pretty;
+}
 
 /* Mobile */
 @media (max-width: 760px) {
-  .project-video-header,
-  .education-page .project-video-header {
-    margin-top: 0;
-    margin-bottom: 52px;
+  .case-page .project-video-header__eyebrow,
+  .case-page .project-video-header .case-eyebrow,
+  .case-page .project-video-eyebrow {
+    margin-bottom: 16px !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.13em !important;
   }
+}
+
+
+
+
+
+.brand-strategy-copy {
+  padding-bottom: 50px;
+}
+.branded-print-img {
+  margin-top: 28px;
+  padding-bottom: 0px;
 }

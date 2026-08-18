@@ -286,141 +286,27 @@
         transition: none !important;
       }
     }
-
-    /* ===== MATCHED PORTFOLIO CASE-STUDY LAYOUT ===== */
-    .case-study-content {
-      padding-top: clamp(46px, 6vw, 82px);
-    }
-    .case-intro {
-      display: grid;
-      grid-template-columns: minmax(0, 1.08fr) minmax(300px, .72fr);
-      gap: clamp(34px, 6vw, 86px);
-      align-items: start;
-    }
-    .case-intro h1 {
-      max-width: 900px;
-      font-size: clamp(2.8rem, 6vw, 6.6rem);
-    }
-    .case-intro-copy {
-      align-self: end;
-    }
-    .case-intro-copy p {
-      margin: 0;
-      color: var(--muted);
-      font-size: clamp(1.02rem, 1.35vw, 1.25rem);
-      line-height: 1.7;
-    }
-    .case-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 28px;
-    }
-    .case-tags span {
-      padding: 8px 12px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: #d6d6da;
-      font-size: .76rem;
-      letter-spacing: .04em;
-    }
-    .case-section {
-      margin-top: clamp(92px, 10vw, 145px);
-    }
-    .case-section-head {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(300px, .72fr);
-      gap: clamp(36px, 6vw, 84px);
-      align-items: start;
-      margin-bottom: 42px;
-    }
-    .case-section h2 {
-      max-width: 850px;
-      margin: 0;
-      font-size: clamp(2.3rem, 4.7vw, 5rem);
-      line-height: .98;
-      letter-spacing: -.045em;
-    }
-    .case-body {
-      margin: 0;
-      color: var(--muted);
-      font-size: clamp(1rem, 1.25vw, 1.18rem);
-      line-height: 1.72;
-    }
-    .case-image {
-      margin: 0;
-    }
-    .case-image img {
-      display: block;
-      width: 100%;
-      height: auto;
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-    }
-    .case-image figcaption {
-      padding-top: 11px;
-      color: #85858c;
-      font-size: .82rem;
-    }
-    .case-grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: clamp(22px, 3vw, 40px);
-      align-items: start;
-    }
-    .case-split {
-      display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr);
-      gap: clamp(36px, 6vw, 78px);
-      align-items: center;
-    }
-    .case-split-copy h2 {
-      margin-bottom: 24px;
-    }
-    .case-outcome {
-      margin-top: clamp(105px, 11vw, 155px);
-      padding: clamp(34px, 5vw, 62px);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--surface);
-    }
-    .case-outcome h2 {
-      max-width: 1050px;
-      margin: 0 0 24px;
-      font-size: clamp(2.4rem, 5vw, 5.3rem);
-      line-height: .98;
-      letter-spacing: -.045em;
-    }
-    @media (max-width: 850px) {
-      .case-intro,
-      .case-section-head,
-      .case-grid-2,
-      .case-split {
-        grid-template-columns: 1fr;
-      }
-      .case-intro-copy { align-self: auto; }
-      .case-section { margin-top: 72px; }
-    }
-
   </style>
 </head>
 
-<body>
+<body class="ts-page">
   <main class="page">
-<header class="project-page-nav">
-  <a href="https://m1ndseye.com/" class="project-page-brand">
-    <img src="./assets/M1E_icon_2.svg" alt="M1ndseye" />
-    <span>M1ndseye</span>
-  </a>
+    <header class="project-page-nav">
+      <a href="https://m1ndseye.com/" class="project-page-brand">
+        <img src="./assets/M1E_icon_2.svg" alt="M1ndseye" />
+        <span>M1ndseye</span>
+      </a>
 
-  <div class="project-page-actions">
-    <a href="https://m1ndseye.com/" class="project-page-btn">Portfolio</a>
+      <div class="project-page-actions">
+        <a href="https://m1ndseye.com/" class="project-page-btn">Portfolio</a>
         <a href="./m1ndseye-educational-assets.html" class="project-page-btn">← Prev</a>
-    <a href="./2024-ndm-sizzle-reel.html" class="project-page-btn">Next →</a>
+        <a href="./2024-ndm-sizzle-reel.html" class="project-page-btn">Next →</a>
+      </div>
+    </header>
 
-  </div>
-</header>
-    <p class="project-video-header__eyebrow case-eyebrow ">TrialSupport.us · Integrated Campaign · 2026</p>
+    <p class="project-video-header__eyebrow case-eyebrow">
+      TrialSupport.us · Integrated Campaign · 2026
+    </p>
 
     <section class="video-shell controls-visible" id="videoShell" aria-label="Campaign showcase video">
       <div class="video-wrap">
@@ -441,16 +327,7 @@
         </button>
 
         <div class="timeline">
-          <input
-            class="seek"
-            id="seekBar"
-            type="range"
-            min="0"
-            max="100"
-            step="0.1"
-            value="0"
-            aria-label="Seek video"
-          />
+          <input class="seek" id="seekBar" type="range" min="0" max="100" step="0.1" value="0" aria-label="Seek video" />
           <span class="time" id="timeDisplay">0:00 / 0:00</span>
         </div>
 
@@ -469,7 +346,6 @@
     </section>
 
     <div class="case-study-content">
-
       <section class="case-intro">
         <div>
           <p class="eyebrow">Creative Direction · Brand Transformation · 2026</p>
@@ -495,10 +371,9 @@
         </div>
       </section>
 
-<section class="case-section">
-        <figure class="case-image">
-          <img src="./assets/TS-Print-Branding-2.png"
-               alt="TrialSupport brand color system and visual development" loading="lazy" />
+      <section class="case-section case-section--media">
+        <figure class="case-image branded-print-img">
+          <img src="./assets/TS-Print-Branding-2.png" alt="TrialSupport branded print campaign imagery" loading="lazy" />
           <figcaption>Branded print campaign imagery</figcaption>
         </figure>
       </section>
@@ -517,15 +392,12 @@
             strategic direction rather than simply split the difference.
           </p>
         </div>
-
-
       </section>
 
       <section class="case-section">
         <div class="case-split">
           <figure class="case-image">
-            <img src="./assets/TS_Color_Swatches_.png"
-                 alt="TrialSupport branded social campaign imagery" loading="lazy" />
+            <img src="./assets/TS_Color_Swatches_.png" alt="TrialSupport brand color system" loading="lazy" />
             <figcaption>Developing a gem-tone visual system to differentiate TrialSupport in the legal-support market</figcaption>
           </figure>
 
@@ -543,24 +415,25 @@
         </div>
       </section>
 
-      <figure class="case-image">
-          <img src="./assets/ME-Render-TS-Social-Blog.png"
-               alt="TrialSupport brand color system and visual development" loading="lazy" />
-          <figcaption>Developing a gem-tone visual system to differentiate TrialSupport in the legal-support market</figcaption>
+      <section class="case-section case-section--media">
+        <figure class="case-image">
+          <img src="./assets/ME-Render-TS-Social-Blog.png" alt="TrialSupport social and blog campaign system" loading="lazy" />
+          <figcaption>Social and blog campaign system extending the rebrand across digital touchpoints</figcaption>
         </figure>
       </section>
 
       <section class="case-section">
-        <div class="case-section-head">
+        <div class="case-section-head case-section-head--with-media">
           <figure class="case-image">
-          <img src="./assets/TS_Render_Jams_CC_Double_Screen_Higlighter.jpg"
-               alt="TrialSupport 3D and AI-generated campaign environment" loading="lazy" />
-          <figcaption>Blender-built environments paired with AI-assisted character and campaign imagery</figcaption>
-        </figure>
+            <img src="./assets/TS_Render_Jams_CC_Double_Screen_Higlighter.jpg" alt="TrialSupport 3D and AI-generated campaign environment" loading="lazy" />
+            <figcaption>Blender-built environments paired with AI-assisted character and campaign imagery</figcaption>
+          </figure>
+
           <div>
             <p class="eyebrow">03 · AI + 3D Production</p>
             <h2>Building believable worlds instead of relying on generic stock imagery.</h2>
           </div>
+
           <p class="case-body">
             I created realistic TrialSupport-equipped courtroom and office environments in
             Blender, then used AI-assisted character generation and compositing to populate
@@ -568,24 +441,19 @@
             combined the control of 3D production with the speed and creative range of AI.
           </p>
         </div>
-        </section>
-
-      <section class="case-section edu-main-hero">
-        <figure class="case-figure edu-main-hero__figure">
-          <figure class="case-image">
-            <img src="./assets/ME-Render-TS-Videos.jpg"
-                 alt="TrialSupport motion graphics and video content" loading="lazy" />
-            <figcaption>Motion graphics extending the brand into video and digital storytelling</figcaption>
-          </figure>
-        </div>
       </section>
 
+      <section class="case-section case-section--media">
+        <figure class="case-image">
+          <img src="./assets/ME-Render-TS-Videos.jpg" alt="TrialSupport motion graphics and video content" loading="lazy" />
+          <figcaption>Motion graphics extending the brand into video and digital storytelling</figcaption>
+        </figure>
+      </section>
 
       <section class="case-section">
         <div class="case-split">
           <figure class="case-image">
-            <img src="./assets/TS_Render_Website_2.png"
-                 alt="TrialSupport courtroom presentation graphics and technology" loading="lazy" />
+            <img src="./assets/TS_Render_Website_2.png" alt="TrialSupport courtroom presentation graphics and technology" loading="lazy" />
             <figcaption>Courtroom presentation graphics and litigation-support visualization</figcaption>
           </figure>
 
@@ -599,10 +467,8 @@
               it immediate, credible, and persuasive for an audience that may only have
               seconds to understand it.
             </p>
-            <p class="case-body" style="margin-top:18px;">
-              <a href="https://www.trialsupport.us/3d-precision-graphics/"
-                 target="_blank" rel="noopener noreferrer"
-                 style="color:#fff;text-decoration:underline;text-underline-offset:4px;">
+            <p class="case-body ts-inline-link">
+              <a href="https://www.trialsupport.us/3d-precision-graphics/" target="_blank" rel="noopener noreferrer">
                 View the 3D Precision Graphics work →
               </a>
             </p>
@@ -623,20 +489,12 @@
             system to evolve around audience behavior rather than assumptions.
           </p>
         </div>
-
-        <!-- <figure class="case-image">
-          <img src=""
-               alt="TrialSupport website and content ecosystem" loading="lazy" />
-          <figcaption>SEO-focused content architecture connecting education, lead generation, and brand storytelling</figcaption>
-        </figure>
-      </section> -->
-
+      </section>
 
       <section class="case-section">
         <div class="case-split">
           <figure class="case-image">
-            <img src="./assets/ME_Render_TS_Brochure_4.jpg"
-                 alt="TrialSupport branded brochure" loading="lazy" />
+            <img src="./assets/ME_Render_TS_Brochure_4.jpg" alt="TrialSupport branded brochure" loading="lazy" />
             <figcaption>Branded brochure translating the digital identity into a tangible sales and marketing asset</figcaption>
           </figure>
 
@@ -653,14 +511,11 @@
         </div>
       </section>
 
-       <section class="case-section edu-main-hero">
-        <figure class="case-figure edu-main-hero__figure">
-          <figure class="case-image">
-            <img src="./assets/TS_Render_Emails_3.png"
-                 alt="TrialSupport motion graphics and video content" loading="lazy" />
-            <figcaption>Email Campaign Visuals</figcaption>
-          </figure>
-        </div>
+      <section class="case-section case-section--media">
+        <figure class="case-image">
+          <img src="./assets/TS_Render_Emails_3.png" alt="TrialSupport email campaign visuals" loading="lazy" />
+          <figcaption>Email campaign visuals</figcaption>
+        </figure>
       </section>
 
       <section class="case-section">
@@ -676,15 +531,13 @@
             qualified traffic back to the site.
           </p>
         </div>
+      </section>
 
-
-      <section class="case-section edu-main-hero">
-        <figure class="case-figure edu-main-hero__figure">
-          <figure class="case-image">
-            <img src="./assets/TS-Senior-partner-Outline-Typing.png"
-                 alt="TrialSupport motion graphics and video content" loading="lazy" />
-            <figcaption>Blending 3d Environment with Ai generated characters</figcaption>
-          </figure>
+      <section class="case-section case-section--media">
+        <figure class="case-image">
+          <img src="./assets/TS-Senior-partner-Outline-Typing.png" alt="TrialSupport AI-assisted campaign development" loading="lazy" />
+          <figcaption>Blending 3D environments with AI-generated characters</figcaption>
+        </figure>
       </section>
 
       <section class="case-section">
@@ -700,9 +553,7 @@
             and brand standards to make the final work feel intentional and consistent.
           </p>
         </div>
-
       </section>
-
 
       <section class="case-outcome">
         <p class="eyebrow">The Impact</p>
@@ -715,7 +566,7 @@
           visually undefined company into a more recognizable and scalable brand experience.
         </p>
 
-        <div class="case-tags" style="margin-top:30px;">
+        <div class="case-tags ts-impact-tags">
           <span>Brand Transformation</span>
           <span>Integrated Campaigns</span>
           <span>AI-Assisted Production</span>
@@ -726,19 +577,14 @@
           <span>Performance-Informed Design</span>
         </div>
       </section>
-
     </div>
+
     <div class="divider"></div>
 
-<footer class="case-footer">
-  <span>
-    Creative Direction · Brand Strategy · Motion Design · AI + 3D
-  </span>
-
-  <span>
-    TrialSupport.us · 2026
-  </span>
-</footer>
+    <footer class="case-footer">
+      <span>Creative Direction · Brand Strategy · Motion Design · AI + 3D</span>
+      <span>TrialSupport.us · 2026</span>
+    </footer>
   </main>
 
   <script src="https://player.vimeo.com/api/player.js"></script>
