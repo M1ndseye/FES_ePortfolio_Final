@@ -34,6 +34,21 @@
         border-color: rgba(216, 196, 107, 0.28);
       }
 
+      .education-page .edu-hero__media {
+        height: auto;
+        min-height: 0;
+        align-self: center;
+      }
+
+      .education-page .edu-hero__media .case-video {
+        width: 100%;
+        margin: 0;
+      }
+
+      .education-page .edu-hero__media iframe {
+        border-radius: 24px;
+      }
+
       .edu-grid {
         display: grid;
         grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -104,7 +119,8 @@
 
       /* =========================================================
        HOLIDAY STORY SECTIONS
-       text + still image on left, video on right
+       Each story fits within the height of its vertical video.
+       Text begins at the top; still artwork uses the remaining space.
        ========================================================= */
 
       .edu-holiday {
@@ -112,58 +128,125 @@
       }
 
       .edu-holiday__grid {
+        --edu-holiday-height: clamp(760px, 59vw, 920px);
         display: grid;
-        grid-template-columns: minmax(0, 0.9fr) minmax(420px, 1.1fr);
-        gap: clamp(34px, 5vw, 72px);
+        grid-template-columns: minmax(0, 0.92fr) minmax(400px, 1.08fr);
+        gap: clamp(42px, 5vw, 72px);
         align-items: start;
+      }
+
+      .edu-holiday__copy,
+      .edu-holiday__video {
+        height: var(--edu-holiday-height);
+        min-height: 0;
       }
 
       .edu-holiday__copy {
         max-width: 620px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .edu-holiday__copy .case-eyebrow {
+        margin-bottom: 14px;
+      }
+
+      .edu-holiday__copy .case-heading {
+        margin-bottom: 18px;
       }
 
       .edu-holiday__copy .case-body + .case-body {
         margin-top: 18px;
       }
 
+      .edu-holiday__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .edu-inline-download {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 10px 16px;
+        border: 1px solid rgba(216, 196, 107, 0.48);
+        border-radius: 999px;
+        background: rgba(216, 196, 107, 0.08);
+        color: #f4e79b;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        text-decoration: none;
+        transition:
+          background-color 0.2s ease,
+          border-color 0.2s ease,
+          transform 0.2s ease;
+      }
+
+      .edu-inline-download:hover {
+        background: rgba(216, 196, 107, 0.16);
+        border-color: rgba(216, 196, 107, 0.75);
+        transform: translateY(-1px);
+      }
+
       .edu-holiday__still {
-        margin: 32px 0 0;
+        flex: 1 1 auto;
+        min-height: 0;
+        width: min(100%, 520px);
+        margin: 24px 0 0;
+        display: flex;
+        flex-direction: column;
       }
 
       .edu-holiday__still img {
-        display: block;
+        flex: 1 1 auto;
+        min-height: 0;
         width: 100%;
-        height: auto;
-        max-height: 560px;
+        height: 0;
+        display: block;
         object-fit: cover;
+        object-position: center;
         border-radius: 24px;
       }
 
-      .edu-holiday__still figcaption {
+      .edu-holiday__still figcaption,
+      .edu-holiday__video figcaption {
+        flex: 0 0 auto;
+        margin: 0;
         padding-top: 10px;
+        line-height: 1.35;
       }
 
       .edu-holiday__video {
         margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
 
       .edu-holiday__video-frame {
+        flex: 1 1 auto;
+        min-height: 0;
         position: relative;
-        width: 100%;
         overflow: hidden;
         border-radius: 24px;
         background: #111113;
         box-shadow: 0 30px 70px rgba(0, 0, 0, 0.28);
       }
 
-      .edu-holiday__video-frame--landscape {
-        aspect-ratio: 4 / 3;
+      .edu-holiday__video-frame--vertical {
+        height: 100%;
+        width: auto;
+        max-width: 100%;
+        aspect-ratio: 9 / 16;
       }
 
-      .edu-holiday__video-frame--vertical {
-        aspect-ratio: 9 / 16;
-        max-width: 520px;
-        margin-inline: auto;
+      .edu-holiday__video-frame--landscape {
+        width: 100%;
+        aspect-ratio: 4 / 3;
       }
 
       .edu-holiday__video iframe {
@@ -175,7 +258,7 @@
       }
 
       .edu-holiday__video figcaption {
-        padding-top: 10px;
+        width: min(100%, 520px);
       }
 
       /* =========================================================
@@ -259,6 +342,22 @@
         filter: brightness(1.05);
       }
 
+      .edu-download__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 28px;
+      }
+
+      .edu-download__actions .edu-download__btn {
+        margin-top: 0;
+      }
+
+      .edu-download__btn--secondary {
+        background: transparent;
+        color: var(--edu-gold);
+      }
+
       .edu-download__note {
         display: block;
         margin-top: 12px;
@@ -319,91 +418,6 @@
           padding: 24px;
         }
       }
-
-      /* =========================================================
-       UNIFIED VIDEO PROJECT HEADER
-       Matches the 2026 Multi-Channel page structure
-       ========================================================= */
-      .project-video-header__eyebrow {
-        margin: 0 0 18px;
-        color: var(--muted, #a7a7ad);
-        font-size: 0.78rem;
-        font-weight: 700;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-      }
-
-      .project-video-header__media {
-        position: relative;
-        width: 100%;
-        overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 22px;
-        background: #000;
-        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
-        isolation: isolate;
-      }
-
-      .project-video-header__video {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        background: #000;
-      }
-
-      .project-video-header__video iframe {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        border: 0;
-      }
-
-      .project-video-header__content {
-        display: grid;
-        grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
-        gap: clamp(28px, 5vw, 80px);
-        padding: clamp(34px, 5vw, 72px) 4px 0;
-        align-items: end;
-      }
-
-      .project-video-header__title {
-        max-width: 950px;
-        margin: 0;
-        color: var(--text, #f5f5f7);
-        font-size: clamp(2.8rem, 5vw, 5.2rem);
-        line-height: 0.98;
-        letter-spacing: -0.055em;
-        text-wrap: balance;
-      }
-
-      .project-video-header__copy {
-        align-self: end;
-        min-width: 0;
-      }
-
-      .project-video-header__lede {
-        margin: 0;
-        color: var(--muted, #a7a7ad);
-        font-size: clamp(1.04rem, 1.4vw, 1.3rem);
-        line-height: 1.72;
-      }
-
-      .project-video-header__copy .case-tags {
-        margin-top: 28px;
-      }
-
-      @media (max-width: 780px) {
-        .project-video-header__media {
-          border-radius: 14px;
-        }
-        .project-video-header__content {
-          grid-template-columns: 1fr;
-        }
-        .project-video-header__copy {
-          align-self: auto;
-        }
-      }
     </style>
   </head>
 
@@ -431,16 +445,19 @@
         </div>
       </header>
 
-      <!-- =====================================================
-         UNIFIED VIDEO HEADER
-         ===================================================== -->
-      <p class="project-video-header__eyebrow">M1ndseye · Educational Assets</p>
+      <!-- =========================================================
+     VIDEO HEADER
+     ========================================================= -->
 
       <section
-        class="project-video-header__media"
+        class="project-video-header education-video-header"
         aria-label="M1ndseye Educational Assets video"
       >
-        <div class="project-video-header__video">
+        <p class="project-video-header__eyebrow case-eyebrow">
+          M1ndseye Educational Assets · Educational Design · Motion · 3D
+        </p>
+
+        <div class="case-video">
           <iframe
             src="https://player.vimeo.com/video/1061083069?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
             title="Educational Assets You Can Count On!"
@@ -454,23 +471,25 @@
             "
             referrerpolicy="strict-origin-when-cross-origin"
             allowfullscreen
-          >
-          </iframe>
+          ></iframe>
         </div>
       </section>
 
-      <section class="project-video-header__content">
-        <h1 class="project-video-header__title">
-          Educational assets you can count on.
-        </h1>
+      <!-- =========================================================
+     PROJECT INTRO
+     ========================================================= -->
 
-        <div class="project-video-header__copy">
-          <p class="project-video-header__lede">
-            Unlock your child’s potential and get ahead of the curve with the
-            M1ndseye Illustrated Alphabet Tracing Workbook—a playful learning
-            system designed to build early literacy, manual dexterity,
-            confidence, and curiosity through progressive exercises and visual
-            storytelling.
+      <section class="case-intro education-intro">
+        <div class="case-intro__copy">
+          <p class="case-eyebrow">M1ndseye Educational Assets</p>
+
+          <h1 class="case-title">Educational assets you can count on.</h1>
+
+          <p class="case-lede">
+            Unlock your child’s potential with the M1ndseye Illustrated Alphabet
+            Tracing Workbook—a playful learning system designed to build early
+            literacy, manual dexterity, confidence, and curiosity through
+            progressive exercises and visual storytelling.
           </p>
 
           <div class="case-tags">
@@ -484,56 +503,127 @@
         </div>
       </section>
 
-      <!-- =====================================================
+      <section class="case-section edu-main-hero">
+        <figure class="case-figure edu-main-hero__figure">
+          <img
+            src="./assets/ME_Social_Sesame_Hero_Image_Main_.jpg"
+            alt="M1ndseye educational workbook 3D environment"
+            loading="lazy"
+          />
+        </figure>
+      </section>
+
+      <div class="edu-highlight">
+        <p class="case-eyebrow">THE INSIGHT</p>
+
+        <h2 class="case-heading">
+          I designed it for my kids.<br />
+          Then I saw it working.
+        </h2>
+
+        <p class="case-body">
+          What began as worksheets I created for my own children during the
+          pandemic became something more. As they worked through the activities,
+          I began seeing the visual language of the worksheets reflected in
+          their handwriting. That observation shaped M1ndseye: make learning
+          materials visually engaging, easy for young hands to use, and designed
+          around the small wins that build confidence.
+        </p>
+      </div>
+
+      <!-- ======================================================
+     MESSAGE ARCHITECTURE
+     ====================================================== -->
+
+      <section class="case-section edu-section-space">
+        <!-- =====================================================
          PRODUCT SYSTEM
          ===================================================== -->
-      <section class="case-section">
-        <div class="case-section__head">
-          <div>
-            <p class="case-eyebrow">Learning System</p>
-            <h2 class="case-heading">Built to grow with the learner.</h2>
-            <a
-              class="edu-download__btn"
-              href="https://www.amazon.com/gp/product/B0DM65745Y?ref_=dbs_m_mng_rwt_calw_tpbk_2&storeType=ebooks&qid=1772216582&sr=8-3#detailBullets_feature_div"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Purchase the workbook on Amazon
-            </a>
+        <section class="case-section edu-section-space">
+          <div class="case-section__head">
+            <div>
+              <p class="case-eyebrow">Learning System</p>
+
+              <h2 class="case-heading">Built to grow with the learner.</h2>
+
+              <a
+                class="edu-download__btn"
+                href="https://www.amazon.com/gp/product/B0DM65745Y?ref_=dbs_m_mng_rwt_calw_tpbk_2&storeType=ebooks&qid=1772216582&sr=8-3#detailBullets_feature_div"
+                target="_blank"
+                rel="noopener"
+              >
+                Purchase the workbook on Amazon
+              </a>
+            </div>
+
+            <p class="case-body">
+              Six full exercise series introduce skills through a gradually
+              sloping difficulty curve. Word searches, vowel mazes, early
+              phonics, tracing, and writing practice build muscle memory and
+              manual dexterity while keeping the experience playful. Each book
+              also introduces Spanish or French, giving young learners an early
+              reason to explore beyond the immediate lesson.
+            </p>
           </div>
 
-          <p class="case-body">
-            Six full exercise series introduce skills through a gradually
-            sloping difficulty curve. Word searches, vowel mazes, early phonics,
-            tracing, and writing practice build muscle memory and manual
-            dexterity while keeping the experience playful. Each book also
-            introduces Spanish or French, giving young learners an early reason
-            to explore beyond the immediate lesson.
-          </p>
-        </div>
-
-        <section class="case-section edu-main-hero">
-          <figure class="case-figure edu-main-hero__figure">
-            <img
-              src="./assets/ME_Social_Sesame_Hero_Image_Main_.jpg"
-              alt="M1ndseye educational workbook 3D environment"
-              loading="lazy"
-            />
-          </figure>
+          <div class="edu-message-stack">
+            <!-- your four image figures stay here -->
+          </div>
         </section>
 
-        <div class="edu-highlight">
-          <p class="case-eyebrow">Progressive Learning</p>
-          <h2 class="case-heading">
-            Word searches that grow with the child. Vowel mazes where every path
-            is the right path.
-          </h2>
-          <p class="case-body">
-            The system is built to support accomplishment rather than
-            frustration. Activities become more challenging over time while
-            giving children repeated opportunities to practice letterforms,
-            vocabulary, pattern recognition, and foundational phonics.
-          </p>
+        <!-- FULL-WIDTH IMAGE GRID -->
+        <div class="edu-message-stack">
+          <!-- 01 -->
+          <figure class="case-figure edu-message-card">
+            <img
+              src="./assets/ME_Social_Sesame_Mazes_.png"
+              alt="Vowel mazes educational activity"
+              loading="lazy"
+            />
+
+            <figcaption>
+              With our Vowel Mazes every path is the right path.
+            </figcaption>
+          </figure>
+
+          <!-- 02 -->
+          <figure class="case-figure edu-message-card">
+            <img
+              src="./assets/ME_Social_Sesame_Word_Search_.png"
+              alt="Word search educational activity"
+              loading="lazy"
+            />
+
+            <figcaption>
+              Word Search Challenges that grow as your child’s experience grows.
+            </figcaption>
+          </figure>
+
+          <!-- 03 -->
+          <figure class="case-figure edu-message-card">
+            <img
+              src="./assets/ME_Social_Sesame_Sloping_Difficulty_Curve_.png"
+              alt="Progressive sloping difficulty curve"
+              loading="lazy"
+            />
+
+            <figcaption>
+              Six full series featuring a gradually sloping difficulty curve.
+            </figcaption>
+          </figure>
+
+          <!-- 04 -->
+          <figure class="case-figure edu-message-card">
+            <img
+              src="./assets/ME_Social_Sesame_Duo_Intro_to_French_.png"
+              alt="M1ndseye educational workbook with introduction to French"
+              loading="lazy"
+            />
+
+            <figcaption>
+              Available with introduction to Spanish or French.
+            </figcaption>
+          </figure>
         </div>
       </section>
 
@@ -543,7 +633,7 @@
       <section class="case-section edu-section-space">
         <div class="case-section__head">
           <div>
-            <p class="case-eyebrow">Campaign Extensions</p>
+            <p class="case-eyebrow">Holiday Activities</p>
             <h2 class="case-heading">
               Learning content extended into a playful 3D brand world.
             </h2>
@@ -557,20 +647,18 @@
           </p>
         </div>
 
-       
-
         <div class="edu-social-grid">
-           <figure class="case-figure edu-card">
-          <img
-            src="./assets/ME_Sesame_Hol_Valentines_Love_Certs_.jpg"
-            alt="Valentine educational campaign"
-            loading="lazy"
-          />
-          <figcaption>Valentine Coupon Campaign</figcaption>
-        </figure>
           <figure class="case-figure edu-card">
             <img
-              src="./assets/ME_Sesame_Hol_St_Patty.jpg"
+              src="./assets/ME_Sesame_Hol_Valentines_Love_Certs_.jpg"
+              alt="Valentine educational campaign"
+              loading="lazy"
+            />
+            <figcaption>Valentine Coupon Campaign</figcaption>
+          </figure>
+          <figure class="case-figure edu-card">
+            <img
+              src="./assets/ME_Sesame_Hol_St_Patty_Landscape.jpg"
               alt="St. Patrick's Day Shamrock Maze"
               loading="lazy"
             />
@@ -598,90 +686,31 @@
       </section>
 
       <!-- =====================================================
-         VALENTINE STORY
-         ===================================================== -->
-      <section class="edu-holiday">
-        <div class="edu-holiday__grid">
-          <div class="edu-holiday__copy">
-            <p class="case-eyebrow">Seasonal Storytelling · Valentine</p>
-            <h2 class="case-heading">
-              A campaign that made the learning product part of the celebration.
-            </h2>
-
-            <p class="case-body">
-              The Valentine campaign translated the educational system into a
-              softer, playful world without losing the brand’s core visual
-              language. The still campaign focused on the idea that meaningful
-              educational support does not need to feel expensive or overly
-              serious.
-            </p>
-
-            <p class="case-body">
-              Motion then brought the environment to life, giving the social
-              piece its own pacing and personality while staying grounded in the
-              same workbook-centered system.
-            </p>
-
-            <figure class="edu-holiday__still">
-              <img
-                src="./assets/ME_Sesame_Hol_Valentines_Love_Certs_.jpg"
-                alt="M1ndseye Valentine educational campaign still"
-                loading="lazy"
-              />
-              <figcaption>
-                Valentine campaign still · product + 3D environment
-              </figcaption>
-            </figure>
-          </div>
-
-          <figure class="edu-holiday__video">
-            <div
-              class="edu-holiday__video-frame edu-holiday__video-frame--vertical"
-            >
-              <iframe
-                src="https://player.vimeo.com/video/1216834021?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
-                title="M1ndseye Valentine Educational Campaign"
-                allow="
-                  autoplay;
-                  fullscreen;
-                  picture-in-picture;
-                  clipboard-write;
-                  encrypted-media;
-                  web-share;
-                "
-                referrerpolicy="strict-origin-when-cross-origin"
-                allowfullscreen
-              >
-              </iframe>
-            </div>
-            <figcaption>Valentine campaign · social motion</figcaption>
-          </figure>
-        </div>
-      </section>
-
-      <!-- =====================================================
          HALLOWEEN STORY
          ===================================================== -->
       <section class="edu-holiday">
         <div class="edu-holiday__grid">
           <div class="edu-holiday__copy">
-            <p class="case-eyebrow">Seasonal Storytelling · Halloween</p>
-            <h2 class="case-heading">
-              A familiar seasonal hook turned into a learning challenge.
-            </h2>
+            <p class="case-eyebrow">
+              Continuous Line Halloween Maze · free printable activity
+            </p>
+            <h2 class="case-heading">One line. One big challenge.</h2>
 
             <p class="case-body">
-              For Halloween, the workbook world shifted into a more atmospheric
-              environment centered around the pumpkin maze. The creative still
-              worked as a clear promotional asset, while the vertical motion
-              piece was built specifically for social viewing.
+              One continuous line fills the entire Halloween maze, creating a
+              longer, more engaging hand workout designed to build manual
+              dexterity while children play their way to the finish.
             </p>
 
-            <p class="case-body">
-              Separating the static campaign art from the motion experience kept
-              the page from feeling like a video gallery and instead showed how
-              one idea was adapted across formats.
-            </p>
+            <div class="edu-holiday__actions">
+              <a
+                class="edu-inline-download"
+                href="./assets/ME_Maze_Jack_o_Lantern_.pdf"
+                download
+              >
+                Download Free Halloween Maze ↓
+              </a>
+            </div>
 
             <figure class="edu-holiday__still">
               <img
@@ -723,63 +752,136 @@
       </section>
 
       <!-- =====================================================
-         MESSAGE SYSTEM
+         St Patrick's Day STORY
          ===================================================== -->
-      <section class="case-section edu-section-space">
-        <div class="edu-copy-grid">
-          <div>
-            <p class="case-eyebrow">Message Architecture</p>
-            <h2 class="case-heading">Simple promises. Clear learning value.</h2>
+      <section class="edu-holiday">
+        <div class="edu-holiday__grid">
+          <div class="edu-holiday__copy">
+            <p class="case-eyebrow">
+              Continuous Line Shamrock Maze · free printable activity
+            </p>
+            <h2 class="case-heading">Follow the line. Find your luck.</h2>
 
             <p class="case-body">
-              “With our Vowel Mazes every path is the right path.”
+              One continuous line winds through the entire Shamrock Maze, giving
+              little hands a longer challenge that helps build manual dexterity,
+              pencil control, and focus—all disguised as St. Patrick’s Day fun.
             </p>
 
-            <p class="case-body">
-              “Word Search Challenges that grow as your child’s experience
-              grows.”
-            </p>
+            <div class="edu-holiday__actions">
+              <a
+                class="edu-inline-download"
+                href="./assets/ME_Maze_Shamrock_.pdf"
+                download
+              >
+                Download Free St Patrick's Day Maze ↓
+              </a>
+            </div>
 
-            <p class="case-body">
-              “Six full series featuring a gradually sloping difficulty curve.”
-            </p>
-
-            <p class="case-body">“Now available with an intro to French.”</p>
+            <figure class="edu-holiday__still">
+              <img
+                src="./assets/ME_Sesame_Hol_St_Patty_Landscape.jpg"
+                alt="M1ndseye St Patrick's Day Shamrock Maze"
+                loading="lazy"
+              />
+              <figcaption>
+                St Patrick's Day campaign still · shamrock maze promotion
+              </figcaption>
+            </figure>
           </div>
 
-          <div class="edu-message-stack">
-            <figure class="case-figure edu-message-card">
-              <img
-                src="./assets/ME_Social_Sesame_Mazes_.png"
-                alt="Vowel mazes educational activity"
-                loading="lazy"
-              />
-            </figure>
+          <figure class="edu-holiday__video">
+            <div
+              class="edu-holiday__video-frame edu-holiday__video-frame--vertical"
+            >
+              <iframe
+                src="https://player.vimeo.com/video/1217523034?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                frameborder="0"
+                allow="
+                  autoplay;
+                  fullscreen;
+                  picture-in-picture;
+                  clipboard-write;
+                  encrypted-media;
+                  web-share;
+                "
+                referrerpolicy="strict-origin-when-cross-origin"
+                style="
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                "
+                title="Continuous Line Shamrock Maze"
+              ></iframe>
+            </div>
+            <figcaption>
+              Halloween campaign · vertical social animation
+            </figcaption>
+          </figure>
+        </div>
+      </section>
 
-            <figure class="case-figure edu-message-card">
-              <img
-                src="./assets/ME_Social_Sesame_Word_Search_.png"
-                alt="Word search educational activity"
-                loading="lazy"
-              />
-            </figure>
+      <!-- =====================================================
+         VALENTINE STORY
+         ===================================================== -->
+      <section class="edu-holiday">
+        <div class="edu-holiday__grid">
+          <div class="edu-holiday__copy">
+            <p class="case-eyebrow">Seasonal Storytelling · Valentine</p>
+            <h2 class="case-heading">
+              A campaign that made the learning product part of the celebration.
+            </h2>
 
-            <figure class="case-figure edu-message-card">
-              <img
-                src="./assets/ME_Social_Sesame_Sloping_Difficulty_Curve_.png"
-                alt="Progressive sloping difficulty curve"
-                loading="lazy"
-              />
-            </figure>
+            <p class="case-body">
+              The Valentine campaign translated the educational system into a
+              softer, playful world without losing the brand’s core visual
+              language. The still campaign focused on the idea that meaningful
+              educational support does not need to feel expensive or overly
+              serious.
+            </p>
 
-            <figure class="case-figure edu-message-card">
+            <p class="case-body">
+              Motion then brought the environment to life, giving the social
+              piece its own pacing and personality while staying grounded in the
+              same workbook-centered system.
+            </p>
+
+            <figure class="edu-holiday__still">
               <img
-                src="./assets/ME_Social_Sesame_Duo_Intro_to_French_.png"
-                alt="Introduction to French educational activity"
+                src="./assets/ME_Sesame_Valentine_Landscape.jpg"
+                alt="M1ndseye Valentine educational campaign still"
                 loading="lazy"
               />
+              <figcaption>
+                Valentine campaign still · product + 3D environment
+              </figcaption>
             </figure>
           </div>
+
+          <figure class="edu-holiday__video">
+            <div
+              class="edu-holiday__video-frame edu-holiday__video-frame--vertical"
+            >
+              <iframe
+                src="https://player.vimeo.com/video/1216834021?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+                title="M1ndseye Valentine Educational Campaign"
+                allow="
+                  autoplay;
+                  fullscreen;
+                  picture-in-picture;
+                  clipboard-write;
+                  encrypted-media;
+                  web-share;
+                "
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              >
+              </iframe>
+            </div>
+            <figcaption>Valentine campaign · social motion</figcaption>
+          </figure>
         </div>
       </section>
 
@@ -810,13 +912,22 @@
             system used alongside the original worksheets.
           </p>
 
-          <a
-            class="edu-download__btn"
-            href="./assets/ME_Goal_Chart_Celestial.zip"
-            download
-          >
-            Download Free Goal Chart ↓
-          </a>
+          <div class="edu-download__actions">
+            <a
+              class="edu-download__btn"
+              href="./assets/ME_Goal_Chart_Celestial.zip"
+              download
+            >
+              Download Free Goal Chart ↓
+            </a>
+
+            <!-- <a
+            class="edu-download__btn edu-download__btn--secondary"
+            href="./assets/ME_Maze_Shamrock_.pdf"
+            download>
+            Download Free Shamrock Maze ↓
+          </a> -->
+          </div>
 
           <span class="edu-download__note">
             <strong>ME_Goal_Chart_Celestial.zip</strong> contains both black and
@@ -846,13 +957,53 @@
         </p>
       </section>
 
-      <footer class="case-footer">
-        <span
-          >Educational Design · 3D Illustration · Motion Design · Social
-          Content</span
-        >
-        <span>M1ndseye · Educational Assets</span>
-      </footer>
+     <!-- =====================================================
+     PROJECT FOOTER
+     ===================================================== -->
+
+<footer class="project-footer">
+
+  <div class="project-footer-nav">
+
+    <a href="https://m1ndseye.com/" class="project-footer-brand">
+      <img src="./assets/M1E_icon_2.svg" alt="M1ndseye" />
+      <span>M1ndseye</span>
+    </a>
+
+    <nav class="project-footer-actions" aria-label="Project navigation">
+      <a href="https://m1ndseye.com/" class="project-footer-btn">
+        Portfolio
+      </a>
+
+      <a
+        href="./enzoani-fashion-events.html"
+        class="project-footer-btn"
+      >
+        ← Prev
+      </a>
+
+      <a
+        href="./2026-multi-channel-brand-campaign-showcase.html"
+        class="project-footer-btn"
+      >
+        Next →
+      </a>
+    </nav>
+
+  </div>
+
+  <div class="project-footer-meta">
+    <span>
+      Educational Design · 3D Illustration · Motion Design · Social Content
+    </span>
+
+    <span>
+      M1ndseye · Educational Assets
+    </span>
+  </div>
+
+</footer>
+
     </main>
 
     <script src="https://player.vimeo.com/api/player.js"></script>
