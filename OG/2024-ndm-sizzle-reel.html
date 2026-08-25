@@ -8,9 +8,8 @@
       content="A seven-month integrated content campaign for TrialSupport.us, spanning digital marketing, brand storytelling, and motion design."
     />
     <title>NDM Sizzle Reel</title>
-    <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="./portfolio-projects.css">
-    <link rel="stylesheet" href="mos-edw.css" />
+    <link rel="stylesheet" href="style.css?v=3" />
+    <link rel="stylesheet" href="portfolio-projects.css?v=2" />
 
     <style>
       :root {
@@ -296,11 +295,103 @@
           transition: none !important;
         }
       }
+
+    /* =========================================================
+       NDM WIDTH ALIGNMENT
+       Uses the same outer case-shell as the Healthcare project.
+       ========================================================= */
+    .ndm-page .project-page-nav,
+    .ndm-page .project-video-header__eyebrow,
+    .ndm-page .project-video-header__media,
+    .ndm-page .project-video-header__content {
+      width: 100%;
+      max-width: none;
+    }
+
+    /* =========================================================
+       UNIFIED VIDEO PROJECT HEADER
+       Matches the 2026 Multi-Channel page structure
+       ========================================================= */
+    .project-video-header__eyebrow {
+      margin: 0 0 18px;
+      color: var(--muted, #a7a7ad);
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .project-video-header__media {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 22px;
+      background: #000;
+      box-shadow: 0 30px 80px rgba(0,0,0,.45);
+      isolation: isolate;
+    }
+
+    .project-video-header__video {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+
+    .project-video-header__video iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .project-video-header__content {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(260px, .85fr);
+      gap: clamp(28px, 5vw, 80px);
+      padding: clamp(34px, 5vw, 72px) 4px 0;
+      align-items: end;
+    }
+
+    .project-video-header__title {
+      max-width: 950px;
+      margin: 0;
+      color: var(--text, #f5f5f7);
+      font-size: clamp(2.8rem, 5vw, 5.2rem);
+      line-height: .98;
+      letter-spacing: -.055em;
+      text-wrap: balance;
+    }
+
+    .project-video-header__copy {
+      align-self: end;
+      min-width: 0;
+    }
+
+    .project-video-header__lede {
+      margin: 0;
+      color: var(--muted, #a7a7ad);
+      font-size: clamp(1.04rem, 1.4vw, 1.3rem);
+      line-height: 1.72;
+    }
+
+    .project-video-header__copy .case-tags {
+      margin-top: 28px;
+    }
+
+    @media (max-width: 780px) {
+      .project-video-header__media { border-radius: 14px; }
+      .project-video-header__content { grid-template-columns: 1fr; }
+      .project-video-header__copy { align-self: auto; }
+    }
+
     </style>
   </head>
 
-  <body class="ndm-page">
-    <main class="page">
+  <body class="case-page ndm-page">
+    <main class="case-shell">
       <header class="project-page-nav">
         <a href="https://m1ndseye.com/" class="project-page-brand">
           <img src="./assets/M1E_icon_2.svg" alt="M1ndseye" />
@@ -308,24 +399,15 @@
         </a>
 
         <div class="project-page-actions">
-          <a href="https://m1ndseye.com/" class="project-page-btn"
-            >Portfolio</a
-          >
-          <a
-            href="./2026-multi-channel-brand-campaign-showcase.html"
-            class="project-page-btn"
-            >← Prev</a
-          >
-          <a href="./providence-histotripsy-campaign.html" class="project-page-btn"
-            >Next →</a
-          >
-
+          <a href="https://m1ndseye.com/" class="project-page-btn">Portfolio</a>
+          <a href="./2026-multi-channel-brand-campaign-showcase.html" class="project-page-btn">← Prev</a>
+          <a href="./providence-histotripsy-campaign.html" class="project-page-btn">Next →</a>
         </div>
       </header>
-      <p class="eyebrow">NDM Communications · Social Campaign · 2024</p>
+      <p class="project-video-header__eyebrow">NDM Communications · Social Campaign · 2024</p>
 
-      <section class="video-shell" aria-label="Campaign showcase video">
-        <div class="video-wrap">
+      <section class="video-shell project-video-header__media" aria-label="Campaign showcase video">
+        <div class="video-wrap project-video-header__video">
           <iframe
             src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fndmcomm%2Fvideos%2F603579752542952%2F&show_text=0&width=560"
             width="560"
@@ -346,10 +428,10 @@
         </div>
       </section>
 
-      <section class="content">
-        <h1>NDM Brand Identity Social Media Campaign 2024</h1>
+      <section class="content project-video-header__content">
+        <h1 class="project-video-header__title">NDM Brand Identity Social Media Campaign 2024</h1>
 
-        <p class="description">
+        <p class="description project-video-header__lede">
           Working alongside our in-house writer, I translated NDM’s messaging
           into a cohesive visual campaign spanning social content, motion
           design, 3D animation, and brand storytelling.
