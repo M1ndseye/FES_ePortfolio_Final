@@ -391,6 +391,101 @@
   <style>
 
     /* =========================================================
+       NDM CAMPAIGN CONTENT — RESTORE CLEAN SECTION FLOW
+       ========================================================= */
+    .ndm-page .campaign-showcase,
+    .ndm-page .campaign-grid {
+      width: 100%;
+      margin: clamp(56px, 7vw, 96px) 0 0;
+      padding: 0;
+    }
+
+    .ndm-page .section-intro {
+      max-width: 1180px;
+      margin: 0 0 clamp(28px, 4vw, 48px);
+    }
+
+    .ndm-page .section-intro .eyebrow,
+    .ndm-page .campaign-copy .eyebrow {
+      margin: 0 0 16px;
+    }
+
+    .ndm-page .section-intro h2,
+    .ndm-page .campaign-copy h3 {
+      margin: 0 0 12px;
+      color: var(--text, #f5f5f7);
+      line-height: 1.08;
+    }
+
+    .ndm-page .section-intro h2 {
+      font-size: clamp(2rem, 3.2vw, 3.6rem);
+    }
+
+    .ndm-page .campaign-copy h3 {
+      font-size: clamp(1.6rem, 2.4vw, 2.6rem);
+    }
+
+    .ndm-page .section-intro p:last-child,
+    .ndm-page .campaign-copy p:last-child {
+      margin: 0;
+      max-width: 1200px;
+      color: var(--muted, #a7a7ad);
+      font-size: clamp(1rem, 1.25vw, 1.18rem);
+      line-height: 1.65;
+    }
+
+    .ndm-page .ndm-feature-image,
+    .ndm-page .campaign-grid-image {
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      border-radius: 22px;
+      background: transparent;
+    }
+
+    .ndm-page .ndm-feature-image img,
+    .ndm-page .campaign-grid-image img {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin: 0;
+      object-fit: cover;
+    }
+
+    .ndm-page .campaign-grid {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(24px, 3vw, 38px);
+      margin-bottom: 0;
+    }
+
+    .ndm-page .campaign-copy {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .ndm-page .project-footer {
+      clear: both;
+      position: relative;
+      margin-top: clamp(44px, 6vw, 74px) !important;
+    }
+
+    @media (max-width: 760px) {
+      .ndm-page .campaign-showcase,
+      .ndm-page .campaign-grid {
+        margin-top: 52px;
+      }
+
+      .ndm-page .ndm-feature-image,
+      .ndm-page .campaign-grid-image {
+        border-radius: 16px;
+      }
+    }
+
+    /* =========================================================
        PROJECT FOOTER — MATCHES M1NDSEYE EDUCATIONAL ASSETS
        ========================================================= */
     .project-footer {
@@ -547,7 +642,7 @@
 
         <div class="project-page-actions">
           <a href="https://m1ndseye.com/" class="project-page-btn">Portfolio</a>
-          <a href="./m1ndseye-educational-assets.html" class="project-page-btn">← Prev</a>
+          <a href="./2026-multi-channel-brand-campaign-showcase.html" class="project-page-btn">← Prev</a>
           <a href="./providence-histotripsy-campaign.html" class="project-page-btn">Next →</a>
         </div>
       </header>
@@ -659,7 +754,7 @@
 
           <nav class="project-footer-actions" aria-label="Project navigation">
             <a href="https://m1ndseye.com/" class="project-footer-btn">Portfolio</a>
-            <a href="./m1ndseye-educational-assets.html" class="project-footer-btn">← Prev</a>
+            <a href="./2026-multi-channel-brand-campaign-showcase.html" class="project-footer-btn">← Prev</a>
             <a href="./providence-histotripsy-campaign.html" class="project-footer-btn">Next →</a>
           </nav>
         </div>
