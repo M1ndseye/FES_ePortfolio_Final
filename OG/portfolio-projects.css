@@ -422,7 +422,6 @@
   line-height: 1.4;
 }
 
-
 /* =========================================================
    MOBILE
    ========================================================= */
@@ -1775,4 +1774,259 @@
   }
 }
 
+/* =========================================================
+   EDUCATION PROJECT FOOTER — LOCKED LAYOUT
+   Keeps nav directly above the metadata bar and aligned to the
+   same full content width as the Outcome card.
+   ========================================================= */
+.education-page .education-project-footer {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 34px 0 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
 
+.education-page .education-project-footer .project-footer-nav {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 8px 10px 12px !important;
+  background: transparent !important;
+}
+
+.education-page .education-project-footer .project-footer-brand {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin: 0 !important;
+  color: #f5f5f7 !important;
+  text-decoration: none !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+}
+
+.education-page .education-project-footer .project-footer-brand img {
+  display: block !important;
+  width: 42px !important;
+  height: 42px !important;
+  object-fit: contain !important;
+}
+
+.education-page .education-project-footer .project-footer-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+  margin: 0 0 0 auto !important;
+}
+
+.education-page .education-project-footer .project-footer-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 44px !important;
+  padding: 0 18px !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 12px !important;
+  background: rgba(0, 0, 0, 0.22) !important;
+  color: #f5f5f7 !important;
+  text-decoration: none !important;
+  font-size: 0.86rem !important;
+  font-weight: 650 !important;
+  white-space: nowrap !important;
+}
+
+.education-page .education-project-footer .project-footer-meta {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 23px 44px !important;
+  border-radius: 0 0 28px 28px !important;
+  background: #282828 !important;
+  color: rgba(255, 255, 255, 0.48) !important;
+  font-size: 0.95rem !important;
+  line-height: 1.4 !important;
+}
+
+.education-page .education-project-footer .project-footer-meta span:last-child {
+  text-align: right;
+}
+
+@media (max-width: 760px) {
+  .education-page .education-project-footer {
+    margin-top: 26px !important;
+  }
+
+  .education-page .education-project-footer .project-footer-nav {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 16px !important;
+    padding: 8px 4px 12px !important;
+  }
+
+  .education-page .education-project-footer .project-footer-actions {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    width: 100% !important;
+    margin: 0 !important;
+    gap: 8px !important;
+  }
+
+  .education-page .education-project-footer .project-footer-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 0 8px !important;
+    font-size: 0.78rem !important;
+  }
+
+  .education-page .education-project-footer .project-footer-meta {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    padding: 20px 22px !important;
+    border-radius: 0 0 22px 22px !important;
+    font-size: 0.84rem !important;
+  }
+
+  .education-page .education-project-footer .project-footer-meta span:last-child {
+    text-align: left;
+  }
+}
+
+
+
+/* =========================================================
+   PROGRAM & COLLECT — LAYOUT FIX
+   ========================================================= */
+
+.edw-program {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.38fr) minmax(0, 1fr);
+  column-gap: clamp(40px, 5vw, 80px);
+  row-gap: 42px;
+  align-items: start;
+}
+
+.edw-program__intro {
+  min-width: 0;
+}
+
+.edw-program__intro h2 {
+  max-width: 9ch;
+}
+
+.edw-program .edw-grid--editorial {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  min-width: 0;
+}
+
+.edw-program .edw-card--wide {
+  width: 100%;
+  margin: 0;
+}
+
+.edw-program .edw-card--wide img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.edw-program .edw-card--cinema {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-top: 28px;
+}
+
+.edw-program .edw-card--cinema img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+
+/* Mobile */
+@media (max-width: 900px) {
+  .edw-program {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .edw-program__intro h2 {
+    max-width: 12ch;
+  }
+
+  .edw-program .edw-card--cinema {
+    grid-column: auto;
+  }
+}
+
+/* =========================================================
+   GEM HOPPER CONCEPT GRID
+   ========================================================= */
+
+.edw-concept-strip {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 28px 24px;
+  align-items: start;
+}
+
+/* Top 3 — equal thirds */
+.edw-concept-strip .edw-card:nth-child(1),
+.edw-concept-strip .edw-card:nth-child(2),
+.edw-concept-strip .edw-card:nth-child(3) {
+  grid-column: span 2;
+}
+
+/* Bottom 2 — equal halves */
+.edw-concept-strip .edw-card:nth-child(4),
+.edw-concept-strip .edw-card:nth-child(5) {
+  grid-column: span 3;
+}
+
+.edw-concept-strip .edw-card {
+  width: 100%;
+  margin: 0;
+  min-width: 0;
+}
+
+.edw-concept-strip .edw-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 22px;
+}
+
+.edw-concept-strip figcaption {
+  margin-top: 10px;
+}
+
+
+/* TABLET / MOBILE */
+@media (max-width: 900px) {
+  .edw-concept-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .edw-concept-strip .edw-card:nth-child(n) {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .edw-concept-strip {
+    grid-template-columns: 1fr;
+  }
+}
