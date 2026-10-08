@@ -3,11 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Stephen Padilla</title>
-    <link rel="stylesheet" href="style.css?v=3" />
-    <script src="index.js?v=3" defer></script>
+    <title>Steve Padilla | Senior Brand &amp; Motion Designer</title>
+    <meta name="description" content="Senior brand and motion designer with 18+ years of experience. 3D, motion and campaign systems, including a launch film that earned 1M+ views." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Steve Padilla | Senior Brand &amp; Motion Designer" />
+    <meta property="og:description" content="18+ years building brands from nothing: 3D, motion and campaign systems. Launch film for Providence earned 1M+ views." />
+    <meta property="og:url" content="https://m1ndseye.com/" />
+    <meta property="og:image" content="https://m1ndseye.com/assets/FES_ePort_PRO_Histor_Vid_3d.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://m1ndseye.com/" />
+    <link rel="stylesheet" href="style.css?v=4" />
+    <script src="index.js?v=4" defer></script>
     <link rel="icon" href="/assets/M1E_icon.svg" type="image/x-icon" />
-<script src="https://kit.fontawesome.com/01087b1b84.js" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/01087b1b84.js" crossorigin="anonymous" defer></script>
     <script type="text/javascript"
         src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
     </script>
@@ -24,7 +32,7 @@
     <section id="landing-page">
       <nav>
         <figure>
-          <img id="personal-logo" src="./assets/M1E_icon_2.svg" alt="" />
+          <img id="personal-logo" src="./assets/M1E_icon_2.svg" alt="M1ndseye logo" />
         </figure>
         <ul class="nav__link--list">
           <li class="nav__link" onclick="toggleModal()">
@@ -64,11 +72,15 @@
           <h1 class="title">Hey</h1>
           <h1 class="title accent-color">I'm Steve</h1>
           <p class="header__para">
-            I'm a senior <b class="accent-color">Design Systems and Brand Architect</b> with
-            18+ years of experience building and scaling premium visual systems, integrating advanced AI content automation, and bridging the gap between design and engineering.
+            I'm a senior <b class="accent-color">Brand &amp; Motion Designer</b> with
+            18+ years of experience building brands from nothing: launch films, 3D worlds and campaign systems that turn complex subjects into clear, high-performing creative.
             <br />
             Here's a bit more <b class="accent-color click" onclick="toggleModal()">about me.</b>
           </p>
+          <div class="hero__cta">
+            <a class="hero__btn hero__btn--primary" href="./assets/Steve-Padilla-Resume-2026.pdf" target="_blank" rel="noopener">Download resume</a>
+            <a class="hero__btn" href="mailto:steve.mindseye@gmail.com">Email me</a>
+          </div>
           <div class="social__list">
             <a
               href="https://www.linkedin.com/in/stevemichaelpadilla/"
@@ -200,6 +212,7 @@ I work across branding, UI/UX, 3D, motion, and front-end fundamentals to create 
           <h3 class="modal__sub-title modal__sub-title--contact">
             Whether you have a project in mind, want to discuss potential collaboration, or just want to connect, feel free to reach out.
           </h3>
+          <p class="modal__direct">Prefer email? <a href="mailto:steve.mindseye@gmail.com">steve.mindseye@gmail.com</a></p>
           <form id="contact__form" onsubmit="contact(event)">
             <div class="form__item">
               <label class="form__item-label">Name</label>
@@ -236,7 +249,30 @@ I work across branding, UI/UX, 3D, motion, and front-end fundamentals to create 
             <li class="project">
               <div class="project__wrapper">
                 <img
-                  src="./assets/ME-Render-TS-Social-Blog.png"
+                  src="./assets/FES_ePort_PRO_Histor_Vid_3d.jpg" alt="3D medical animation frame from the Providence histotripsy launch film" decoding="async"
+                  class="project__img"
+                />
+                <div class="project__wrapper--bg"></div>
+                <div class="project__description">
+                  <h3 class="project__description--title">
+                    Providence Histotripsy Procedure 3d Animation & Campaign
+                  </h3>
+                  <h4 class="project__description--subtitle">
+                    Branding, Video Editing, Motion Graphics
+                   &middot; <b>1M+ views</b></h4>
+                  <p class="project__description--para">
+                    When Providence needed to promote Histotripsy, a groundbreaking liver tumor treatment, I created a concise, engaging video and web ads without access to the equipment, using Blender, After Effects, and AI voiceover—garnering over a million views.
+                  </p>
+                  <div class="project__description--links">
+                    <a href="./providence-histotripsy-campaign.html" class="project-page-btn">View Project</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="project">
+              <div class="project__wrapper">
+                <img
+                  src="./assets/ME-Render-TS-Social-Blog.jpg" alt="TrialSupport branded social graphic rendered in 3D" loading="lazy" decoding="async"
                   class="project__img"
                 />
                 <div class="project__wrapper--bg"></div>
@@ -246,7 +282,7 @@ I work across branding, UI/UX, 3D, motion, and front-end fundamentals to create 
                   </h3>
                   <h4 class="project__description--subtitle">
                     Branding, Motion Graphics, Video Editing<!-- Branding, Video Editing, Motion Graphics -->
-                  </h4>
+                   &middot; <b>52% click-through lift on video vs. static posts</b></h4>
                   <p class="project__description--para">
                     Designed and produced social content for TrialSupport, blending motion graphics and brand design to turn complex information into clear, engaging visuals—building a consistent look and feel while keeping the feed dynamic and easy to follow.<!-- This section features selected work for TrialSupport.us, spanning social campaigns, email marketing, web design, trial visuals, and 3D video. Each project demonstrates a strategic blend of design, technology, and storytelling to simplify complex ideas and deliver results. -->
                   </p>
@@ -259,7 +295,7 @@ I work across branding, UI/UX, 3D, motion, and front-end fundamentals to create 
             <li class="project">
               <div class="project__wrapper">
                 <img
-                  src="./assets/FES_ePort_Sesame_Duo_Spiral_.jpg"
+                  src="./assets/FES_ePort_Sesame_Duo_Spiral_.jpg" alt="M1ndseye illustrated alphabet tracing workbook pages" loading="lazy" decoding="async"
                   class="project__img"
                 />
                 <div class="project__wrapper--bg"></div>
@@ -282,7 +318,7 @@ I work across branding, UI/UX, 3D, motion, and front-end fundamentals to create 
             <li class="project">
               <div class="project__wrapper">
                 <img
-                  src="./assets/FES_ePort_NDM_Sizzle_Reel.jpg"
+                  src="./assets/FES_ePort_NDM_Sizzle_Reel.jpg" alt="Frame from the NDM Communication trade show sizzle reel" loading="lazy" decoding="async"
                   class="project__img"
                 />
                 <div class="project__wrapper--bg"></div>
@@ -302,30 +338,7 @@ I work across branding, UI/UX, 3D, motion, and front-end fundamentals to create 
             <li class="project">
               <div class="project__wrapper">
                 <img
-                  src="./assets/FES_ePort_PRO_Histor_Vid_3d.jpg"
-                  class="project__img"
-                />
-                <div class="project__wrapper--bg"></div>
-                <div class="project__description">
-                  <h3 class="project__description--title">
-                    Providence Histotripsy Procedure 3d Animation & Campaign
-                  </h3>
-                  <h4 class="project__description--subtitle">
-                    Branding, Video Editing, Motion Graphics
-                  </h4>
-                  <p class="project__description--para">
-                    When Providence needed to promote Histotripsy, a groundbreaking liver tumor treatment, I created a concise, engaging video and web ads without access to the equipment, using Blender, After Effects, and AI voiceover—garnering over a million views.
-                  </p>
-                  <div class="project__description--links">
-                    <a href="./providence-histotripsy-campaign.html" class="project-page-btn">View Project</a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="project">
-              <div class="project__wrapper">
-                <img
-                  src="./assets/FES_ePort_TMMC_Map_3d.jpg"
+                  src="./assets/FES_ePort_TMMC_Map_3d.jpg" alt="3D map of the Torrance Memorial campus from the healthcare publication system" loading="lazy" decoding="async"
                   class="project__img"
                 />
                 <div class="project__wrapper--bg"></div>
@@ -349,7 +362,7 @@ I work across branding, UI/UX, 3D, motion, and front-end fundamentals to create 
             <li class="project">
               <div class="project__wrapper">
                 <img
-                  src="./assets/EDW_Program_Collect_.jpg"
+                  src="./assets/EDW_Program_Collect_.jpg" alt="Program and Collect station from the Boston Museum of Science Engineering Design Workshop" loading="lazy" decoding="async"
                   class="project__img"
                 />
                 <div class="project__wrapper--bg"></div>
@@ -372,7 +385,7 @@ I work across branding, UI/UX, 3D, motion, and front-end fundamentals to create 
             <li class="project">
               <div class="project__wrapper">
                 <img
-                  src="./assets/FES_ePort_NDM_MSF_3d_Map.jpg"
+                  src="./assets/FES_ePort_NDM_MSF_3d_Map.jpg" alt="3D community site map for Reata Glen and Morningside" loading="lazy" decoding="async"
                   class="project__img"
                 />
                 <div class="project__wrapper--bg"></div>
@@ -395,7 +408,7 @@ I work across branding, UI/UX, 3D, motion, and front-end fundamentals to create 
             <li class="project">
               <div class="project__wrapper">
                 <img
-                  src="./assets/FES_ePort_11_Fe_.jpg"
+                  src="./assets/FES_ePort_11_Fe_.jpg" alt="Enzoani Bridal fashion event invitation and branding" loading="lazy" decoding="async"
                   class="project__img"
                 />
                 <div class="project__wrapper--bg"></div>
@@ -442,6 +455,12 @@ I work across branding, UI/UX, 3D, motion, and front-end fundamentals to create 
               class="footer__social--link link__hover-effect link__hover-effect--white"
             >
               LinkedIn
+            </a>
+            <a href="mailto:steve.mindseye@gmail.com" class="
+            footer__social--link 
+            link__hover-effect 
+            link__hover-effect--white">
+              Email
             </a>
             <a href="#" onclick="toggleModal()" class="
             footer__social--link 

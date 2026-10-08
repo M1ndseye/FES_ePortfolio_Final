@@ -1034,3 +1034,39 @@ body {
     object-fit: cover;
     display: block;
 }
+/* Hero calls to action */
+.hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0 8px;
+}
+.hero__btn {
+  display: inline-block;
+  padding: 12px 22px;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+.hero__btn:hover,
+.hero__btn:focus-visible {
+  transform: translateY(-2px);
+}
+.hero__btn--primary {
+  background: #56418d;
+  border-color: #56418d;
+  color: #fff;
+}
+.modal__direct {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+.modal__direct a {
+  text-decoration: underline;
+}
+.project__description--subtitle b {
+  font-weight: 700;
+}
