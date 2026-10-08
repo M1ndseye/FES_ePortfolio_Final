@@ -49,7 +49,9 @@ function contact(event) {
       loading.classList.remove("modal__overlay--visible");
       success.classList += " modal__overlay--visible";
     })
-    .catch(() => {
+    .catch((err) => {
+      // EmailJS returns {status, text}; log it so the real cause shows in the browser console
+      console.error("EmailJS send failed:", err && err.status, err && err.text, err);
       loading.classList.remove("modal__overlay--visible");
       alert(
         "The email service is temporarily unavailable. Please contact me directly at steve.mindseye@gmail.com",
