@@ -3,7 +3,7 @@
 // jf8G_9wc-MGeb3w95
 //global scale variables at top
 let isModalOpen = false;
-let contrastToggle = false;
+let contrastToggle = true; // site starts in dark mode (body has class "dark-theme")
 
 // function moveBackground(event) {
 //   const shapes = document.querySelectorAll(".shape");
