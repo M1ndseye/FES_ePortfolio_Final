@@ -1,5 +1,5 @@
 // template_57nss0a
-// service_gi4jv3s
+// service_x9xwlsf
 // jf8G_9wc-MGeb3w95
 //global scale variables at top
 let isModalOpen = false;
@@ -40,7 +40,7 @@ function contact(event) {
   loading.classList += " modal__overlay--visible";
   emailjs
     .sendForm(
-      "service_gi4jv3s",
+      "service_x9xwlsf",
       "template_57nss0a",
       event.target,
       "jf8G_9wc-MGeb3w95",
