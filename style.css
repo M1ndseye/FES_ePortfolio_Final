@@ -28,10 +28,6 @@ a {
   text-decoration: none;
 }
 
-.language__name {
-  font-size: 8px;
-  text-align: center;
-}
 
 button {
   cursor: pointer;
@@ -168,7 +164,7 @@ nav,
 }
 .dark-theme .accent-color,
 .dark-theme .title {
-  color: #30a0f4 important;
+  color: #a994f0 !important;
 }
 
 .dark-theme .mail__btn {
@@ -361,19 +357,27 @@ MODAL
 
 .modal__language {
   width: 25%;
-  padding: 16px;
+  padding: 16px 8px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .language__name {
-  flex-direction: column;
-  align-items: center;
+  display: block;
+  width: 100%;
   margin-top: 8px;
-  font-size: 8px;
+  font-size: 12px;
+  line-height: 1.2;
   text-align: center;
 }
 
 .modal__language--img {
-  width: 100%;
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
 }
 
 .modal__contact {
@@ -1033,4 +1037,15 @@ body {
 
     object-fit: cover;
     display: block;
+}
+.modal__direct {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+.modal__direct a {
+  color: #fff;
+  text-decoration: underline;
+}
+.project__description--subtitle b {
+  font-weight: 700;
 }
