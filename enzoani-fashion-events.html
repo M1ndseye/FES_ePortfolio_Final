@@ -36,6 +36,8 @@
     .enzo-masonry { display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); gap:var(--case-gap); }
     .enzo-span-4{grid-column:span 4}.enzo-span-5{grid-column:span 5}.enzo-span-6{grid-column:span 6}.enzo-span-7{grid-column:span 7}.enzo-span-12{grid-column:span 12}
     .enzoani-page .enzo-card img { width:100%; height:100%; min-height:320px; max-height:620px; object-fit:cover; }
+    .enzoani-page .enzo-eq .enzo-card img { height:var(--eq-h); min-height:0; max-height:none; object-fit:contain; background:#111113; }
+    @media (max-width:700px){ .enzoani-page .enzo-eq .enzo-card img{height:auto} }
     .enzoani-page .enzo-card--contain img { object-fit:contain; background:#111113; }
     .enzoani-page .enzo-overview-strip { margin-top:clamp(76px,8vw,116px); }
     .enzoani-page .enzo-overview-strip img { width:100%; max-height:760px; object-fit:contain; background:#111113; }
@@ -465,22 +467,26 @@
         </div>
       </div>
  
-      <div class="enzo-masonry">
+      <div class="enzo-masonry enzo-eq" style="--eq-h:440px">
         <figure class="case-figure enzo-card enzo-span-7"><img src="./assets/12_FE_Invite_01.jpg" alt="2012 Enzoani Fashion Event welcome package box" loading="lazy"><figcaption>Film Noir welcome package, sized to fit a standard small USPS box</figcaption></figure>
         <figure class="case-figure enzo-card enzo-span-5"><img src="./assets/12_FE_Invite_02.jpg" alt="Opened 2012 Enzoani welcome package with red organza pouch" loading="lazy"><figcaption>Opened package: red pouch and printed welcome cards</figcaption></figure>
       </div>
 
-      <div class="enzo-masonry">
+      <div class="enzo-masonry enzo-eq" style="--eq-h:380px">
         <figure class="case-figure enzo-card enzo-span-4"><img src="./assets/12_FE_Invite_03.jpg" alt="2012 Enzoani multi-card illustration" loading="lazy"><figcaption>Vintage aesthetic</figcaption></figure>
         <figure class="case-figure enzo-card enzo-span-4"><img src="./assets/12_FE_Invite_05.jpg" alt="2012 Enzoani event map" loading="lazy"><figcaption>Event map and navigation design</figcaption></figure>
         <figure class="case-figure enzo-card enzo-span-4"><img src="./assets/12_FE_Invite_08.jpg" alt="2012 Enzoani invitation in hand" loading="lazy"><figcaption>The back of the cards form a red carpet scene</figcaption></figure>
       </div>
 
-      <div class="enzo-masonry">
+      <div class="enzo-masonry enzo-eq" style="--eq-h:440px">
         <figure class="case-figure enzo-card enzo-span-6"><img src="./assets/12_FE_Invite_04.jpg" alt="2012 Enzoani location details map card" loading="lazy"><figcaption>Location details card with greyscale map and shuttle information</figcaption></figure>
         <figure class="case-figure enzo-card enzo-span-6"><img src="./assets/12_FE_Invite_06.jpg" alt="2012 Enzoani farewell party card and venue map" loading="lazy"><figcaption>Farewell party card with pool-deck event map</figcaption></figure>
+        </div>
+      <div class="enzo-masonry enzo-eq" style="--eq-h:440px">
         <figure class="case-figure enzo-card enzo-span-5"><img src="./assets/12_FE_Invite_07.jpg" alt="2012 Enzoani spa lounge schedule card" loading="lazy"><figcaption>Spa lounge card with illustrated four-step schedule</figcaption></figure>
         <figure class="case-figure enzo-card enzo-span-7"><img src="./assets/Fe-Overview-2012.jpg" alt="2012 Enzoani event book overview spread" loading="lazy"><figcaption>2012 event book: identity, signage, and wristbands</figcaption></figure>
+              </div>
+      <div class="enzo-masonry">
         <figure class="case-figure enzo-card enzo-span-12"><img src="./assets/Fe-Overview-2012-2.jpg" alt="2012 Enzoani event book timeline spread" loading="lazy"><figcaption>2012 event timeline: digital marketing, gift bags, signage, and charity auction</figcaption></figure>
       </div>
     </section>
