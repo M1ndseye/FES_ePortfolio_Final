@@ -806,7 +806,7 @@
 .education-page .edu-holiday__video figcaption {
   flex: 0 0 auto;
   margin: 0;
-  padding-top: 10px;
+  padding-top: 12px;
   line-height: 1.35;
 }
 
@@ -1178,7 +1178,7 @@
 }
 
 .education-page .edu-message-card figcaption {
-  margin-top: 14px;
+  margin-top: 12px;
 
   font-size: 17px;
   line-height: 1.5;
@@ -1672,9 +1672,9 @@
 
 .ts-page .case-image figcaption {
   margin: 0;
-  padding-top: 11px;
+  padding-top: 12px;
   color: #85858c;
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   line-height: 1.4;
 }
 
@@ -1820,7 +1820,7 @@
 }
 
 .edw-page .edw-concept-strip .edw-card figcaption {
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 @media (max-width: 900px) {

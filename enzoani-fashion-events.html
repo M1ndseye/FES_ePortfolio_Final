@@ -6,7 +6,7 @@
   <meta name="description" content="Enzoani Fashion Events 2008–2016 — creative direction, luxury brand experience design, invitation systems, event identity, print production, and experiential storytelling." />
   <title>Enzoani Fashion Events | M1ndseye</title>
   <link rel="stylesheet" href="style.css?v=3" />
-  <link rel="stylesheet" href="portfolio-projects.css?v=2" />
+  <link rel="stylesheet" href="portfolio-projects.css?v=4" />
   <style>
     .enzoani-page { --enzo-gold:#caa75b; --enzo-soft-gold:#e6d2a0; }
     .enzoani-page .enzo-hero__media { height:clamp(520px,49vw,680px); }
@@ -15,11 +15,8 @@
     .enzoani-page .case-tags span { border-color:rgba(202,167,91,.3); }
     .enzoani-page .enzo-founders-hero { margin:0; }
     .enzoani-page .enzo-founders-hero img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
-    .enzoani-page .enzo-hero-note { margin:12px 4px 0; color:var(--case-muted,#a7a7ad); font-size:.78rem; letter-spacing:.02em; }
     .enzoani-page .enzo-intro-after { margin-top:clamp(28px,3.5vw,48px); padding-top:0; }
     .enzoani-page .enzo-2011-spread { margin:clamp(56px,6vw,88px) 0 0 !important; }
-    .enzoani-page .enzo-2011-spread img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
-    .enzoani-page .enzo-spread-cap { position:static; padding:12px 16px; background:#111113; color:var(--case-muted,#a7a7ad); font-size:.78rem; }
     .enzoani-page .enzo-story { margin-top:0; padding-top:clamp(44px,4.5vw,64px); }
     .enzoani-page .enzo-story__copy .case-body + .case-body { margin-top:20px; }
     .enzoani-page .enzo-quote { margin-top:clamp(40px,5vw,64px); padding:clamp(34px,5vw,58px); border:1px solid rgba(202,167,91,.18); border-radius:24px; background:linear-gradient(180deg,rgba(202,167,91,.055),rgba(255,255,255,.015)); }
@@ -64,8 +61,7 @@
     .enzoani-page .enzo-book-pair .enzo-card img { height:auto; min-height:0; max-height:none; aspect-ratio:1412/910; }
     .enzoani-page .enzo-book-pair .enzo-card + .enzo-card img { aspect-ratio:1600/1029; }
     @media (max-width:700px){ .enzoani-page .enzo-book-pair { grid-template-columns:1fr; } }
-    .enzoani-page .enzo-masonry + .enzo-trio, .enzoani-page .enzo-trio + .enzo-masonry { margin-top:28px; }
-    .enzoani-page .enzo-after-row { margin-top:28px; }
+    .enzoani-page .enzo-book-row .enzo-card img { height:auto; min-height:0; max-height:none; aspect-ratio:5/3; }
     .enzoani-page .enzo-2011-spread + .enzo-overview-pair { margin-top:clamp(40px,4.5vw,64px); }
     @media (max-width:700px){ .enzoani-page .enzo-overview-pair { grid-template-columns:1fr; } }
     @media (max-width:700px){ .enzoani-page .enzo-pair { grid-template-columns:1fr; } }
@@ -81,6 +77,12 @@
       .enzoani-page .enzo-card img{min-height:0;max-height:none;object-fit:contain}
       .enzo-year{margin-top:82px}
     }
+    /* One caption rhythm for every image: 12px below the image, 28px before the next row (matches .case-figure captions on other pages) */
+    .enzoani-page figure figcaption,
+    .enzoani-page figure.case-figure figcaption,
+    .enzoani-page .enzo-hero-note { margin:0; padding:12px 0 0; color:var(--case-soft,#c9c9cf); font-size:.84rem; line-height:1.45; letter-spacing:normal; }
+    .enzoani-page .enzo-masonry + .enzo-masonry { margin-top:28px; }
+    @media (max-width:700px){ .enzoani-page .enzo-masonry + .enzo-masonry { margin-top:22px; } }
   </style>
 <style>
 
@@ -470,6 +472,10 @@
         <figure class="case-figure enzo-card enzo-span-6"><img src="./assets/14_FE_Invite_04.jpg" alt="2014 Enzoani invitation reveal" loading="lazy"><figcaption>Die-cut reveal and interior pattern</figcaption></figure>
         <figure class="case-figure enzo-card enzo-span-6"><img src="./assets/14_FE_Invite_05.jpg" alt="2014 Enzoani interior geometric pattern" loading="lazy"><figcaption>Faceted visual language</figcaption></figure>
       </div>
+      <div class="enzo-masonry enzo-after-row enzo-book-row">
+        <figure class="case-figure enzo-card enzo-span-6"><img src="./assets/Fe-Overview-2014.jpg" width="1600" height="960" alt="Enzoani 2014 Fashion Event book spread with the Optical Illusion identity, runway show, Enzoani magazine, and confirmation package" loading="lazy"><figcaption>2014 event book: runway show, magazine, and confirmation package</figcaption></figure>
+        <figure class="case-figure enzo-card enzo-span-6"><img src="./assets/Fe-Overview-2014-2.jpg" width="1600" height="960" alt="Enzoani 2014 Fashion Event book spread with lobby branding, sponsorship infographic, welcome lounge, and retailer walk of fame" loading="lazy"><figcaption>2014 event book: lobby branding, sponsorship, and walk of fame</figcaption></figure>
+      </div>
     </section>
 
     <section class="enzo-year">
@@ -533,11 +539,9 @@
         <div><p class="case-eyebrow">Eight Years of Evolution</p><h2 class="case-heading">One brand. A different world every year.</h2></div>
         <p class="case-body">The strength of the program came from balancing consistency with reinvention. Each event could have its own story, material language, invitation mechanic, and environmental personality while still feeling unmistakably Enzoani.</p>
       </div>
-      <figure class="project-video-header__media enzo-2011-spread">
-        <div class="project-video-header__video">
-          <img src="./assets/FE-2011-Event-Book-Spread.png" width="1600" height="900" alt="Enzoani 2011 Fashion Event book spread showing the Coastal Pop identity, event map, signage, and hotel branding" loading="lazy" />
-        </div>
-        <figcaption class="enzo-spread-cap">2011 Coastal Pop · event book timeline: identity, confirmation package, hotel branding, and wayfinding</figcaption>
+      <figure class="case-figure enzo-2011-spread">
+        <img src="./assets/FE-2011-Event-Book-Spread.png" width="1600" height="900" alt="Enzoani 2011 Fashion Event book spread showing the Coastal Pop identity, event map, signage, and hotel branding" loading="lazy" />
+        <figcaption>2011 Coastal Pop · event book timeline: identity, confirmation package, hotel branding, and wayfinding</figcaption>
       </figure>
 
       <div class="enzo-masonry enzo-overview-pair">
