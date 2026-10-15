@@ -48,6 +48,13 @@
     .enzoani-page .enzo-pair > .enzo-card { grid-column:auto; }
     .enzoani-page .enzo-pair .enzo-card img { height:auto; min-height:0; max-height:none; aspect-ratio:3/2; }
     .enzoani-page .enzo-pair .enzo-card + .enzo-card img { aspect-ratio:2/3; }
+    /* 2009 (5:3) and 2010 (3:2) spreads in 10:9 columns so both render at the same height */
+    .enzoani-page .enzo-overview-pair { grid-template-columns:minmax(0,10fr) minmax(0,9fr); margin-top:clamp(56px,6vw,88px); }
+    .enzoani-page .enzo-overview-pair > .enzo-card { grid-column:auto; }
+    .enzoani-page .enzo-overview-pair .enzo-card img { height:auto; min-height:0; max-height:none; aspect-ratio:5/3; }
+    .enzoani-page .enzo-overview-pair .enzo-card + .enzo-card img { aspect-ratio:3/2; }
+    .enzoani-page .enzo-overview-pair + .enzo-2011-spread { margin-top:clamp(40px,4.5vw,64px) !important; }
+    @media (max-width:700px){ .enzoani-page .enzo-overview-pair { grid-template-columns:1fr; } }
     @media (max-width:700px){ .enzoani-page .enzo-pair { grid-template-columns:1fr; } }
     .enzoani-page .enzo-overview-strip { margin-top:clamp(76px,8vw,116px); }
     .enzoani-page .enzo-overview-strip img { width:100%; max-height:760px; object-fit:contain; background:#111113; }
@@ -269,6 +276,11 @@
         </div>
       </div>
     </section>
+
+    <div class="enzo-masonry enzo-overview-pair">
+      <figure class="case-figure enzo-card"><img src="./assets/FE-Overview-09.jpg" width="1600" height="960" alt="Enzoani 2009 Fashion Event book spread with butterfly identity, invitations, venue map, and pre-runway dinner" loading="lazy"><figcaption>2009 Fashion Event · event book timeline</figcaption></figure>
+      <figure class="case-figure enzo-card"><img src="./assets/FE-Overview-2010.jpg" width="1600" height="1067" alt="Enzoani 2010 Fashion Event book spread with Alice in Wonderland identity, confirmation packet, banners, and playing cards" loading="lazy"><figcaption>2010 Fashion Event · event book timeline</figcaption></figure>
+    </div>
 
     <figure class="project-video-header__media enzo-2011-spread">
       <div class="project-video-header__video">
