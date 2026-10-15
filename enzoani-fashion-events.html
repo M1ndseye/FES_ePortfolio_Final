@@ -57,10 +57,10 @@
     /* Rows of three 3:2 photos, uncropped and equal height */
     .enzoani-page .enzo-trio .enzo-card img { height:auto; min-height:0; max-height:none; aspect-ratio:3/2; }
     @media (min-width:701px) and (max-width:1000px){ .enzoani-page .enzo-trio .enzo-span-4 { grid-column:span 4; } }
-    /* 2012 book spreads (1600×910, 1600×1029): columns match each aspect ratio so both render at the same height */
-    .enzoani-page .enzo-book-pair { grid-template-columns:minmax(0,1.7582fr) minmax(0,1.5549fr); }
+    /* 2012 book spreads (1412×910, 1600×1029): columns match each aspect ratio so both render at the same height */
+    .enzoani-page .enzo-book-pair { grid-template-columns:minmax(0,1.5516fr) minmax(0,1.5549fr); }
     .enzoani-page .enzo-book-pair > .enzo-card { grid-column:auto; }
-    .enzoani-page .enzo-book-pair .enzo-card img { height:auto; min-height:0; max-height:none; aspect-ratio:1600/910; }
+    .enzoani-page .enzo-book-pair .enzo-card img { height:auto; min-height:0; max-height:none; aspect-ratio:1412/910; }
     .enzoani-page .enzo-book-pair .enzo-card + .enzo-card img { aspect-ratio:1600/1029; }
     @media (max-width:700px){ .enzoani-page .enzo-book-pair { grid-template-columns:1fr; } }
     .enzoani-page .enzo-masonry + .enzo-trio, .enzoani-page .enzo-trio + .enzo-masonry { margin-top:28px; }
