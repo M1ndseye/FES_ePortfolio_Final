@@ -26,6 +26,26 @@
         object-position: center 42%;
       }
 
+      @media (min-width: 1001px) {
+        .maps-page .maps-hero {
+          align-items: stretch;
+        }
+
+        .maps-page .maps-hero__media {
+          position: relative;
+          height: auto;
+        }
+
+        .maps-page .maps-hero__media img {
+          position: absolute;
+          inset: 0;
+        }
+      }
+
+      .maps-page .maps-intro-figure {
+        margin-bottom: clamp(56px, 7vw, 96px);
+      }
+
       .maps-page .maps-process {
         display: grid;
         grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr);
@@ -323,6 +343,18 @@
 
       <!-- STORY / PROCESS -->
       <section class="case-section">
+        <figure class="case-figure maps-feature maps-intro-figure">
+          <img
+            src="./assets/RG-Map-Iso-Plaza.jpg"
+            alt="Reata Glen 3D isometric plaza rendering"
+            loading="lazy"
+          />
+          <figcaption>
+            3D isometric environment · architecture, landscape, and amenity
+            detail
+          </figcaption>
+        </figure>
+
         <div class="case-section__head">
           <div>
             <p class="case-eyebrow">From Vector Plan to 3D Environment</p>
@@ -386,18 +418,6 @@
         </div>
 
         <div class="case-grid case-grid--2 maps-pair">
-          <figure class="case-figure maps-feature">
-            <img
-              src="./assets/RG-Map-Iso-Plaza.jpg"
-              alt="Reata Glen 3D isometric plaza rendering"
-              loading="lazy"
-            />
-            <figcaption>
-              3D isometric environment · architecture, landscape, and amenity
-              detail
-            </figcaption>
-          </figure>
-
           <figure class="case-figure maps-feature">
             <img
               src="./assets/RG-Map-Zoom.jpg"
