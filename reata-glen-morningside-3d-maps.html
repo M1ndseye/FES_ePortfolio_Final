@@ -87,10 +87,16 @@
         object-fit: cover;
       }
 
+      /* Portrait maps show at their natural ratio, never letterboxed */
       .maps-page .maps-vertical img {
-        max-height: 900px;
-        object-fit: contain;
-        background: #111113;
+        height: auto;
+      }
+
+      /* Lone portrait map: landscape detail crop fills the row */
+      .maps-page .maps-detail img {
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        object-position: center 45%;
       }
 
       @media (max-width: 1000px) {
@@ -429,7 +435,7 @@
         </div>
 
         <div class="maps-pair">
-          <figure class="case-figure maps-vertical">
+          <figure class="case-figure maps-detail">
             <img
               src="./assets/RG-Map-Zoom.jpg"
               alt="Reata Glen detailed community map"

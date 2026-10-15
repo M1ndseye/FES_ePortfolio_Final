@@ -41,7 +41,7 @@
     .enzoani-page .enzo-card img { width:100%; height:100%; min-height:320px; max-height:620px; object-fit:cover; }
     .enzoani-page .enzo-eq .enzo-card img { height:var(--eq-h); min-height:0; max-height:none; object-fit:contain; background:#111113; }
     @media (max-width:700px){ .enzoani-page .enzo-eq .enzo-card img{height:auto} }
-    .enzoani-page .enzo-card--contain img { object-fit:contain; background:#111113; }
+    .enzoani-page .enzo-card--contain img { min-height:0; object-fit:contain; background:#111113; }
     /* Columns sized 9:4 to match 3:2 and 2:3 images (1334×889, 667×1001) so both render at the same height */
     .enzoani-page .enzo-pair { grid-template-columns:minmax(0,9fr) minmax(0,4fr); }
     .enzoani-page .enzo-pair > .enzo-card { grid-column:auto; }
@@ -96,7 +96,7 @@
       .enzo-deliverables{columns:1}
       .enzo-masonry{grid-template-columns:1fr}
       .enzo-masonry [class*="enzo-span-"]{grid-column:auto}
-      .enzoani-page .enzo-card img{min-height:0;max-height:none;object-fit:contain}
+      .enzoani-page .enzo-card img{min-height:0;max-height:none;height:auto;aspect-ratio:auto;object-fit:contain}
       .enzo-year{margin-top:82px}
     }
     /* One caption rhythm for every image: 12px below the image, 28px before the next row (matches .case-figure captions on other pages) */
