@@ -61,6 +61,12 @@
     .enzoani-page .enzo-book-pair .enzo-card img { height:auto; min-height:0; max-height:none; aspect-ratio:1412/910; }
     .enzoani-page .enzo-book-pair .enzo-card + .enzo-card img { aspect-ratio:1600/1029; }
     @media (max-width:700px){ .enzoani-page .enzo-book-pair { grid-template-columns:1fr; } }
+    /* 2015 floor sticker (430×394) and table cards (826×337): columns match each aspect ratio so both render at the same height */
+    .enzoani-page .enzo-2015-pair { grid-template-columns:minmax(0,1.0914fr) minmax(0,2.451fr); }
+    .enzoani-page .enzo-2015-pair > .enzo-card { grid-column:auto; }
+    .enzoani-page .enzo-2015-pair .enzo-card img { height:auto; min-height:0; max-height:none; aspect-ratio:430/394; }
+    .enzoani-page .enzo-2015-pair .enzo-card + .enzo-card img { aspect-ratio:826/337; }
+    @media (max-width:700px){ .enzoani-page .enzo-2015-pair { grid-template-columns:1fr; } }
     .enzoani-page .enzo-book-row .enzo-card img { height:auto; min-height:0; max-height:none; aspect-ratio:5/3; }
     .enzoani-page .enzo-2011-spread + .enzo-overview-pair { margin-top:clamp(40px,4.5vw,64px); }
     @media (max-width:700px){ .enzoani-page .enzo-overview-pair { grid-template-columns:1fr; } }
@@ -405,7 +411,7 @@
         <figure class="case-figure enzo-card enzo-card--contain enzo-span-6"><img src="./assets/15_FE_Invite_04.jpg" alt="Enzoani event overview 2012 and 2013" loading="lazy"><figcaption>Layered invitation storytelling</figcaption></figure>
   </div>
 
-  <div class="enzo-masonry">
+  <div class="enzo-masonry enzo-2015-pair">
 
   <!-- <figure class="case-figure enzo-card enzo-span-7">
     <img
