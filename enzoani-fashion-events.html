@@ -57,7 +57,12 @@
     /* Rows of three 3:2 photos, uncropped and equal height */
     .enzoani-page .enzo-trio .enzo-card img { height:auto; min-height:0; max-height:none; aspect-ratio:3/2; }
     @media (min-width:701px) and (max-width:1000px){ .enzoani-page .enzo-trio .enzo-span-4 { grid-column:span 4; } }
-    .enzoani-page .enzo-full .enzo-card img { height:auto; min-height:0; max-height:none; }
+    /* 2012 book spreads (1600×910, 1600×1029): columns match each aspect ratio so both render at the same height */
+    .enzoani-page .enzo-book-pair { grid-template-columns:minmax(0,1.7582fr) minmax(0,1.5549fr); }
+    .enzoani-page .enzo-book-pair > .enzo-card { grid-column:auto; }
+    .enzoani-page .enzo-book-pair .enzo-card img { height:auto; min-height:0; max-height:none; aspect-ratio:1600/910; }
+    .enzoani-page .enzo-book-pair .enzo-card + .enzo-card img { aspect-ratio:1600/1029; }
+    @media (max-width:700px){ .enzoani-page .enzo-book-pair { grid-template-columns:1fr; } }
     .enzoani-page .enzo-masonry + .enzo-trio, .enzoani-page .enzo-trio + .enzo-masonry { margin-top:28px; }
     .enzoani-page .enzo-overview-pair + .enzo-2011-spread { margin-top:clamp(40px,4.5vw,64px) !important; }
     @media (max-width:700px){ .enzoani-page .enzo-overview-pair { grid-template-columns:1fr; } }
@@ -523,11 +528,9 @@
         <figure class="case-figure enzo-card enzo-span-4"><img src="./assets/12_FE_Invite_07.jpg" alt="2012 Enzoani spa lounge schedule card" loading="lazy"><figcaption>Spa lounge card with illustrated four-step schedule</figcaption></figure>
       </div>
 
-      <div class="enzo-masonry enzo-full">
-        <figure class="case-figure enzo-card enzo-span-12"><img src="./assets/Fe-Overview-2012.jpg" alt="2012 Enzoani event book overview spread" loading="lazy"><figcaption>2012 event book: identity, signage, and wristbands</figcaption></figure>
-      </div>
-      <div class="enzo-masonry">
-        <figure class="case-figure enzo-card enzo-span-12"><img src="./assets/Fe-Overview-2012-2.jpg" alt="2012 Enzoani event book timeline spread" loading="lazy"><figcaption>2012 event timeline: digital marketing, gift bags, signage, and charity auction</figcaption></figure>
+      <div class="enzo-masonry enzo-book-pair">
+        <figure class="case-figure enzo-card"><img src="./assets/Fe-Overview-2012.jpg" alt="2012 Enzoani event book overview spread" loading="lazy"><figcaption>2012 event book: identity, signage, and wristbands</figcaption></figure>
+        <figure class="case-figure enzo-card"><img src="./assets/Fe-Overview-2012-2.jpg" alt="2012 Enzoani event book timeline spread" loading="lazy"><figcaption>2012 event timeline: digital marketing, gift bags, signage, and charity auction</figcaption></figure>
       </div>
     </section>
 
