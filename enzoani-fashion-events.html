@@ -43,6 +43,12 @@
     .enzoani-page .enzo-eq .enzo-card img { height:var(--eq-h); min-height:0; max-height:none; object-fit:contain; background:#111113; }
     @media (max-width:700px){ .enzoani-page .enzo-eq .enzo-card img{height:auto} }
     .enzoani-page .enzo-card--contain img { object-fit:contain; background:#111113; }
+    /* Columns sized 9:4 to match 3:2 and 2:3 images (1334×889, 667×1001) so both render at the same height */
+    .enzoani-page .enzo-pair { grid-template-columns:minmax(0,9fr) minmax(0,4fr); }
+    .enzoani-page .enzo-pair > .enzo-card { grid-column:auto; }
+    .enzoani-page .enzo-pair .enzo-card img { height:auto; min-height:0; max-height:none; aspect-ratio:3/2; }
+    .enzoani-page .enzo-pair .enzo-card + .enzo-card img { aspect-ratio:2/3; }
+    @media (max-width:700px){ .enzoani-page .enzo-pair { grid-template-columns:1fr; } }
     .enzoani-page .enzo-overview-strip { margin-top:clamp(76px,8vw,116px); }
     .enzoani-page .enzo-overview-strip img { width:100%; max-height:760px; object-fit:contain; background:#111113; }
     .enzoani-page .enzo-highlight { padding:clamp(34px,5vw,58px); border:1px solid rgba(202,167,91,.18); border-radius:24px; background:linear-gradient(180deg,rgba(202,167,91,.055),rgba(255,255,255,.015)); }
@@ -461,9 +467,11 @@
           <ul class="enzo-deliverables"><li>Theme & Creative Direction</li><li>Collectible Pin Design</li><li>Flight Attendant Hat Design</li><li>Passport Design System</li><li>Lace Guilloché Pattern</li><li>Interactive Stamp Experience</li></ul>
         </div>
       </div>
-      <div class="enzo-masonry">
+      <div class="enzo-masonry enzo-pair">
         <figure class="case-figure enzo-card enzo-span-7"><img src="./assets/13_FE_Invite_04.jpeg" alt="2013 Enzoani Take Flight invitation system" loading="lazy"><figcaption>Travel-inspired invitation kit</figcaption></figure>
         <figure class="case-figure enzo-card enzo-span-5"><img src="./assets/13_FE_Invite_01.jpg" alt="2013 Enzoani passport design" loading="lazy"><figcaption>Collectible passport and travel identity</figcaption></figure>
+      </div>
+      <div class="enzo-masonry">
         <figure class="case-figure enzo-card enzo-span-6"><img src="./assets/13_FE_Invite_02.jpg" alt="2013 Enzoani travel documents" loading="lazy"><figcaption>Branded travel collateral and keepsakes</figcaption></figure>
         <figure class="case-figure enzo-card enzo-span-6"><img src="./assets/13_FE_Invite_03.jpg" alt="2013 Enzoani invitation documents" loading="lazy"><figcaption>Layered invitation experience</figcaption></figure>
       </div>
