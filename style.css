@@ -1049,3 +1049,57 @@ body {
 .project__description--subtitle b {
   font-weight: 700;
 }
+
+/* Touch screens (phones/tablets have no hover): show each project's
+   title and View Project button under the image, always visible. */
+@media (hover: none), (max-width: 768px) {
+  .project {
+    margin-bottom: 64px;
+  }
+  .project__wrapper {
+    aspect-ratio: auto;
+    overflow: visible;
+    box-shadow: none;
+    border-radius: 0;
+    cursor: pointer;
+  }
+  .project__img {
+    aspect-ratio: 16 / 10;
+    height: auto;
+    border-radius: 16px;
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.35);
+  }
+  .project__wrapper:hover .project__img {
+    transform: none;
+    filter: none;
+  }
+  .project__wrapper--bg {
+    display: none;
+  }
+  .project__description,
+  .project__wrapper:hover .project__description {
+    position: static;
+    opacity: 1;
+    transform: none;
+    color: inherit;
+    max-width: none;
+    width: 100%;
+    padding: 0;
+    margin: 20px 0 0;
+    text-align: left;
+  }
+  .project__description--title {
+    font-size: 22px;
+  }
+  .project__description--subtitle {
+    font-size: 14px;
+    margin: 6px 0 14px;
+  }
+  .project__description--links .project-page-btn {
+    width: 100%;
+  }
+  .dark-theme .project__description,
+  .dark-theme .project__wrapper:hover .project__description {
+    color: #fff;
+  }
+}

@@ -198,3 +198,11 @@ document.addEventListener("DOMContentLoaded", () => {
   resizeCanvas();
   animate();
 });
+
+// Let a tap anywhere on a project card open that project (touch screens have no hover).
+document.addEventListener("click", (e) => {
+  const card = e.target.closest(".project__wrapper");
+  if (!card || e.target.closest("a")) return;
+  const link = card.querySelector(".project-page-btn");
+  if (link) window.location.href = link.href;
+});
