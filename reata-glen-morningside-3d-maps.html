@@ -42,8 +42,9 @@
         }
       }
 
+      /* One vertical rhythm: sections > section head > image rows */
       .maps-page .maps-intro-figure {
-        margin-bottom: clamp(56px, 7vw, 96px);
+        margin-bottom: clamp(48px, 5.5vw, 76px);
       }
 
       .maps-page .maps-process {
@@ -62,15 +63,23 @@
       }
 
       .maps-page .maps-art-grid {
-        margin-top: clamp(56px, 7vw, 96px);
+        margin-top: clamp(40px, 4.5vw, 64px);
       }
 
-      .maps-page .maps-night {
-        margin-top: clamp(82px, 9vw, 126px);
-      }
-
+      /* Section head already provides the gap above its first image */
       .maps-page .maps-pair {
-        margin-top: clamp(56px, 7vw, 96px);
+        margin-top: 0;
+      }
+
+      /* Align feature image edges with the grids below it */
+      .maps-page .case-feature {
+        width: 100%;
+      }
+
+      /* Paired renders share one height */
+      .maps-page .maps-match img {
+        aspect-ratio: 10 / 9;
+        object-fit: cover;
       }
 
       .maps-page .maps-feature img {
@@ -95,10 +104,12 @@
           height: 480px;
         }
 
-        .maps-page .maps-art-grid,
-        .maps-page .maps-night,
-        .maps-page .maps-pair {
-          margin-top: 48px;
+        .maps-page .maps-art-grid {
+          margin-top: 36px;
+        }
+
+        .maps-page .case-grid--2 {
+          row-gap: 36px;
         }
       }
     </style>
@@ -484,7 +495,7 @@
           </figure>
         </div>
 
-        <div class="case-grid case-grid--2 maps-art-grid">
+        <div class="case-grid case-grid--2 maps-art-grid maps-match">
           <figure class="case-figure">
             <img
               src="./assets/MSF-Book-Zoom_1.jpg"
