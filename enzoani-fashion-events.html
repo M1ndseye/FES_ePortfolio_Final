@@ -54,7 +54,8 @@
     .enzoani-page .enzo-overview-pair > .enzo-card { grid-column:auto; }
     .enzoani-page .enzo-overview-pair .enzo-card img { height:auto; min-height:0; max-height:none; aspect-ratio:5/3; }
     .enzoani-page .enzo-overview-pair .enzo-card + .enzo-card img { aspect-ratio:3/2; }
-    /* Rows of three 3:2 photos, uncropped and equal height */
+    /* Rows of two or three 3:2 photos, filling their frames at equal height */
+    .enzoani-page .enzo-duo .enzo-card img,
     .enzoani-page .enzo-trio .enzo-card img { height:auto; min-height:0; max-height:none; aspect-ratio:3/2; }
     @media (min-width:701px) and (max-width:1000px){ .enzoani-page .enzo-trio .enzo-span-4 { grid-column:span 4; } }
     /* 2012 book spreads (1412×910, 1600×1029): columns match each aspect ratio so both render at the same height */
@@ -499,9 +500,9 @@
         </div>
       </div>
  
-      <div class="enzo-masonry enzo-eq" style="--eq-h:440px">
-        <figure class="case-figure enzo-card enzo-span-7"><img src="./assets/12_FE_Invite_01.jpg" alt="2012 Enzoani Fashion Event welcome package box" loading="lazy"><figcaption>Film Noir welcome package, sized to fit a standard small USPS box</figcaption></figure>
-        <figure class="case-figure enzo-card enzo-span-5"><img src="./assets/12_FE_Invite_02.jpg" alt="Opened 2012 Enzoani welcome package with red organza pouch" loading="lazy"><figcaption>Opened package: red pouch and printed welcome cards</figcaption></figure>
+      <div class="enzo-masonry enzo-duo">
+        <figure class="case-figure enzo-card enzo-span-6"><img src="./assets/12_FE_Invite_01.jpg" alt="2012 Enzoani Fashion Event welcome package box" loading="lazy"><figcaption>Film Noir welcome package, sized to fit a standard small USPS box</figcaption></figure>
+        <figure class="case-figure enzo-card enzo-span-6"><img src="./assets/12_FE_Invite_02.jpg" alt="Opened 2012 Enzoani welcome package with red organza pouch" loading="lazy"><figcaption>Opened package: red pouch and printed welcome cards</figcaption></figure>
       </div>
 
       <div class="enzo-masonry enzo-trio">
