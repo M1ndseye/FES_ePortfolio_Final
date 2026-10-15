@@ -69,7 +69,18 @@
     .enzoani-page .enzo-2015-pair .enzo-card + .enzo-card img { aspect-ratio:826/337; }
     @media (max-width:700px){ .enzoani-page .enzo-2015-pair { grid-template-columns:1fr; } }
     .enzoani-page .enzo-book-row .enzo-card img { height:auto; min-height:0; max-height:none; aspect-ratio:5/3; }
-    .enzoani-page .enzo-2011-spread + .enzo-overview-pair { margin-top:clamp(40px,4.5vw,64px); }
+    /* 2011 photo rows: columns sized to each photo's aspect ratio so every image in a row shares one height, uncropped */
+    .enzoani-page .enzo-2011-spread + .enzo-2011-row { margin-top:28px; }
+    .enzoani-page .enzo-2011-row > .enzo-card { grid-column:auto; }
+    .enzoani-page .enzo-2011-row .enzo-card img { height:auto; min-height:0; max-height:none; }
+    .enzoani-page .enzo-2011-row--a { grid-template-columns:minmax(0,.7693fr) minmax(0,.6667fr) minmax(0,.6667fr); }
+    .enzoani-page .enzo-2011-row--a .enzo-card:nth-child(1) img { aspect-ratio:1867/2427; }
+    .enzoani-page .enzo-2011-row--a .enzo-card:nth-child(n+2) img { aspect-ratio:2/3; }
+    .enzoani-page .enzo-2011-row--b { grid-template-columns:minmax(0,1.1818fr) minmax(0,.6667fr) minmax(0,.6667fr); }
+    .enzoani-page .enzo-2011-row--b .enzo-card:nth-child(1) img { aspect-ratio:3368/2850; }
+    .enzoani-page .enzo-2011-row--b .enzo-card:nth-child(n+2) img { aspect-ratio:2/3; }
+    .enzoani-page .enzo-masonry.enzo-2011-row + .enzo-overview-pair { margin-top:clamp(40px,4.5vw,64px); }
+    @media (max-width:700px){ .enzoani-page .enzo-2011-row--a, .enzoani-page .enzo-2011-row--b { grid-template-columns:1fr; } }
     @media (max-width:700px){ .enzoani-page .enzo-overview-pair { grid-template-columns:1fr; } }
     @media (max-width:700px){ .enzoani-page .enzo-pair { grid-template-columns:1fr; } }
     .enzoani-page .enzo-overview-strip { margin-top:clamp(76px,8vw,116px); }
@@ -555,6 +566,16 @@
         <img src="./assets/FE-2011-Event-Book-Spread.png" width="1600" height="900" alt="Enzoani 2011 Fashion Event book spread showing the Coastal Pop identity, event map, signage, and hotel branding" loading="lazy" />
         <figcaption>2011 Coastal Pop · event book timeline: identity, confirmation package, hotel branding, and wayfinding</figcaption>
       </figure>
+      <div class="enzo-masonry enzo-2011-row enzo-2011-row--a">
+        <figure class="case-figure enzo-card"><img src="./assets/11-Fe-Image-Hotel-web.jpg" width="1077" height="1400" alt="Enzoani name lit across the Newport Beach Marriott at night" loading="lazy"><figcaption>Hotel exterior branding at night</figcaption></figure>
+        <figure class="case-figure enzo-card"><img src="./assets/11-Im-EveFas-Bra-030-web.jpg" width="933" height="1400" alt="2011 Coastal Pop floor graphic at the hotel entrance" loading="lazy"><figcaption>Coastal Pop floor graphic at the entrance</figcaption></figure>
+        <figure class="case-figure enzo-card"><img src="./assets/11-Im-EveFas-Bra-026-web.jpg" width="933" height="1400" alt="Enzoani 4M Lounge column signage beside a black couture gown on a plinth" loading="lazy"><figcaption>Lobby wayfinding and gown display</figcaption></figure>
+      </div>
+      <div class="enzo-masonry enzo-2011-row enzo-2011-row--b">
+        <figure class="case-figure enzo-card"><img src="./assets/11-Im-EveFas-Branding-Art-web.jpg" width="1400" height="1184" alt="Four framed 2011 Enzoani Fashion Event art panels in green and gold" loading="lazy"><figcaption>Custom wall art carrying the event mark</figcaption></figure>
+        <figure class="case-figure enzo-card"><img src="./assets/11-Im-EveFas-Din-001-web.jpg" width="933" height="1400" alt="Sunlit poolside luncheon with pink tablecloths, umbrellas, and orchid centerpieces" loading="lazy"><figcaption>Poolside luncheon styling</figcaption></figure>
+        <figure class="case-figure enzo-card"><img src="./assets/11-Im-EveFas-Bra-052-web.jpg" width="933" height="1400" alt="2011 Enzoani Fashion Event table number card in pink and violet" loading="lazy"><figcaption>Coastal Pop table numbers</figcaption></figure>
+      </div>
 
       <div class="enzo-masonry enzo-overview-pair">
         <figure class="case-figure enzo-card"><img src="./assets/FE-Overview-09.jpg" width="1600" height="960" alt="Enzoani 2009 Fashion Event book spread with butterfly identity, invitations, venue map, and pre-runway dinner" loading="lazy"><figcaption>2009 Fashion Event · event book timeline</figcaption></figure>
