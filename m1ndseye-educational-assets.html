@@ -1001,5 +1001,24 @@
     </main>
 
     <script src="https://player.vimeo.com/api/player.js"></script>
+    <script>
+      // Jump links (e.g. m1ndseye.com/halloween): keep the target in view while
+      // lazy images above it load, until the visitor scrolls or 4 seconds pass.
+      (function () {
+        var id = location.hash && location.hash.slice(1);
+        var t = id && document.getElementById(id);
+        if (!t || !window.ResizeObserver) return;
+        var stop = false;
+        var end = function () { stop = true; ro.disconnect(); };
+        var pin = function () { if (!stop) t.scrollIntoView(); };
+        var ro = new ResizeObserver(pin);
+        ro.observe(document.body);
+        ["wheel", "touchstart", "keydown", "mousedown"].forEach(function (e) {
+          window.addEventListener(e, end, { once: true, passive: true });
+        });
+        setTimeout(end, 4000);
+        pin();
+      })();
+    </script>
   </body>
 </html>
