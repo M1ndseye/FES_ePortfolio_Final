@@ -10,6 +10,21 @@
 
       gtag('config', 'G-TJ0G6QV08B');
     </script>
+    <!-- Pinterest tag -->
+    <script>
+      !function(e){if(!window.pintrk){window.pintrk=function(){window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var n=window.pintrk;n.queue=[],n.version="3.0";var t=document.createElement("script");t.async=!0,t.src=e;var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r)}}("https://s.pinimg.com/ct/core.js");
+      pintrk('load', '2613532238308');
+      pintrk('page');
+      pintrk('track', 'pagevisit');
+      // Count free printable downloads (maze PDFs, certificate zip) as leads
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a[href]');
+        if (a && /\.(pdf|zip)(\?|#|$)/i.test(a.getAttribute('href'))) {
+          pintrk('track', 'lead', { lead_type: 'Free printable', event_id: 'dl-' + Date.now() });
+        }
+      });
+    </script>
+    <!-- end Pinterest tag -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Enzoani Fashion Events 2008–2016 — creative direction, luxury brand experience design, invitation systems, event identity, print production, and experiential storytelling." />
