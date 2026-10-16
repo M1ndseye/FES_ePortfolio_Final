@@ -418,6 +418,10 @@
           padding: 24px;
         }
       }
+    
+      /* Landscape campaign stills: show the whole image (no side cropping), aligned to the bottom of the column */
+      .education-page .edu-holiday__still--full { justify-content: flex-end; width: 100%; }
+      .education-page .edu-holiday__still--full img { flex: 0 0 auto; height: auto; object-fit: contain; }
     </style>
   </head>
 
@@ -778,7 +782,7 @@
               </a>
             </div>
 
-            <figure class="edu-holiday__still">
+            <figure class="edu-holiday__still edu-holiday__still--full">
               <img
                 src="./assets/ME_Sesame_Hol_St_Patty_Landscape.jpg"
                 alt="M1ndseye St Patrick's Day Shamrock Maze"
@@ -817,7 +821,7 @@
               ></iframe>
             </div>
             <figcaption>
-              Halloween campaign · vertical social animation
+              St Patrick's Day campaign · vertical social animation
             </figcaption>
           </figure>
         </div>
@@ -851,7 +855,7 @@
               </a>
             </div>
 
-            <figure class="edu-holiday__still">
+            <figure class="edu-holiday__still edu-holiday__still--full">
               <img
                 src="./assets/ME_Sesame_Valentine_Landscape.jpg"
                 alt="M1ndseye Valentine educational campaign still"
