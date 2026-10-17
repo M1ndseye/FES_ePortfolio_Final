@@ -145,6 +145,11 @@
       .b1 .dot { background: var(--rose); } .b2 .dot { background: var(--teal); } .b3 .dot { background: var(--gold); }
       .b4 .dot { background: var(--plum); } .b5 .dot { background: var(--rose); } .b6 .dot { background: var(--teal); }
 
+      /* Video */
+      .watch { padding-top: 0; }
+      .video { position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; background: var(--plum); box-shadow: 0 24px 60px rgba(59, 42, 90, 0.22); }
+      .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
       /* Inside the book */
       .inside { background: var(--surface); }
       .inside-row { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; margin-bottom: 48px; }
@@ -268,6 +273,25 @@
             <div class="benefit b4"><div class="dot">★</div><h3>130+ illustrations</h3><p>Friendly, accurately drawn animals and objects give every letter something to talk about.</p></div>
             <div class="benefit b5"><div class="dot">¡</div><h3>A first taste of a new language</h3><p>Choose the edition with a bonus Spanish or French chapter.</p></div>
             <div class="benefit b6"><div class="dot">✓</div><h3>Screen-free and ready to go</h3><p>Open the book and a pencil is all they need: at the table, in the car, or on a rainy afternoon.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="watch">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="eyebrow">Watch</span>
+            <h2>See the workbook in action.</h2>
+          </div>
+          <div class="video">
+            <iframe
+              src="https://player.vimeo.com/video/1061083069?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+              title="M1ndseye: Educational assets you can count on!"
+              loading="lazy"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
           </div>
         </div>
       </section>
