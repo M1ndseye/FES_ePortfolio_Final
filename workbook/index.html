@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TJ0G6QV08B"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-TJ0G6QV08B');
+    </script>
+    <!-- Pinterest tag -->
+    <script>
+      !function(e){if(!window.pintrk){window.pintrk=function(){window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var n=window.pintrk;n.queue=[],n.version="3.0";var t=document.createElement("script");t.async=!0,t.src=e;var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r)}}("https://s.pinimg.com/ct/core.js");
+      pintrk('load', '2613532238308');
+      pintrk('page');
+      pintrk('track', 'pagevisit');
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a[href]');
+        if (!a) return;
+        var href = a.getAttribute('href');
+        // Free printable downloads count as leads
+        if (/\.(pdf|zip)(\?|#|$)/i.test(href)) {
+          pintrk('track', 'lead', { lead_type: 'Free printable', event_id: 'dl-' + Date.now() });
+          gtag('event', 'free_printable_download', { file_name: href.split('/').pop(), page: 'workbook' });
+        }
+        // Amazon clicks: the last step we can see before a sale
+        if (/amazon\./i.test(href)) {
+          gtag('event', 'amazon_click', { link_location: a.getAttribute('data-loc') || 'unknown', page: 'workbook' });
+          pintrk('track', 'custom', { event_name: 'amazon_click', event_id: 'amz-' + Date.now() });
+        }
+      });
+    </script>
+    <!-- end Pinterest tag -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Illustrated Alphabet Tracing Workbook, Ages 3–6 | M1ndseye</title>
+    <meta
+      name="description"
+      content="A playful alphabet tracing workbook for ages 3–6: six levels of tracing, mazes, word searches and early phonics, 130+ illustrations, plus a bonus Spanish or French chapter. Made by a designer dad for his own kids."
+    />
+    <link rel="canonical" href="https://m1ndseye.com/workbook/" />
+    <meta property="og:type" content="product" />
+    <meta property="og:title" content="M1ndseye Illustrated Alphabet Tracing Workbook (Ages 3–6)" />
+    <meta property="og:description" content="Six levels of tracing, mazes and word searches that grow with your child. 130+ illustrations and a bonus Spanish or French chapter." />
+    <meta property="og:image" content="https://m1ndseye.com/assets/ME_Social_Sesame_Duo_Intro_to_French_.jpg" />
+    <meta property="og:url" content="https://m1ndseye.com/workbook/" />
+    <link rel="icon" href="../assets/M1E_icon_2.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Zilla+Slab:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #fbf3ee;
+        --surface: #ffffff;
+        --ink: #2a1f2d;
+        --muted: #6b5a68;
+        --line: rgba(42, 31, 45, 0.12);
+        --plum: #3b2a5a;
+        --rose: #c9566b;
+        --rose-dark: #a8404f;
+        --gold: #d8a93a;
+        --teal: #1f6f7a;
+        --radius: 18px;
+        --wrap: 1120px;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font: 400 17px/1.6 "Roboto", system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      img { max-width: 100%; display: block; height: auto; }
+      a { color: inherit; }
+      .wrap { width: min(var(--wrap), 100% - 32px); margin-inline: auto; }
+      h1, h2, h3 { font-family: "Zilla Slab", Georgia, serif; line-height: 1.12; margin: 0 0 0.5em; color: var(--plum); }
+      h1 { font-size: clamp(2.2rem, 5.2vw, 3.6rem); letter-spacing: -0.01em; }
+      h2 { font-size: clamp(1.7rem, 3.6vw, 2.5rem); }
+      h3 { font-size: 1.25rem; }
+      p { margin: 0 0 1em; }
+      .eyebrow {
+        display: inline-block;
+        font: 700 0.78rem/1 "Roboto", sans-serif;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--rose);
+        margin-bottom: 14px;
+      }
+
+      /* Header */
+      .site-head { padding: 18px 0; }
+      .site-head .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+      .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 700 1.15rem/1 "Zilla Slab", serif; color: var(--plum); }
+      .brand img { width: 36px; height: 36px; padding: 7px; border-radius: 10px; background: var(--plum); }
+      .head-link { font-size: 0.95rem; color: var(--muted); text-decoration: none; }
+      .head-link:hover { color: var(--rose); }
+
+      /* Buttons */
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+        min-height: 52px; padding: 0 26px; border-radius: 999px;
+        font: 700 1rem/1 "Roboto", sans-serif; text-decoration: none;
+        transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+      }
+      .btn:active { transform: translateY(1px); }
+      .btn--buy { background: var(--rose); color: #fff; box-shadow: 0 8px 22px rgba(201, 86, 107, 0.32); }
+      .btn--buy:hover { background: var(--rose-dark); }
+      .btn--ghost { color: var(--plum); border: 2px solid var(--plum); }
+      .btn--ghost:hover { background: var(--plum); color: #fff; }
+      .btn-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+      .fine { font-size: 0.88rem; color: var(--muted); margin-top: 12px; }
+
+      /* Hero */
+      .hero { padding: 24px 0 56px; }
+      .hero .wrap { display: grid; grid-template-columns: 1fr 1.15fr; gap: 44px; align-items: center; }
+      .hero p.lead { font-size: 1.15rem; color: var(--muted); max-width: 34em; }
+      .hero-media { border-radius: var(--radius); overflow: hidden; box-shadow: 0 24px 60px rgba(59, 42, 90, 0.22); }
+
+      /* Facts strip */
+      .facts { background: var(--plum); color: #fff; padding: 22px 0; }
+      .facts ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; text-align: center; }
+      .facts strong { display: block; font: 700 1.6rem/1.1 "Zilla Slab", serif; color: var(--gold); }
+      .facts span { font-size: 0.92rem; opacity: 0.9; }
+
+      section { padding: 72px 0; }
+      .section-head { max-width: 40em; margin-bottom: 36px; }
+      .section-head p { color: var(--muted); font-size: 1.08rem; }
+
+      /* Benefits */
+      .benefits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+      .benefit { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+      .benefit .dot { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font: 700 1.1rem/1 "Zilla Slab", serif; color: #fff; margin-bottom: 14px; }
+      .benefit p { color: var(--muted); margin: 0; }
+      .b1 .dot { background: var(--rose); } .b2 .dot { background: var(--teal); } .b3 .dot { background: var(--gold); }
+      .b4 .dot { background: var(--plum); } .b5 .dot { background: var(--rose); } .b6 .dot { background: var(--teal); }
+
+      /* Inside the book */
+      .inside { background: var(--surface); }
+      .inside-row { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; margin-bottom: 48px; }
+      .inside-row:last-child { margin-bottom: 0; }
+      .inside-row:nth-child(even) .inside-media { order: 2; }
+      .inside-media { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); }
+      .inside-row p { color: var(--muted); }
+
+      /* Story */
+      .story { background: var(--bg); }
+      .story-card { background: var(--plum); color: #f4ecf6; border-radius: 24px; padding: clamp(28px, 5vw, 56px); display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center; }
+      .story-card h2 { color: #fff; }
+      .story-card .eyebrow { color: var(--gold); }
+      .story-card img { border-radius: var(--radius); }
+
+      /* Freebies */
+      .freebies-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+      .freebie { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
+      .freebie img { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
+      .freebie div { padding: 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+      .freebie h3 { margin: 0; font-size: 1.1rem; }
+      .freebie p { color: var(--muted); font-size: 0.95rem; margin: 0; flex: 1; }
+      .freebie a { font-weight: 700; color: var(--rose); text-decoration: none; margin-top: 6px; }
+      .freebie a:hover { text-decoration: underline; }
+
+      /* Final CTA */
+      .final { text-align: center; background: linear-gradient(180deg, var(--bg), #f3dfe2); }
+      .final p { color: var(--muted); max-width: 36em; margin-inline: auto; }
+      .final .btn-row { justify-content: center; }
+
+      footer { padding: 32px 0 48px; font-size: 0.9rem; color: var(--muted); }
+      footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; }
+      footer a { color: var(--muted); }
+
+      @media (max-width: 900px) {
+        .hero .wrap, .inside-row, .story-card { grid-template-columns: 1fr; }
+        .inside-row:nth-child(even) .inside-media { order: 0; }
+        .benefits { grid-template-columns: 1fr 1fr; }
+        .freebies-grid { grid-template-columns: 1fr 1fr; }
+        .facts ul { grid-template-columns: 1fr 1fr; }
+        section { padding: 56px 0; }
+      }
+      @media (max-width: 560px) {
+        .benefits, .freebies-grid { grid-template-columns: 1fr; }
+        .btn { width: 100%; }
+        .hero { padding-top: 8px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-head">
+      <div class="wrap">
+        <a class="brand" href="../"><img src="../assets/M1E_icon_2.svg" alt="" />M1ndseye</a>
+        <a class="head-link" href="#freebies">Free printables</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" style="padding-top: 24px">
+        <div class="wrap">
+          <div>
+            <span class="eyebrow">Illustrated Alphabet Tracing Workbook · Ages 3–6</span>
+            <h1>Watch their letters take shape.</h1>
+            <p class="lead">
+              Tracing, mazes, word searches and early phonics in six levels that
+              grow with your child, so every page feels like a small win, not a
+              chore.
+            </p>
+            <div class="btn-row">
+              <a class="btn btn--buy" data-loc="hero" href="https://www.amazon.com/dp/B0DM65745Y" target="_blank" rel="noopener">Buy on Amazon</a>
+              <a class="btn btn--ghost" href="#freebies">Try a free printable first</a>
+            </div>
+            <p class="fine">Available with a bonus Spanish or French chapter.</p>
+          </div>
+          <div class="hero-media">
+            <img
+              src="../assets/ME_Social_Sesame_Duo_Intro_to_French_.jpg"
+              alt="Two editions of the M1ndseye Illustrated Alphabet Tracing Workbook for ages 3–6, one with a bonus Spanish chapter and one with a bonus French chapter"
+              width="1920" height="1080"
+            />
+          </div>
+        </div>
+      </section>
+
+      <div class="facts" aria-label="Workbook at a glance">
+        <div class="wrap">
+          <ul>
+            <li><strong>Ages 3–6</strong><span>Pre-K to early reader</span></li>
+            <li><strong>6 levels</strong><span>Gradually harder</span></li>
+            <li><strong>130+</strong><span>Kid-friendly illustrations</span></li>
+            <li><strong>+1 language</strong><span>Spanish or French bonus</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <section>
+        <div class="wrap">
+          <div class="section-head">
+            <span class="eyebrow">Why parents like it</span>
+            <h2>Built for little hands and short attention spans.</h2>
+          </div>
+          <div class="benefits">
+            <div class="benefit b1"><div class="dot">1</div><h3>Six levels that grow with them</h3><p>Each series is a little harder than the last, so your child keeps moving forward without hitting a wall.</p></div>
+            <div class="benefit b2"><div class="dot">✎</div><h3>Pencil control through play</h3><p>Tracing and continuous-line mazes build the hand strength and control that writing needs.</p></div>
+            <div class="benefit b3"><div class="dot">A</div><h3>Letters, then words</h3><p>Starts with letter shapes, then moves to early phonics, vowel mazes and word searches.</p></div>
+            <div class="benefit b4"><div class="dot">★</div><h3>130+ illustrations</h3><p>Friendly, accurately drawn animals and objects give every letter something to talk about.</p></div>
+            <div class="benefit b5"><div class="dot">¡</div><h3>A first taste of a new language</h3><p>Choose the edition with a bonus Spanish or French chapter.</p></div>
+            <div class="benefit b6"><div class="dot">✓</div><h3>Screen-free and ready to go</h3><p>Open the book and a pencil is all they need: at the table, in the car, or on a rainy afternoon.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="inside">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="eyebrow">Inside the book</span>
+            <h2>A peek at the pages.</h2>
+          </div>
+          <div class="inside-row">
+            <div class="inside-media"><img src="../assets/ME_Social_Sesame_Mazes_.jpg" alt="Vowel maze pages from the workbook" loading="lazy" width="1920" height="1080" /></div>
+            <div><h3>Vowel mazes where every path is the right path</h3><p>No dead ends and no wrong answers. Kids follow the line, meet the vowels, and finish feeling capable.</p></div>
+          </div>
+          <div class="inside-row">
+            <div class="inside-media"><img src="../assets/ME_Social_Sesame_Word_Search_.jpg" alt="Word search pages from the workbook" loading="lazy" width="1920" height="1080" /></div>
+            <div><h3>Word searches that grow with them</h3><p>Puzzles start short and simple, then stretch as your child's confidence with letters and words grows.</p></div>
+          </div>
+          <div class="inside-row">
+            <div class="inside-media"><img src="../assets/ME_Social_Sesame_Sloping_Difficulty_Curve_.jpg" alt="Diagram of the six series with a gradual difficulty curve" loading="lazy" width="1920" height="1080" /></div>
+            <div><h3>A gentle difficulty curve</h3><p>Six full series move from tracing to writing at a steady pace, so practice builds muscle memory instead of frustration.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="story">
+        <div class="wrap">
+          <div class="story-card">
+            <div>
+              <span class="eyebrow">The story</span>
+              <h2>I made it for my own kids.</h2>
+              <p>
+                During the pandemic I started designing worksheets for my children.
+                As they worked through them, I began to see the shapes from those
+                pages show up in their handwriting. That's when I knew this was
+                worth sharing.
+              </p>
+              <p>
+                Every page is designed to be clear, inviting and easy for young
+                hands, and built around the small wins that build confidence.
+              </p>
+              <p style="margin: 0"><strong>Steve Padilla</strong>, designer and dad, M1ndseye</p>
+            </div>
+            <img src="../assets/ME_Social_Sesame_Hero_Image_Main_.jpg" alt="M1ndseye: educational assets you can count on" loading="lazy" width="1600" height="900" />
+          </div>
+        </div>
+      </section>
+
+      <section id="freebies">
+        <div class="wrap">
+          <div class="section-head">
+            <span class="eyebrow">Free printables</span>
+            <h2>Try M1ndseye free tonight.</h2>
+            <p>Print one of these at home and see how your child likes the style. No sign-up needed.</p>
+          </div>
+          <div class="freebies-grid">
+            <div class="freebie">
+              <img src="../assets/ME_Sesame_Hol_Halloween_PUmpkin_Maze_.jpg" alt="Jack-o'-lantern continuous line maze" loading="lazy" />
+              <div><h3>Jack-o'-Lantern Maze</h3><p>One continuous line through the whole pumpkin. A long, satisfying Halloween challenge.</p><a href="../assets/ME_Maze_Jack_o_Lantern_.pdf" download>Download PDF ↓</a></div>
+            </div>
+            <div class="freebie">
+              <img src="../assets/ME_Sesame_Hol_St_Patty_Landscape.jpg" alt="Shamrock continuous line maze" loading="lazy" />
+              <div><h3>Shamrock Maze</h3><p>Follow the line, find your luck. Great for St. Patrick's Day or any day.</p><a href="../assets/ME_Maze_Shamrock_.pdf" download>Download PDF ↓</a></div>
+            </div>
+            <div class="freebie">
+              <img src="../assets/ME_Sesame_Valentine_Landscape.jpg" alt="Valentine love certificates" loading="lazy" />
+              <div><h3>Valentine Love Certificates</h3><p>Sweet, printable coupons kids can give to the people they love.</p><a href="../assets/ME_Valentine_Love_Certs_.zip" download>Download ZIP ↓</a></div>
+            </div>
+            <div class="freebie">
+              <img src="../assets/ME_Vid_Cover_Rocket_Goal_Chart_Comets.jpg" alt="Celestial goal chart" loading="lazy" />
+              <div><h3>Celestial Goal Chart</h3><p>Track practice and celebrate progress. Color and black-and-white versions.</p><a href="../assets/ME_Goal_Chart_Celestial.zip" download>Download ZIP ↓</a></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="final">
+        <div class="wrap">
+          <h2>Ready for the whole alphabet?</h2>
+          <p>Six levels, 130+ illustrations and a bonus language chapter, all in one workbook.</p>
+          <div class="btn-row">
+            <a class="btn btn--buy" data-loc="footer_cta" href="https://www.amazon.com/dp/B0DM65745Y" target="_blank" rel="noopener">Buy on Amazon</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <span>© M1ndseye · Educational assets you can count on.</span>
+        <span><a href="../m1ndseye-educational-assets.html">How M1ndseye was made</a> · <a href="../">Portfolio</a></span>
+      </div>
+    </footer>
+  </body>
+</html>
