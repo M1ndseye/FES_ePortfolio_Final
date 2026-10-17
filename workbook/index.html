@@ -112,6 +112,10 @@
       .btn:active { transform: translateY(1px); }
       .btn--buy { background: var(--rose); color: #fff; box-shadow: 0 8px 22px rgba(201, 86, 107, 0.32); }
       .btn--buy:hover { background: var(--rose-dark); }
+      .btn--alt { background: var(--plum); box-shadow: 0 8px 22px rgba(59, 42, 90, 0.28); }
+      .btn--alt:hover { background: #2a1d42; }
+      .edition-label { margin: 22px 0 0; font-weight: 700; color: var(--plum); }
+      .fine a { color: var(--rose); }
       .btn--ghost { color: var(--plum); border: 2px solid var(--plum); }
       .btn--ghost:hover { background: var(--plum); color: #fff; }
       .btn-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
@@ -223,11 +227,12 @@
               phonics in six levels that grow with your child, so every page feels
               like a small win, not a chore. (And you get a little quiet time.)
             </p>
-            <div class="btn-row">
-              <a class="btn btn--buy" data-loc="hero" href="https://www.amazon.com/dp/B0DM65745Y" target="_blank" rel="noopener">Buy on Amazon</a>
-              <a class="btn btn--ghost" href="#freebies">Try a free printable first</a>
+            <p class="edition-label">Choose your bonus language · $6.50 on Amazon</p>
+            <div class="btn-row" style="margin-top: 10px">
+              <a class="btn btn--buy" data-loc="hero_spanish" href="https://www.amazon.com/dp/B0DM65745Y" target="_blank" rel="noopener">Buy with Spanish 🇲🇽</a>
+              <a class="btn btn--buy btn--alt" data-loc="hero_french" href="https://www.amazon.com/dp/B0DTQ5ZLM2" target="_blank" rel="noopener">Buy with French 🇫🇷</a>
             </div>
-            <p class="fine">Available with a bonus Spanish or French chapter.</p>
+            <p class="fine">97 pages · Paperback · or <a href="#freebies">try a free printable first</a></p>
           </div>
           <div class="hero-media">
             <img
@@ -383,9 +388,10 @@
       <section class="final">
         <div class="wrap">
           <h2>Ready for the whole alphabet?</h2>
-          <p>Six levels, 130+ illustrations and a bonus language chapter, all in one workbook.</p>
+          <p>Six levels, 130+ illustrations and a bonus language chapter, all in one $6.50 workbook.</p>
           <div class="btn-row">
-            <a class="btn btn--buy" data-loc="footer_cta" href="https://www.amazon.com/dp/B0DM65745Y" target="_blank" rel="noopener">Buy on Amazon</a>
+            <a class="btn btn--buy" data-loc="footer_spanish" href="https://www.amazon.com/dp/B0DM65745Y" target="_blank" rel="noopener">Buy with Spanish 🇲🇽</a>
+            <a class="btn btn--buy btn--alt" data-loc="footer_french" href="https://www.amazon.com/dp/B0DTQ5ZLM2" target="_blank" rel="noopener">Buy with French 🇫🇷</a>
           </div>
           <div class="extras">
             <div>
