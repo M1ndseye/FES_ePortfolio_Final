@@ -194,6 +194,19 @@
       .extras a { color: var(--rose); font-weight: 700; }
       @media (max-width: 900px) { .rewards-card, .extras { grid-template-columns: 1fr; } }
 
+      /* Email gate */
+      .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+      .ml-gate { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+      .ml-gate input[type="email"] { min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: 10px; font: inherit; font-size: 0.95rem; background: #fff; color: var(--ink); }
+      .ml-gate input[type="email"]:focus { outline: 2px solid var(--rose); outline-offset: 1px; }
+      .ml-gate button { min-height: 44px; border: 0; border-radius: 999px; background: var(--rose); color: #fff; font: 700 0.95rem/1 "Roboto", sans-serif; cursor: pointer; }
+      .ml-gate button:hover { background: var(--rose-dark); }
+      .ml-gate button[disabled] { opacity: 0.7; cursor: wait; }
+      .ml-gate small, .ml-done small { color: var(--muted); font-size: 0.8rem; line-height: 1.4; }
+      .freebie .ml-done { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; padding: 0; }
+      .ml-done[hidden], .ml-gate[hidden] { display: none; }
+      .ml-done strong { color: var(--plum); }
+
       footer { padding: 32px 0 48px; font-size: 0.9rem; color: var(--muted); }
       footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; }
       footer a { color: var(--muted); }
@@ -353,7 +366,7 @@
           <div class="section-head">
             <span class="eyebrow">Free printables</span>
             <h2>Try M1ndseye free tonight.</h2>
-            <p>Print one of these at home and see how your child likes the style. No sign-up needed.</p>
+            <p>Print one of these at home and see how your child likes the style. The mazes and tickets are instant downloads; the goal chart just needs your email.</p>
           </div>
           <div class="freebies-grid">
             <div class="freebie">
@@ -368,9 +381,25 @@
               <img src="../assets/ME_Sesame_Valentine_Landscape.jpg" alt="Printable family reward tickets" loading="lazy" />
               <div><h3>Family Reward Tickets</h3><p>Printable prize tickets for experiences, not stuff: a family adventure, picking dinner, an extra story.</p><a href="../assets/ME_Valentine_Love_Certs_.zip" download>Download ZIP ↓</a></div>
             </div>
-            <div class="freebie">
+            <div class="freebie" id="goal-chart">
               <img src="../assets/ME_Vid_Cover_Rocket_Goal_Chart_Comets.jpg" alt="Celestial goal chart" loading="lazy" />
-              <div><h3>Celestial Goal Chart</h3><p>The same kind of chart that kept my kids going. Color and black-and-white versions.</p><a href="../assets/ME_Goal_Chart_Celestial.zip" download>Download ZIP ↓</a></div>
+              <div>
+                <h3>Celestial Goal Chart</h3>
+                <p>The same kind of chart that kept my kids going. Color and black-and-white versions.</p>
+                <form class="ml-gate" action="https://assets.mailerlite.com/jsonp/2719328/forms/201533675300456291/subscribe" method="post" data-file="../assets/ME_Goal_Chart_Celestial.zip">
+                  <label class="sr-only" for="gate-email">Email address</label>
+                  <input id="gate-email" type="email" name="fields[email]" placeholder="Your email" autocomplete="email" required />
+                  <input type="hidden" name="ml-submit" value="1" />
+                  <input type="hidden" name="anticsrf" value="true" />
+                  <button type="submit">Get the chart free</button>
+                  <small>Plus new printables now and then. Unsubscribe anytime.</small>
+                </form>
+                <div class="ml-done" hidden>
+                  <strong>It's yours!</strong>
+                  <a href="../assets/ME_Goal_Chart_Celestial.zip" download>Download the goal chart ↓</a>
+                  <small>Check your inbox to confirm your email and stay on the list for new printables.</small>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -403,7 +432,7 @@
                 <li>When the jar is full, go celebrate!</li>
               </ol>
               <p>It rewards good habits and teaches kids to work toward a goal. Pair it with the free goal chart and reward tickets above.</p>
-              <a class="btn btn--buy" href="#freebies" style="margin-top: 6px">Get the free goal chart</a>
+              <a class="btn btn--buy" href="#goal-chart" style="margin-top: 6px">Get the free goal chart</a>
             </div>
           </div>
         </div>
@@ -437,5 +466,24 @@
         <span><a href="../m1ndseye-educational-assets.html">How M1ndseye was made</a> · <a href="../">Portfolio</a></span>
       </div>
     </footer>
+    <script>
+      // Goal chart email gate: subscribe through MailerLite, then reveal the download.
+      document.querySelectorAll('.ml-gate').forEach(function (form) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var btn = form.querySelector('button');
+          btn.disabled = true;
+          btn.textContent = 'One sec…';
+          function reveal() {
+            form.hidden = true;
+            form.nextElementSibling.hidden = false;
+            if (window.gtag) gtag('event', 'generate_lead', { lead_source: 'goal_chart_gate', page: 'workbook' });
+            if (window.pintrk) pintrk('track', 'signup', { lead_type: 'Goal chart', event_id: 'gate-' + Date.now() });
+          }
+          fetch(form.action, { method: 'POST', body: new FormData(form), mode: 'no-cors' })
+            .then(reveal, reveal);
+        });
+      });
+    </script>
   </body>
 </html>
