@@ -16,11 +16,18 @@
       pintrk('load', '2613532238308');
       pintrk('page');
       pintrk('track', 'pagevisit');
-      // Count free printable downloads (maze PDFs, certificate zip) as leads
+      // Count free printable downloads (maze PDFs, certificate zip) as leads, and Amazon clicks
       document.addEventListener('click', function (e) {
         var a = e.target.closest && e.target.closest('a[href]');
-        if (a && /\.(pdf|zip)(\?|#|$)/i.test(a.getAttribute('href'))) {
+        if (!a) return;
+        var href = a.getAttribute('href');
+        if (/\.(pdf|zip)(\?|#|$)/i.test(href)) {
           pintrk('track', 'lead', { lead_type: 'Free printable', event_id: 'dl-' + Date.now() });
+          if (window.gtag) gtag('event', 'free_printable_download', { file_name: href.split('/').pop(), page: 'educational_assets' });
+        }
+        if (/amazon\./i.test(href)) {
+          if (window.gtag) gtag('event', 'amazon_click', { link_location: a.getAttribute('data-loc') || 'unknown', page: 'educational_assets' });
+          pintrk('track', 'custom', { event_name: 'amazon_click', event_id: 'amz-' + Date.now() });
         }
       });
     </script>
@@ -577,7 +584,8 @@
 
               <a
                 class="edu-download__btn"
-                href="https://www.amazon.com/gp/product/B0DM65745Y?ref_=dbs_m_mng_rwt_calw_tpbk_2&storeType=ebooks&qid=1772216582&sr=8-3#detailBullets_feature_div"
+                href="https://www.amazon.com/dp/B0DM65745Y"
+                data-loc="assets_page_buy"
                 target="_blank"
                 rel="noopener"
               >
