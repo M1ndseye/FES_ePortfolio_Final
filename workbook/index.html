@@ -55,16 +55,16 @@
     />
     <style>
       :root {
-        --bg: #fbf3ee;
+        --bg: #f5f3f5;
         --surface: #ffffff;
-        --ink: #2a1f2d;
-        --muted: #6b5a68;
-        --line: rgba(42, 31, 45, 0.12);
-        --plum: #3b2a5a;
-        --rose: #c9566b;
-        --rose-dark: #a8404f;
-        --gold: #d8a93a;
-        --teal: #1f6f7a;
+        --ink: #22121f;
+        --muted: #64545f;
+        --line: rgba(34, 18, 31, 0.12);
+        --plum: #370638;
+        --rose: #a82e25;
+        --rose-dark: #8a241c;
+        --gold: #d4ab3a;
+        --teal: #003d48;
         --radius: 18px;
         --wrap: 1120px;
       }
@@ -110,10 +110,10 @@
         transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
       }
       .btn:active { transform: translateY(1px); }
-      .btn--buy { background: var(--rose); color: #fff; box-shadow: 0 8px 22px rgba(201, 86, 107, 0.32); }
+      .btn--buy { background: var(--rose); color: #fff; box-shadow: 0 8px 22px rgba(168, 46, 37, 0.3); }
       .btn--buy:hover { background: var(--rose-dark); }
-      .btn--alt { background: var(--plum); box-shadow: 0 8px 22px rgba(59, 42, 90, 0.28); }
-      .btn--alt:hover { background: #2a1d42; }
+      .btn--alt { background: var(--plum); box-shadow: 0 8px 22px rgba(55, 6, 56, 0.25); }
+      .btn--alt:hover { background: #250326; }
       .edition-label { margin: 22px 0 0; font-weight: 700; color: var(--plum); }
       .fine a { color: var(--rose); }
       .btn--ghost { color: var(--plum); border: 2px solid var(--plum); }
@@ -125,7 +125,7 @@
       .hero { padding: 24px 0 56px; }
       .hero .wrap { display: grid; grid-template-columns: 1fr 1.15fr; gap: 44px; align-items: center; }
       .hero p.lead { font-size: 1.15rem; color: var(--muted); max-width: 34em; }
-      .hero-media { border-radius: var(--radius); overflow: hidden; box-shadow: 0 24px 60px rgba(59, 42, 90, 0.22); }
+      .hero-media { border-radius: var(--radius); overflow: hidden; box-shadow: 0 24px 60px rgba(55, 6, 56, 0.22); }
 
       /* Facts strip */
       .facts { background: var(--plum); color: #fff; padding: 22px 0; }
@@ -142,12 +142,12 @@
       .benefit { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
       .benefit .dot { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font: 700 1.1rem/1 "Zilla Slab", serif; color: #fff; margin-bottom: 14px; }
       .benefit p { color: var(--muted); margin: 0; }
-      .b1 .dot { background: var(--rose); } .b2 .dot { background: var(--teal); } .b3 .dot { background: var(--gold); }
+      .b1 .dot { background: var(--rose); } .b2 .dot { background: var(--teal); } .b3 .dot { background: #004d47; }
       .b4 .dot { background: var(--plum); } .b5 .dot { background: var(--rose); } .b6 .dot { background: var(--teal); }
 
       /* Video */
       .watch { padding-top: 0; }
-      .video { position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; background: var(--plum); box-shadow: 0 24px 60px rgba(59, 42, 90, 0.22); }
+      .video { position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; background: var(--plum); box-shadow: 0 24px 60px rgba(55, 6, 56, 0.22); }
       .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
       /* Inside the book */
@@ -160,23 +160,13 @@
 
       /* Story */
       .story { background: var(--bg); }
-      .story-card { background: var(--plum); color: #f4ecf6; border-radius: 24px; padding: clamp(28px, 5vw, 56px); display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center; }
-      .story-card h2 { color: #fff; }
-      .story-card .eyebrow { color: var(--gold); }
+      .story-card { background: var(--plum); color: #ebe6eb; border-radius: 24px; padding: clamp(28px, 5vw, 56px); display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center; }
+      .story-card h2 { color: var(--gold); }
+      .story-card .eyebrow { color: #d8a19d; }
       .story-card img { border-radius: var(--radius); }
 
-      /* Freebies */
-      .freebies-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
-      .freebie { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
-      .freebie img { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
-      .freebie div { padding: 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-      .freebie h3 { margin: 0; font-size: 1.1rem; }
-      .freebie p { color: var(--muted); font-size: 0.95rem; margin: 0; flex: 1; }
-      .freebie a { font-weight: 700; color: var(--rose); text-decoration: none; margin-top: 6px; }
-      .freebie a:hover { text-decoration: underline; }
-
       /* Final CTA */
-      .final { text-align: center; background: linear-gradient(180deg, var(--bg), #f3dfe2); }
+      .final { text-align: center; background: linear-gradient(180deg, var(--bg), #ebe6eb); }
       .final p { color: var(--muted); max-width: 36em; margin-inline: auto; }
       .final .btn-row { justify-content: center; }
 
@@ -187,7 +177,7 @@
       .rewards-card ul, .rewards-card ol { padding-left: 1.2em; margin: 0 0 1em; }
       .rewards-card li { margin-bottom: 8px; }
       .rewards-card li strong { color: var(--ink); }
-      .jar { background: #fdf0e6; border-radius: var(--radius); padding: 26px; }
+      .jar { background: #efe7e9; border-radius: var(--radius); padding: 26px; }
       .extras { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; max-width: 760px; margin: 48px auto 0; text-align: left; }
       .extras > div { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; }
       .extras p { margin: 0; }
@@ -203,9 +193,51 @@
       .ml-gate button:hover { background: var(--rose-dark); }
       .ml-gate button[disabled] { opacity: 0.7; cursor: wait; }
       .ml-gate small, .ml-done small { color: var(--muted); font-size: 0.8rem; line-height: 1.4; }
-      .freebie .ml-done { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; padding: 0; }
+      .ml-done { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; padding: 0; }
       .ml-done[hidden], .ml-gate[hidden] { display: none; }
       .ml-done strong { color: var(--plum); }
+
+      /* Free printables: one section per holiday */
+      .freebies-intro { padding-bottom: 40px; }
+      .freebies-intro .section-head { margin-bottom: 20px; }
+      .holiday-jump { display: flex; flex-wrap: wrap; gap: 10px; }
+      .holiday-jump a { padding: 10px 18px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); text-decoration: none; font-weight: 500; font-size: 0.95rem; color: var(--plum); }
+      .holiday-jump a:hover { border-color: var(--plum); }
+      .holiday { --h-bg: var(--surface); --h-ink: var(--ink); --h-head: var(--plum); --h-muted: var(--muted); --h-accent: var(--rose); --h-btn: var(--rose); --h-btn-hover: var(--rose-dark); --h-btn-ink: #fff;
+        background: var(--h-bg); color: var(--h-ink); padding: 80px 0; scroll-margin-top: 12px; }
+      .holiday h2 { color: var(--h-head); }
+      .holiday p { color: var(--h-muted); font-size: 1.08rem; max-width: 32em; }
+      .holiday .eyebrow { color: var(--h-accent); }
+      .holiday__grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 56px; align-items: center; }
+      .holiday__grid > * { min-width: 0; }
+      .holiday--flip .holiday__grid { grid-template-columns: 1fr 1.35fr; }
+      .holiday--flip .holiday__copy { order: 2; }
+      .holiday__dl { background: var(--h-btn); color: var(--h-btn-ink); }
+      .holiday__dl:hover { background: var(--h-btn-hover); }
+      .holiday__still { margin: 32px 0 0; border-radius: var(--radius); overflow: hidden; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22); }
+      .holiday__video, .holiday__media { margin: 0; }
+      .holiday__frame { position: relative; aspect-ratio: 9 / 16; max-width: 360px; margin-inline: auto; border-radius: 22px; overflow: hidden; background: #000; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3); }
+      .holiday__frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+      .holiday__media img { border-radius: 22px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3); }
+      .holiday--halloween { --h-bg: #370638; --h-ink: #f5f3f5; --h-head: #d4ab3a; --h-muted: #cdc1cd; --h-accent: #d8a19d; --h-btn: #a82e25; --h-btn-hover: #c0392f; --h-btn-ink: #fff; }
+      .holiday--goal { --h-bg: #1b223f; --h-ink: #f2f5f6; --h-head: #d4ab3a; --h-muted: #bfced1; --h-accent: #8ca8ad; --h-btn: #bfd2d1; --h-btn-hover: #e6eded; --h-btn-ink: #04304b;
+        background: linear-gradient(to top right, #023e49 0%, #1b223f 50%, #360638 100%); }
+      .holiday--tickets { --h-bg: #efe7e9; --h-head: #5b0b23; --h-muted: #6b4a54; --h-accent: #a82e25; --h-btn: #5b0b23; --h-btn-hover: #44081a; }
+      .holiday--shamrock { --h-bg: #e6eded; --h-head: #004d47; --h-muted: #3f5f5c; --h-accent: #004d47; --h-btn: #004d47; --h-btn-hover: #003a35; }
+      .holiday .ml-gate { max-width: 420px; margin-top: 8px; }
+      .holiday .ml-gate button { background: var(--h-btn); color: var(--h-btn-ink); min-height: 52px; font-size: 1rem; }
+      .holiday .ml-gate button:hover { background: var(--h-btn-hover); }
+      .holiday small { color: var(--h-muted); }
+      .holiday .ml-gate input[type="email"] { min-height: 52px; font-size: 1rem; }
+      .holiday .ml-done:not([hidden]) { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+      .holiday .ml-done strong { color: var(--h-head); font-size: 1.15rem; }
+      @media (max-width: 900px) {
+        .holiday { padding: 56px 0; }
+        .holiday__grid, .holiday--flip .holiday__grid { grid-template-columns: 1fr; gap: 32px; }
+        .holiday--flip .holiday__copy { order: 0; }
+        .holiday__frame { max-width: 300px; }
+        .holiday__media img { max-width: min(420px, 100%); margin-inline: auto; }
+      }
 
       footer { padding: 32px 0 48px; font-size: 0.9rem; color: var(--muted); }
       footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; }
@@ -215,12 +247,11 @@
         .hero .wrap, .inside-row, .story-card { grid-template-columns: 1fr; }
         .inside-row:nth-child(even) .inside-media { order: 0; }
         .benefits { grid-template-columns: 1fr 1fr; }
-        .freebies-grid { grid-template-columns: 1fr 1fr; }
         .facts ul { grid-template-columns: 1fr 1fr; }
         section { padding: 56px 0; }
       }
       @media (max-width: 560px) {
-        .benefits, .freebies-grid { grid-template-columns: 1fr; }
+        .benefits { grid-template-columns: 1fr; }
         .btn { width: 100%; }
         .hero { padding-top: 8px; }
       }
@@ -361,47 +392,88 @@
         </div>
       </section>
 
-      <section id="freebies">
+      <section id="freebies" class="freebies-intro">
         <div class="wrap">
           <div class="section-head">
             <span class="eyebrow">Free printables</span>
             <h2>Try M1ndseye free tonight.</h2>
-            <p>Print one of these at home and see how your child likes the style. The mazes and tickets are instant downloads; the goal chart just needs your email.</p>
+            <p>Print one at home and see how your child likes the style. The mazes and tickets are instant downloads; the goal chart just needs your email.</p>
           </div>
-          <div class="freebies-grid">
-            <div class="freebie">
-              <img src="../assets/ME_Sesame_Hol_Halloween_PUmpkin_Maze_.jpg" alt="Jack-o'-lantern continuous line maze" loading="lazy" />
-              <div><h3>Jack-o'-Lantern Maze</h3><p>One continuous line through the whole pumpkin. A long, satisfying Halloween challenge.</p><a href="../assets/ME_Maze_Jack_o_Lantern_.pdf" download>Download PDF ↓</a></div>
-            </div>
-            <div class="freebie">
-              <img src="../assets/ME_Sesame_Hol_St_Patty_Landscape.jpg" alt="Shamrock continuous line maze" loading="lazy" />
-              <div><h3>Shamrock Maze</h3><p>Follow the line, find your luck. Great for St. Patrick's Day or any day.</p><a href="../assets/ME_Maze_Shamrock_.pdf" download>Download PDF ↓</a></div>
-            </div>
-            <div class="freebie">
-              <img src="../assets/ME_Sesame_Valentine_Landscape.jpg" alt="Printable family reward tickets" loading="lazy" />
-              <div><h3>Family Reward Tickets</h3><p>Printable prize tickets for experiences, not stuff: a family adventure, picking dinner, an extra story.</p><a href="../assets/ME_Valentine_Love_Certs_.zip" download>Download ZIP ↓</a></div>
-            </div>
-            <div class="freebie" id="goal-chart">
-              <img src="../assets/ME_Vid_Cover_Rocket_Goal_Chart_Comets.jpg" alt="Celestial goal chart" loading="lazy" />
-              <div>
-                <h3>Celestial Goal Chart</h3>
-                <p>The same kind of chart that kept my kids going. Color and black-and-white versions.</p>
-                <form class="ml-gate" action="https://assets.mailerlite.com/jsonp/2719328/forms/201533675300456291/subscribe" method="post" data-file="../assets/ME_Goal_Chart_Celestial.zip">
-                  <label class="sr-only" for="gate-email">Email address</label>
-                  <input id="gate-email" type="email" name="fields[email]" placeholder="Your email" autocomplete="email" required />
-                  <input type="hidden" name="ml-submit" value="1" />
-                  <input type="hidden" name="anticsrf" value="true" />
-                  <button type="submit">Get the chart free</button>
-                  <small>Plus new printables now and then. Unsubscribe anytime.</small>
-                </form>
-                <div class="ml-done" hidden>
-                  <strong>It's yours!</strong>
-                  <a href="../assets/ME_Goal_Chart_Celestial.zip" download>Download the goal chart ↓</a>
-                  <small>Check your inbox to confirm your email and stay on the list for new printables.</small>
-                </div>
-              </div>
+          <nav class="holiday-jump" aria-label="Free printables">
+            <a href="#halloween-maze">Halloween maze</a>
+            <a href="#reward-tickets">Reward tickets</a>
+            <a href="#goal-chart">Goal chart</a>
+            <a href="#shamrock-maze">Shamrock maze</a>
+          </nav>
+        </div>
+      </section>
+
+      <section class="holiday holiday--halloween" id="halloween-maze">
+        <div class="wrap holiday__grid">
+          <div class="holiday__copy">
+            <span class="eyebrow">Halloween · free continuous-line maze</span>
+            <h2>One line. One big challenge.</h2>
+            <p>One continuous line fills the whole jack-o'-lantern, so little hands get a longer workout for pencil control and focus while they play their way to the finish.</p>
+            <a class="btn holiday__dl" href="../assets/ME_Maze_Jack_o_Lantern_.pdf" download>Download the free maze ↓</a>
+            <figure class="holiday__still"><img src="../assets/ME_Sesame_Hol_Halloween_Landscape.jpg" alt="Jack-o'-lantern continuous line maze in the M1ndseye 3D world" loading="lazy" /></figure>
+          </div>
+          <figure class="holiday__video">
+            <div class="holiday__frame"><iframe src="https://player.vimeo.com/video/1216834300?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" title="M1ndseye Halloween maze animation" loading="lazy" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+          </figure>
+        </div>
+      </section>
+
+      <section class="holiday holiday--tickets holiday--flip" id="reward-tickets">
+        <div class="wrap holiday__grid">
+          <div class="holiday__copy">
+            <span class="eyebrow">Valentine's · free reward tickets</span>
+            <h2>Prizes that are moments, not stuff.</h2>
+            <p>Printable tickets for a family adventure, picking dinner, or one more story. Hand them out for finished pages and watch the motivation build.</p>
+            <a class="btn holiday__dl" href="../assets/ME_Valentine_Love_Certs_.zip" download>Download the free tickets ↓</a>
+            <figure class="holiday__still"><img src="../assets/ME_Sesame_Valentine_Landscape.jpg" alt="Printable family reward tickets in the M1ndseye 3D world" loading="lazy" /></figure>
+          </div>
+          <figure class="holiday__video">
+            <div class="holiday__frame"><iframe src="https://player.vimeo.com/video/1216834021?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" title="M1ndseye Valentine reward tickets animation" loading="lazy" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+          </figure>
+        </div>
+      </section>
+
+      <section class="holiday holiday--goal" id="goal-chart">
+        <div class="wrap holiday__grid">
+          <div class="holiday__copy">
+            <span class="eyebrow">New Year · free goal chart</span>
+            <h2>Turn progress into something they can see.</h2>
+            <p>The same kind of chart that kept my kids going. Track practice days, celebrate streaks, and watch the rocket climb. Color and black-and-white versions included.</p>
+            <form class="ml-gate" action="https://assets.mailerlite.com/jsonp/2719328/forms/201533675300456291/subscribe" method="post" data-file="../assets/ME_Goal_Chart_Celestial.zip">
+              <label class="sr-only" for="gate-email">Email address</label>
+              <input id="gate-email" type="email" name="fields[email]" placeholder="Your email" autocomplete="email" required />
+              <input type="hidden" name="ml-submit" value="1" />
+              <input type="hidden" name="anticsrf" value="true" />
+              <button type="submit">Get the chart free</button>
+              <small>Plus new printables now and then. Unsubscribe anytime.</small>
+            </form>
+            <div class="ml-done" hidden>
+              <strong>It's yours!</strong>
+              <a class="btn holiday__dl" href="../assets/ME_Goal_Chart_Celestial.zip" download>Download the goal chart ↓</a>
+              <small>Check your inbox to confirm your email and stay on the list for new printables.</small>
             </div>
           </div>
+          <figure class="holiday__media"><img src="../assets/ME_Vid_Cover_Rocket_Goal_Chart_Comets.jpg" alt="Celestial goal chart with rocket and comets" loading="lazy" /></figure>
+        </div>
+      </section>
+
+      <section class="holiday holiday--shamrock holiday--flip" id="shamrock-maze">
+        <div class="wrap holiday__grid">
+          <div class="holiday__copy">
+            <span class="eyebrow">St. Patrick's Day · free continuous-line maze</span>
+            <h2>Follow the line. Find your luck.</h2>
+            <p>One line winds through the whole shamrock, a longer challenge for pencil control and focus, disguised as St. Patrick's Day fun.</p>
+            <a class="btn holiday__dl" href="../assets/ME_Maze_Shamrock_.pdf" download>Download the free maze ↓</a>
+            <figure class="holiday__still"><img src="../assets/ME_Sesame_Hol_St_Patty_Landscape.jpg" alt="Shamrock continuous line maze in the M1ndseye 3D world" loading="lazy" /></figure>
+          </div>
+          <figure class="holiday__video">
+            <div class="holiday__frame"><iframe src="https://player.vimeo.com/video/1217523034?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" title="M1ndseye Shamrock maze animation" loading="lazy" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+          </figure>
         </div>
       </section>
 
