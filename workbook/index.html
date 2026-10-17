@@ -171,6 +171,20 @@
       .final p { color: var(--muted); max-width: 36em; margin-inline: auto; }
       .final .btn-row { justify-content: center; }
 
+      /* Rewards */
+      .rewards { padding-top: 0; }
+      .rewards-card { background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: clamp(24px, 5vw, 48px); display: grid; grid-template-columns: 1.1fr 1fr; gap: 36px; }
+      .rewards-card p, .rewards-card li { color: var(--muted); }
+      .rewards-card ul, .rewards-card ol { padding-left: 1.2em; margin: 0 0 1em; }
+      .rewards-card li { margin-bottom: 8px; }
+      .rewards-card li strong { color: var(--ink); }
+      .jar { background: #fdf0e6; border-radius: var(--radius); padding: 26px; }
+      .extras { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; max-width: 760px; margin: 48px auto 0; text-align: left; }
+      .extras > div { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; }
+      .extras p { margin: 0; }
+      .extras a { color: var(--rose); font-weight: 700; }
+      @media (max-width: 900px) { .rewards-card, .extras { grid-template-columns: 1fr; } }
+
       footer { padding: 32px 0 48px; font-size: 0.9rem; color: var(--muted); }
       footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; }
       footer a { color: var(--muted); }
@@ -203,11 +217,11 @@
         <div class="wrap">
           <div>
             <span class="eyebrow">Illustrated Alphabet Tracing Workbook · Ages 3–6</span>
-            <h1>Watch their letters take shape.</h1>
+            <h1>Unlock your child's potential.</h1>
             <p class="lead">
-              Tracing, mazes, word searches and early phonics in six levels that
-              grow with your child, so every page feels like a small win, not a
-              chore.
+              Get ahead of the curve with tracing, mazes, word searches and early
+              phonics in six levels that grow with your child, so every page feels
+              like a small win, not a chore. (And you get a little quiet time.)
             </p>
             <div class="btn-row">
               <a class="btn btn--buy" data-loc="hero" href="https://www.amazon.com/dp/B0DM65745Y" target="_blank" rel="noopener">Buy on Amazon</a>
@@ -278,19 +292,27 @@
         <div class="wrap">
           <div class="story-card">
             <div>
-              <span class="eyebrow">The story</span>
-              <h2>I made it for my own kids.</h2>
+              <span class="eyebrow">Behind the gears</span>
+              <h2>I made it for my own three kids.</h2>
               <p>
-                During the pandemic I started designing worksheets for my children.
-                As they worked through them, I began to see the shapes from those
-                pages show up in their handwriting. That's when I knew this was
-                worth sharing.
+                M1ndseye started as worksheets I made with love for my children. I
+                put their names on the pages, filled them with things they were
+                curious about, and kept them motivated with a goal chart. Before I
+                knew it, I could see the difference in their handwriting.
               </p>
               <p>
-                Every page is designed to be clear, inviting and easy for young
-                hands, and built around the small wins that build confidence.
+                I've spent over 20 years as a graphic designer, including work on
+                exhibits at the Museum of Science, Boston, where I designed tactile
+                programming tiles that let visually impaired visitors program a
+                hedgehog. Their approach to universal design, removing
+                obstacles so learning works for everyone, is the heart of every
+                M1ndseye page.
               </p>
-              <p style="margin: 0"><strong>Steve Padilla</strong>, designer and dad, M1ndseye</p>
+              <p>
+                If I can leave the world a little better educated, and buy parents
+                some much-needed quiet time, that's a good thing.
+              </p>
+              <p style="margin: 0"><strong>Steve Padilla</strong>, father of three and founder of M1ndseye</p>
             </div>
             <img src="../assets/ME_Social_Sesame_Hero_Image_Main_.jpg" alt="M1ndseye: educational assets you can count on" loading="lazy" width="1600" height="900" />
           </div>
@@ -314,12 +336,45 @@
               <div><h3>Shamrock Maze</h3><p>Follow the line, find your luck. Great for St. Patrick's Day or any day.</p><a href="../assets/ME_Maze_Shamrock_.pdf" download>Download PDF ↓</a></div>
             </div>
             <div class="freebie">
-              <img src="../assets/ME_Sesame_Valentine_Landscape.jpg" alt="Valentine love certificates" loading="lazy" />
-              <div><h3>Valentine Love Certificates</h3><p>Sweet, printable coupons kids can give to the people they love.</p><a href="../assets/ME_Valentine_Love_Certs_.zip" download>Download ZIP ↓</a></div>
+              <img src="../assets/ME_Sesame_Valentine_Landscape.jpg" alt="Printable family reward tickets" loading="lazy" />
+              <div><h3>Family Reward Tickets</h3><p>Printable prize tickets for experiences, not stuff: a family adventure, picking dinner, an extra story.</p><a href="../assets/ME_Valentine_Love_Certs_.zip" download>Download ZIP ↓</a></div>
             </div>
             <div class="freebie">
               <img src="../assets/ME_Vid_Cover_Rocket_Goal_Chart_Comets.jpg" alt="Celestial goal chart" loading="lazy" />
-              <div><h3>Celestial Goal Chart</h3><p>Track practice and celebrate progress. Color and black-and-white versions.</p><a href="../assets/ME_Goal_Chart_Celestial.zip" download>Download ZIP ↓</a></div>
+              <div><h3>Celestial Goal Chart</h3><p>The same kind of chart that kept my kids going. Color and black-and-white versions.</p><a href="../assets/ME_Goal_Chart_Celestial.zip" download>Download ZIP ↓</a></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rewards">
+        <div class="wrap">
+          <div class="rewards-card">
+            <div>
+              <span class="eyebrow">For parents</span>
+              <h2>Your love don't cost a thing.</h2>
+              <p>
+                It's tempting to motivate kids with toys and candy. But research
+                links heavy reliance on material rewards to more materialism later
+                in life. Kids remember experiences, not stuff.
+              </p>
+              <p><strong>Try rewards like these instead:</strong></p>
+              <ul>
+                <li><strong>Quality time:</strong> extra reading, a board game, a cuddle.</li>
+                <li><strong>Special privileges:</strong> pick the movie or stay up a little later.</li>
+                <li><strong>Experiences:</strong> the park, the zoo, a beach day.</li>
+                <li><strong>Making things together:</strong> bake cookies, plant a garden, draw a picture.</li>
+              </ul>
+            </div>
+            <div class="jar">
+              <h3>The cotton ball jar</h3>
+              <ol>
+                <li>Pick a family goal together: a zoo trip, a new trail, the ice cream shop.</li>
+                <li>Every time your child helps without being asked, listens the first time, or works on the skill you're practicing, they add a cotton ball to the jar.</li>
+                <li>When the jar is full, go celebrate!</li>
+              </ol>
+              <p>It rewards good habits and teaches kids to work toward a goal. Pair it with the free goal chart and reward tickets above.</p>
+              <a class="btn btn--buy" href="#freebies" style="margin-top: 6px">Get the free goal chart</a>
             </div>
           </div>
         </div>
@@ -331,6 +386,16 @@
           <p>Six levels, 130+ illustrations and a bonus language chapter, all in one workbook.</p>
           <div class="btn-row">
             <a class="btn btn--buy" data-loc="footer_cta" href="https://www.amazon.com/dp/B0DM65745Y" target="_blank" rel="noopener">Buy on Amazon</a>
+          </div>
+          <div class="extras">
+            <div>
+              <h3>Coming soon</h3>
+              <p>New M1ndseye learning sets about the solar system and butterflies.</p>
+            </div>
+            <div>
+              <h3>Need a custom order?</h3>
+              <p>Worksheets with your child's name, your classroom's theme, your idea. <a href="mailto:steve.mindseye@gmail.com?subject=M1ndseye%20custom%20order">Tell me your vision.</a></p>
+            </div>
           </div>
         </div>
       </section>
