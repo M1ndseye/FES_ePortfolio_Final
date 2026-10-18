@@ -1933,3 +1933,44 @@
     overflow-wrap: break-word;
   }
 }
+
+/* =========================================================
+   PROJECT FOOTER — neutralize the homepage's generic
+   footer {display:flex} on every case-study page
+   ========================================================= */
+.case-page .project-footer,
+footer.project-footer {
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding: 0;
+  background: transparent;
+}
+footer.project-footer .project-footer-nav {
+  padding-inline: 12px;
+}
+@media (max-width: 760px) {
+  footer.project-footer .project-footer-nav { padding-inline: 4px; }
+  footer.project-footer .project-footer-actions {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  footer.project-footer .project-footer-btn {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+  }
+  footer.project-footer .project-footer-meta {
+    padding: 20px 22px;
+    border-radius: 0 0 22px 22px;
+  }
+}
+
+/* Providence — give headings breathing room above body copy */
+.histotripsy-story__copy .case-heading + .case-body,
+.histotripsy-social__copy .case-heading + .case-body {
+  margin-top: clamp(18px, 2vw, 28px);
+}
