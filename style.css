@@ -1096,17 +1096,13 @@ body {
     margin: 6px 0 14px;
   }
   .project__description--links .project-page-btn {
-    width: auto;
+    width: 100%;
     min-height: 46px;
     padding: 0 28px;
     border-radius: 999px;
     border-color: rgba(255, 255, 255, 0.28);
     background: rgba(255, 255, 255, 0.04);
     font-weight: 600;
-  }
-  .project__description--links .project-page-btn::after {
-    content: "\2192";
-    margin-left: 10px;
   }
   .dark-theme .project__description,
   .dark-theme .project__wrapper:hover .project__description {
