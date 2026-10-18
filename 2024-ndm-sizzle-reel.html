@@ -653,6 +653,98 @@
       }
     }
 
+
+    /* =========================================================
+       NDM — EDITORIAL REFINEMENT
+       ========================================================= */
+    .ndm-page .project-video-header__content { padding-bottom: 0; }
+
+    .ndm-page .ndm-reel {
+      margin-top: clamp(64px, 8vw, 120px);
+    }
+    .ndm-page .ndm-reel__label {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .ndm-page .ndm-reel__label .eyebrow { margin: 0; }
+    .ndm-page .ndm-reel__meta {
+      margin: 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .ndm-page .campaign-showcase,
+    .ndm-page .campaign-grid {
+      margin-top: clamp(88px, 11vw, 160px);
+      padding-top: clamp(28px, 3vw, 40px);
+      border-top: 1px solid var(--line);
+    }
+    .ndm-page .campaign-grid { gap: 0; }
+
+    .ndm-page .ndm-section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+      gap: clamp(28px, 5vw, 80px);
+      align-items: end;
+      margin: 0 0 clamp(32px, 4vw, 56px);
+    }
+    .ndm-page .ndm-section-head .eyebrow {
+      margin: 0 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .ndm-page .ndm-num {
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .ndm-page .ndm-num::after {
+      content: "";
+      display: inline-block;
+      width: 28px;
+      height: 1px;
+      margin-left: 14px;
+      vertical-align: middle;
+      background: var(--line);
+    }
+    .ndm-page .ndm-section-head h2 {
+      margin: 0;
+      color: var(--text);
+      font-size: clamp(2.2rem, 3.8vw, 4rem);
+      line-height: 1.02;
+      letter-spacing: -.04em;
+      text-wrap: balance;
+    }
+    .ndm-page .ndm-section-head > p {
+      margin: 0;
+      max-width: 52ch;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.2vw, 1.15rem);
+      line-height: 1.7;
+    }
+
+    .ndm-page .ndm-feature-image,
+    .ndm-page .campaign-grid-image {
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .ndm-page .project-footer {
+      margin-top: clamp(96px, 11vw, 160px) !important;
+    }
+
+    @media (max-width: 760px) {
+      .ndm-page .ndm-section-head { grid-template-columns: 1fr; gap: 18px; }
+      .ndm-page .ndm-reel__label { flex-direction: column; gap: 6px; }
+      .ndm-page .campaign-showcase,
+      .ndm-page .campaign-grid { margin-top: 72px; }
+      .ndm-page .project-footer { margin-top: 72px !important; }
+    }
   </style>
 </head>
 
@@ -689,21 +781,30 @@
               picture-in-picture;
               web-share;
             "
-            allowfullscreen="true"
           ></iframe>
         </div>
       </section>
 
       <section class="content project-video-header__content">
-        <h1 class="project-video-header__title">NDM Brand Identity Social Media Campaign 2024</h1>
+        <h1 class="project-video-header__title">NDM Brand Identity &amp; Social Campaign</h1>
 
-        <p class="description project-video-header__lede">
-          Working alongside our in-house writer, I translated NDM’s messaging
-          into a cohesive visual campaign spanning social content, motion
-          design, 3D animation, and brand storytelling.
-        </p>
+        <div class="project-video-header__copy">
+          <p class="description project-video-header__lede">
+            Working alongside NDM’s lead copywriter and copy team, I translated
+            the company’s messaging into a cohesive visual campaign spanning
+            social content, motion design, 3D animation, and brand storytelling.
+          </p>
+          <div class="case-tags" aria-label="Disciplines">
+            <span>Creative Direction</span><span>Motion Design</span><span>3D Animation</span><span>Audio</span><span>Social</span>
+          </div>
+        </div>
       </section>
-      <section class="video-shell">
+      <section class="ndm-reel" aria-label="Sizzle reel">
+        <div class="ndm-reel__label">
+          <p class="eyebrow">The Sizzle Reel</p>
+          <p class="ndm-reel__meta">Designed, animated &amp; mixed in six days</p>
+        </div>
+      <div class="video-shell">
         <div class="video-wrap">
           <iframe
             src="https://player.vimeo.com/video/1058503859?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
@@ -717,45 +818,38 @@
               web-share;
             "
             referrerpolicy="strict-origin-when-cross-origin"
-            title="NDM Brand Identity Social Media Campaign 2024"
+            title="NDM sizzle reel"
           ></iframe>
         </div>
+      </div>
       </section>
       <section class="campaign-showcase">
-        <div class="section-intro">
-          <p class="eyebrow">Campaign Ecosystem</p>
-
-          <h2>One visual language across every touchpoint.</h2>
-
+        <div class="ndm-section-head">
+          <div>
+            <p class="eyebrow"><span class="ndm-num">01</span>Campaign Ecosystem</p>
+            <h2>One visual language across every touchpoint.</h2>
+          </div>
           <p>
-            Working alongside our in-house writer, I developed a cohesive visual
-            system spanning motion graphics, social media, digital advertising,
-            email marketing, and branded collateral—ensuring every touchpoint
-            felt unmistakably part of the same brand.
+            The same system carried through motion graphics, digital
+            advertising, email, and branded collateral, so every touchpoint
+            felt unmistakably like NDM.
           </p>
         </div>
 
         <figure class="ndm-feature-image">
           <img
             src="./assets/FES_ePort_NDM_Sizzle_Reel.jpg"
-            alt="NDM Campaign Showcase"
+            alt="NDM campaign pieces — mailers, event invitations and collateral — floating in a 3D laptop scene"
           />
         </figure>
       </section>
 
       <section class="campaign-grid">
-        <figure class="campaign-grid-image">
-          <img
-            src="./assets/FES_ePort_NDM_Social.jpg"
-            alt="Social Media Campaign"
-          />
-        </figure>
-
-        <div class="campaign-copy">
-          <p class="eyebrow">Social Media System</p>
-
-          <h3>Consistency at scale.</h3>
-
+        <div class="ndm-section-head">
+          <div>
+            <p class="eyebrow"><span class="ndm-num">02</span>Social Media System</p>
+            <h2>Consistency at scale.</h2>
+          </div>
           <p>
             Designed dozens of branded social assets that balanced educational
             content, thought leadership, recruiting, event promotion, company
@@ -764,6 +858,13 @@
             brand recognition.
           </p>
         </div>
+
+        <figure class="campaign-grid-image">
+          <img
+            src="./assets/FES_ePort_NDM_Social.jpg"
+            alt="Grid of NDM social posts — tips, myth vs. fact, recruiting and holiday content — shown on phone screens"
+          />
+        </figure>
       </section>
 
 <!-- =====================================================
