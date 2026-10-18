@@ -33,7 +33,7 @@
     />
     <title>Engineering Design Workshop | M1ndseye</title>
     <link rel="stylesheet" href="./style.css" />
-    <link rel="stylesheet" href="portfolio-projects.css?v=4" />
+    <link rel="stylesheet" href="portfolio-projects.css?v=5" />
     <link rel="stylesheet" href="mos-edw.css?v=2" />
     <style>
       /* =========================================================
@@ -179,6 +179,64 @@
           text-align: left !important;
         }
       }
+
+      /* =========================================================
+         EDW — SPACING RHYTHM, CAPTIONS & MOBILE
+         ========================================================= */
+      .edw-page .edw-grid,
+      .edw-page .edw-concept-strip {
+        row-gap: clamp(32px, 4vw, 48px);
+      }
+      .edw-page .edw-section > .edw-grid--2,
+      .edw-page .edw-hero + .edw-grid--2,
+      .edw-page .edw-section + .edw-grid--2 {
+        margin-top: clamp(32px, 4vw, 56px);
+      }
+      .edw-page .edw-card figcaption {
+        margin-top: 14px;
+        color: var(--edw-muted);
+        font-size: .86rem;
+        line-height: 1.5;
+        letter-spacing: .01em;
+      }
+      .edw-page .edw-card--cinema { aspect-ratio: auto; }
+
+      @media (max-width: 1050px) {
+        .edw-page .edw-outcome {
+          grid-template-columns: 1fr;
+          row-gap: 24px;
+        }
+        .edw-page .edw-outcome h2,
+        .edw-page .edw-outcome > p:last-child,
+        .edw-page .edw-outcome .edw-kicker {
+          grid-column: 1;
+        }
+        .edw-page .edw-outcome > p:last-child { max-width: 640px; }
+      }
+
+      @media (max-width: 700px) {
+        .edw-page .edw-section { padding-top: 88px; }
+        .edw-page .edw-intro h2,
+        .edw-page .edw-section__heading h2,
+        .edw-page .edw-copy-panel h2,
+        .edw-page .edw-program__intro h2 {
+          font-size: clamp(2.1rem, 9.6vw, 2.8rem);
+          line-height: 1.02;
+          letter-spacing: -.045em;
+        }
+        .edw-page .edw-section__heading { gap: 20px; margin-bottom: 32px; }
+        .edw-page .edw-section--split,
+        .edw-page .edw-intro { gap: 24px; }
+        .edw-page .edw-outcome {
+          margin-top: 96px;
+          padding: 32px 22px;
+        }
+        .edw-page .edw-outcome h2 {
+          font-size: clamp(2.1rem, 9.6vw, 2.8rem);
+          line-height: 1.02;
+          letter-spacing: -.045em;
+        }
+      }
     </style>
   </head>
   <body class="edw-page">
@@ -235,7 +293,6 @@
         </div>
       </section>
       <div class="edw-grid edw-grid--2">
-        `
         <figure class="edw-card">
           <img
             src="./assets/FES-ePort-MOS-EDW-program-collect-top.webp"
@@ -262,7 +319,6 @@
         </div>
       </section>
       <div class="edw-grid edw-grid--2">
-        `
         <figure class="edw-card">
           <img
             src="./assets/FES-ePort-MOS-EDW-program-collect-controls.jpeg"
