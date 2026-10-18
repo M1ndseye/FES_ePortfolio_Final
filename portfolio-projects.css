@@ -1899,3 +1899,37 @@
   font-weight: 700;
   text-decoration: none;
 }
+
+/* =========================================================
+   CASE HERO — RESPONSIVE STACK (must stay after the
+   unconditional .case-hero grid above)
+   ========================================================= */
+@media (max-width: 1000px) {
+  .case-hero {
+    grid-template-columns: 1fr;
+    gap: clamp(28px, 6vw, 48px);
+  }
+  .case-hero__media,
+  .case-hero__copy {
+    height: auto;
+  }
+  .case-hero__media img {
+    height: auto;
+    max-height: 70vh;
+  }
+}
+
+@media (max-width: 700px) {
+  .case-hero__media--crop {
+    aspect-ratio: 4 / 5;
+  }
+  .case-hero__media--crop img {
+    height: 100%;
+    max-height: none;
+  }
+  .case-title {
+    font-size: clamp(2.5rem, 11vw, 3.4rem);
+    line-height: 1;
+    overflow-wrap: break-word;
+  }
+}

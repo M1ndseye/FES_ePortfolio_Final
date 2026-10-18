@@ -36,7 +36,7 @@
     <title>Healthcare Editorial Systems | M1ndseye</title>
 
     <link rel="stylesheet" href="style.css?v=3" />
-    <link rel="stylesheet" href="portfolio-projects.css?v=4" />
+    <link rel="stylesheet" href="portfolio-projects.css?v=5" />
   <style>
 
     /* =========================================================
@@ -183,6 +183,53 @@
       }
     }
 
+
+    /* =========================================================
+       HEALTHCARE — SPACING RHYTHM & MOBILE
+       ========================================================= */
+    .healthcare-page .case-section > .case-figure + .case-figure,
+    .healthcare-page .hc-space-md {
+      margin-top: clamp(32px, 4vw, 56px);
+    }
+    .healthcare-page .hc-space-lg {
+      margin-top: clamp(48px, 6vw, 88px);
+    }
+    .healthcare-page .case-split + .case-grid {
+      margin-top: clamp(32px, 4vw, 56px);
+    }
+    .healthcare-page .case-section__head + .case-split {
+      margin-top: clamp(16px, 2vw, 24px);
+    }
+    .healthcare-page .case-grid { row-gap: clamp(32px, 4vw, 48px); }
+    .healthcare-page .case-figure figcaption { margin-top: 14px; }
+    .healthcare-page .case-video-section { margin-top: clamp(64px, 8vw, 120px); }
+
+    @media (max-width: 1000px) {
+      .healthcare-page .case-split,
+      .healthcare-page .case-split--media-first { gap: 32px; }
+      .healthcare-page .case-split__copy { max-width: 640px; }
+      .healthcare-page .case-section__head { gap: 20px; }
+      /* copy always reads before its image when stacked */
+      .healthcare-page .case-split--media-first .case-split__copy { order: -1; }
+    }
+
+    @media (max-width: 700px) {
+      .healthcare-page .case-heading {
+        font-size: clamp(2.1rem, 9.6vw, 2.8rem);
+        line-height: 1.02;
+        letter-spacing: -.045em;
+      }
+      .healthcare-page .case-section { padding-top: 88px; }
+      .healthcare-page .case-section__head { margin-bottom: 32px; }
+      .healthcare-page .case-split__copy .case-body { margin-top: 18px; }
+      .healthcare-page .case-video-section { margin-top: 56px; }
+      .healthcare-page .case-outcome {
+        margin-top: 96px;
+        padding: 32px 22px;
+        row-gap: 16px;
+      }
+      .healthcare-page .case-tags span { font-size: .74rem; }
+    }
   </style>
 </head>
 
