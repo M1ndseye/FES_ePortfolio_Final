@@ -173,3 +173,10 @@ body.engine {
 .contact-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(28px, 6vw, 88px); align-items: start; }
 @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .path, .path > video, .path > img.path__bg, .btn { transition: none; } html { scroll-behavior: auto; } }
+
+/* ---------- refractive glass eye (hero core) ---------- */
+.eye { position: absolute; z-index: 2; pointer-events: none; }
+.eye img, .eye canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.eye img { opacity: .9; filter: drop-shadow(0 0 28px rgba(169,148,240,.35)); }
+.eye canvas { opacity: 0; transition: opacity .6s; }
+.eye.is-live canvas { opacity: 1; }

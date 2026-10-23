@@ -27,7 +27,9 @@
       W = r.width; H = r.height;
       canvas.width = W * dpr; canvas.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      core = { x: W * (W < 760 ? 0.5 : 0.62), y: H * (W < 760 ? 0.3 : 0.36) };
+      core = { x: W * (W < 760 ? 0.5 : 0.68), y: H * (W < 760 ? 0.27 : 0.27) };
+      window.m1Core = core;
+      window.dispatchEvent(new Event("m1engine:resize"));
       parts = [];
       var n = W < 760 ? 70 : 150;
       for (var i = 0; i < n; i++) parts.push(spawn(i % 2 === 0 ? "ai" : "oi", true));
