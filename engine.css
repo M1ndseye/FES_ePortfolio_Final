@@ -245,7 +245,9 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 /* ---------- about page ---------- */
 .about-hero { position: relative; padding: clamp(120px, 16vw, 190px) var(--pad) clamp(48px, 8vw, 100px); overflow: hidden; isolation: isolate; background: radial-gradient(60% 70% at 85% 30%, rgba(111,155,255,.18), transparent 70%), radial-gradient(50% 60% at 10% 90%, rgba(255,157,66,.10), transparent 70%); }
 .about-hero__grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: clamp(24px, 5vw, 80px); align-items: center; }
-.about-eye img { width: 100%; height: auto; filter: drop-shadow(0 0 60px rgba(111,155,255,.35)); }
+.about-photo { position: relative; align-self: end; justify-self: center; width: min(100%, 440px); isolation: isolate; }
+.about-photo::before { content: ""; position: absolute; inset: 12% -14% 0; z-index: -1; border-radius: 50%; background: radial-gradient(closest-side, rgba(111,155,255,.38), rgba(255,157,66,.14) 60%, transparent 100%); filter: blur(18px); }
+.about-photo img { width: 100%; height: auto; max-height: 72vh; object-fit: contain; object-position: bottom; }
 .about-links { display: flex; gap: 24px; margin-top: 28px; color: var(--muted); font-weight: 500; }
 .about-links a:hover, .ulink { color: var(--text); border-bottom: 1px solid var(--oi); }
 .about-bio__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 6vw, 96px); align-items: start; }
@@ -266,7 +268,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 @media (max-width: 960px) { .works { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 760px) {
   .about-hero__grid, .about-bio__grid { grid-template-columns: 1fr; }
-  .about-eye { order: -1; max-width: 420px; }
+  .about-photo { order: -1; width: min(78%, 340px); }
   .works { grid-template-columns: 1fr; }
   .work--feature img { aspect-ratio: 16 / 10; }
 }
@@ -275,3 +277,4 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
 .gaze-foot__tag strong { display: block; font-weight: 600; color: var(--text); letter-spacing: .01em; }
 .gaze-foot__tag em { display: block; font-size: .82rem; font-style: italic; color: var(--muted); margin-top: 2px; }
+.about-photo img { -webkit-mask-image: linear-gradient(180deg, #000 82%, transparent 100%); mask-image: linear-gradient(180deg, #000 82%, transparent 100%); }
