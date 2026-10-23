@@ -272,3 +272,6 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { .work a, .work img { transition: none; } }
 #projects, #contact { scroll-margin-top: 64px; }
+
+.gaze-foot__tag strong { display: block; font-weight: 600; color: var(--text); letter-spacing: .01em; }
+.gaze-foot__tag em { display: block; font-size: .82rem; font-style: italic; color: var(--muted); margin-top: 2px; }
