@@ -30,6 +30,26 @@
     if (reduce) { gx = tx; gy = ty; frame(performance.now(), 0); }
   }, { passive: true });
 
+  /* courtroom door: the same deposition clip that opens the courtroom page, loaded on first interest */
+  var veilVideo = null;
+  function courtVideo(play) {
+    if (reduce || !doors.left) return;
+    if (!veilVideo) {
+      if (!play) return;
+      veilVideo = document.createElement("video");
+      veilVideo.muted = true; veilVideo.loop = true; veilVideo.playsInline = true; veilVideo.preload = "auto";
+      veilVideo.setAttribute("playsinline", ""); veilVideo.setAttribute("aria-hidden", "true");
+      veilVideo.src = "assets/_Jane_Doe_Depo_Clip_.mp4";
+      doors.left.querySelector(".door__veil").appendChild(veilVideo);
+    }
+    if (play) { var p = veilVideo.play(); if (p && p.catch) p.catch(function () {}); } else veilVideo.pause();
+  }
+  if (doors.left) {
+    ["mouseenter", "focus"].forEach(function (ev) { doors.left.addEventListener(ev, function () { courtVideo(true); }); });
+    if ("IntersectionObserver" in window && window.matchMedia("(max-width: 860px)").matches)
+      new IntersectionObserver(function (e) { courtVideo(e[0].isIntersecting); }, { threshold: .3 }).observe(doors.left);
+  }
+
   var gazed = { left: false, right: false };
   function setEye() {
     var ang = Math.atan2(gy, gx); if (ang < 0) ang += Math.PI * 2;
@@ -39,7 +59,7 @@
     var m = Math.min(1, Math.sqrt(gx * gx + gy * gy));
     eye.style.transform = "perspective(1400px) translate3d(" + (gx * 18) + "px," + (gy * 12) + "px,0) rotateY(" + (gx * 7) + "deg) rotateX(" + (-gy * 5) + "deg) scale(" + (1 + m * .015) + ")";
     var L = gx < -.42, Rr = gx > .42;
-    if (L !== gazed.left && doors.left) { gazed.left = L; doors.left.classList.toggle("is-gazed", L); }
+    if (L !== gazed.left && doors.left) { gazed.left = L; doors.left.classList.toggle("is-gazed", L); courtVideo(L); }
     if (Rr !== gazed.right && doors.right) { gazed.right = Rr; doors.right.classList.toggle("is-gazed", Rr); }
   }
 
