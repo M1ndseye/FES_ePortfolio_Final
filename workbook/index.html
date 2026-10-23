@@ -215,6 +215,7 @@
       .holiday .eyebrow { color: var(--h-accent); }
       .holiday__grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 56px; align-items: center; }
       .holiday__grid > * { min-width: 0; }
+      .holiday--goal .holiday__grid { grid-template-columns: 1fr 1.3fr; }
       .holiday--flip .holiday__grid { grid-template-columns: 1fr 1.35fr; }
       .holiday--flip .holiday__copy { order: 2; }
       .holiday__dl { background: var(--h-btn); color: var(--h-btn-ink); }
@@ -223,6 +224,16 @@
       .holiday__video, .holiday__media { margin: 0; }
       .holiday__frame { position: relative; aspect-ratio: 9 / 16; max-width: 360px; margin-inline: auto; border-radius: 22px; overflow: hidden; background: #000; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3); }
       .holiday__frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+      .cmp { position: relative; overflow: hidden; border-radius: 22px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3); aspect-ratio: 2000 / 1071; background: #101728; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+      .holiday__media .cmp img { border-radius: 0; box-shadow: none; max-width: none; margin: 0; }
+      .cmp__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .cmp__img--top { clip-path: inset(0 calc(100% - var(--pos)) 0 0); -webkit-clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+      .cmp__line { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 3px; margin-left: -1.5px; background: #fff; box-shadow: 0 0 12px rgba(0, 0, 0, 0.5); pointer-events: none; }
+      .cmp__knob { position: absolute; top: 50%; left: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: #fff; color: #22121f; display: grid; place-items: center; font-weight: 700; font-size: 1.2rem; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4); }
+      .cmp__range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; -webkit-appearance: none; appearance: none; }
+      .cmp:focus-within .cmp__knob { outline: 3px solid var(--gold); outline-offset: 3px; }
+      .cmp__tag { position: absolute; bottom: 12px; padding: 5px 12px; border-radius: 999px; background: rgba(0, 0, 0, 0.6); color: #fff; font-size: 0.8rem; font-weight: 600; pointer-events: none; }
+      .cmp__tag--l { left: 12px; } .cmp__tag--r { right: 12px; }
       .holiday__media img { border-radius: 22px; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3); }
       .holiday--halloween { --h-bg: #1c1a3a; --h-ink: #f3f1ff; --h-head: #ff8a3d; --h-muted: #cac7e6; --h-accent: #ffc845; --h-btn: #ff8a3d; --h-btn-hover: #ffa25f; --h-btn-ink: #1c1a3a; }
       .holiday--goal { --h-bg: #1b223f; --h-ink: #f2f5f6; --h-head: #d4ab3a; --h-muted: #bfced1; --h-accent: #8ca8ad; --h-btn: #bfd2d1; --h-btn-hover: #e6eded; --h-btn-ink: #04304b;
@@ -474,7 +485,16 @@
               <small>Check your inbox to confirm your email and stay on the list for new printables.</small>
             </div>
           </div>
-          <figure class="holiday__media"><img src="../assets/ME_Vid_Cover_Rocket_Goal_Chart_Comets.jpg" alt="Celestial goal chart with rocket and comets" loading="lazy" /></figure>
+          <figure class="holiday__media">
+            <div class="cmp" id="chart-cmp" style="--pos: 50%">
+              <img class="cmp__img" src="../assets/ME_Goal_Chart_Color.webp" alt="Celestial goal chart in color: a printer, a rocket and a star-map track" width="1600" height="857" loading="lazy" />
+              <img class="cmp__img cmp__img--top" src="../assets/ME_Goal_Chart_BW.webp" alt="" width="1600" height="857" loading="lazy" />
+              <span class="cmp__tag cmp__tag--l">Black and white</span>
+              <span class="cmp__tag cmp__tag--r">Color</span>
+              <span class="cmp__line" aria-hidden="true"><span class="cmp__knob">&#8596;</span></span>
+              <input class="cmp__range" type="range" min="0" max="100" value="50" aria-label="Slide to compare the black-and-white and color goal charts" />
+            </div>
+          </figure>
         </div>
       </section>
 
@@ -573,5 +593,13 @@
         });
       });
     </script>
-  </body>
+      <script>
+      (function () {
+        var c = document.getElementById("chart-cmp"); if (!c) return;
+        var r = c.querySelector(".cmp__range");
+        function set() { c.style.setProperty("--pos", r.value + "%"); }
+        r.addEventListener("input", set); set();
+      })();
+    </script>
+</body>
 </html>
