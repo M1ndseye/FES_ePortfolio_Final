@@ -50,6 +50,23 @@
       new IntersectionObserver(function (e) { courtVideo(e[0].isIntersecting); }, { threshold: .3 }).observe(doors.left);
   }
 
+  /* educational door: the Vimeo film that opens the educational assets page, as a muted background loop */
+  var eduLoaded = false;
+  function eduVideo() {
+    if (eduLoaded || reduce || !doors.right) return;
+    eduLoaded = true;
+    var f = document.createElement("iframe");
+    f.src = "https://player.vimeo.com/video/1061083069?background=1&autoplay=1&loop=1&muted=1&autopause=0";
+    f.setAttribute("allow", "autoplay; fullscreen; picture-in-picture"); f.setAttribute("tabindex", "-1");
+    f.setAttribute("aria-hidden", "true"); f.setAttribute("title", "Educational assets background video"); f.setAttribute("loading", "lazy");
+    doors.right.querySelector(".door__veil").appendChild(f);
+  }
+  if (doors.right) {
+    ["mouseenter", "focus"].forEach(function (ev) { doors.right.addEventListener(ev, eduVideo); });
+    if ("IntersectionObserver" in window && window.matchMedia("(max-width: 860px)").matches)
+      new IntersectionObserver(function (e) { if (e[0].isIntersecting) eduVideo(); }, { threshold: .3 }).observe(doors.right);
+  }
+
   var gazed = { left: false, right: false };
   function setEye() {
     var ang = Math.atan2(gy, gx); if (ang < 0) ang += Math.PI * 2;
@@ -60,7 +77,7 @@
     eye.style.transform = "perspective(1400px) translate3d(" + (gx * 18) + "px," + (gy * 12) + "px,0) rotateY(" + (gx * 7) + "deg) rotateX(" + (-gy * 5) + "deg) scale(" + (1 + m * .015) + ")";
     var L = gx < -.42, Rr = gx > .42;
     if (L !== gazed.left && doors.left) { gazed.left = L; doors.left.classList.toggle("is-gazed", L); courtVideo(L); }
-    if (Rr !== gazed.right && doors.right) { gazed.right = Rr; doors.right.classList.toggle("is-gazed", Rr); }
+    if (Rr !== gazed.right && doors.right) { gazed.right = Rr; doors.right.classList.toggle("is-gazed", Rr); if (Rr) eduVideo(); }
   }
 
   /* ---------- caustics (WebGL) ---------- */
