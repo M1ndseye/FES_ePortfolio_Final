@@ -21,14 +21,16 @@
   measure();
   window.addEventListener("resize", function () { measure(); sizeGL(); });
   window.addEventListener("scroll", measure, { passive: true });
-  window.addEventListener("pointermove", function (e) {
+  function onPtr(e) {
     var dx = (e.clientX - cx) / R, dy = (e.clientY - cy) / R, len = Math.sqrt(dx * dx + dy * dy);
     if (len > 1) { dx /= len; dy /= len; len = 1; }
     if (len > .08) { dirx = dx / len; diry = dy / len; tx = dx; ty = dy; }
     else { tx = dirx * len; ty = diry * len; }
     rawX = e.clientX; rawY = e.clientY; lastMove = performance.now();
     if (reduce) { gx = tx; gy = ty; frame(performance.now(), 0); }
-  }, { passive: true });
+  }
+  window.addEventListener("pointermove", onPtr, { passive: true });
+  window.addEventListener("pointerdown", onPtr, { passive: true });
 
   /* ---------- doors: show text and play video when the eye turns toward them ---------- */
   function lazyVideo(door, src) {
@@ -207,7 +209,7 @@
   function sizeGL() {
     if (!gl) return;
     var cssW = stage.clientWidth, cssH = stage.clientHeight;
-    var scale = Math.min(window.devicePixelRatio || 1, 2), cap = 2300000;
+    var scale = Math.min(window.devicePixelRatio || 1, 2), cap = (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) ? 1300000 : 2300000;
     if (cssW * cssH * scale * scale > cap) scale = Math.sqrt(cap / (cssW * cssH));
     var w = Math.max(2, Math.round(cssW * scale)), h = Math.max(2, Math.round(cssH * scale));
     if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
