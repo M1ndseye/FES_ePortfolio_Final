@@ -206,3 +206,8 @@ document.addEventListener("click", (e) => {
   const link = card.querySelector(".project-page-btn");
   if (link) window.location.href = link.href;
 });
+
+// Open the contact modal when arriving from another page via about.html?contact=1
+window.addEventListener("DOMContentLoaded", function () {
+  if (/[?&]contact=1/.test(location.search) && typeof toggleModal === "function") toggleModal();
+});

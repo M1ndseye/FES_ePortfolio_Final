@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TJ0G6QV08B"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-TJ0G6QV08B');
+    </script>
+    <!-- Pinterest tag -->
+    <script>
+      !function(e){if(!window.pintrk){window.pintrk=function(){window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var n=window.pintrk;n.queue=[],n.version="3.0";var t=document.createElement("script");t.async=!0,t.src=e;var r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r)}}("https://s.pinimg.com/ct/core.js");
+      pintrk('load', '2613532238308');
+      pintrk('page');
+      pintrk('track', 'pagevisit');
+      // Count free printable downloads (maze PDFs, certificate zip) as leads
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a[href]');
+        if (a && /\.(pdf|zip)(\?|#|$)/i.test(a.getAttribute('href'))) {
+          pintrk('track', 'lead', { lead_type: 'Free printable', event_id: 'dl-' + Date.now() });
+        }
+      });
+    </script>
+    <!-- end Pinterest tag -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Courtroom animation | M1ndseye</title>
+    <meta name="description" content="3D courtroom animation and deposition simulations for attorneys. See example videos and request a quote from Steve Padilla, M1ndseye." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Courtroom animation | M1ndseye" />
+    <meta property="og:description" content="3D courtroom animation and deposition simulations for attorneys. See example videos and request a quote from Steve Padilla, M1ndseye." />
+    <meta property="og:url" content="https://m1ndseye.com/courtroom-animation.html" />
+    <meta property="og:image" content="https://m1ndseye.com/assets/FES_ePort_PRO_Histor_Vid_3d.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://m1ndseye.com/courtroom-animation.html" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="engine.css?v=1" />
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
+  </head>
+  <body class="engine">
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="eng-nav">
+      <a class="eng-nav__brand" href="./"><img src="./assets/M1E_icon_2.svg" alt="" /><span>M1ndseye</span></a>
+      <button class="eng-nav__toggle" aria-expanded="false" aria-controls="eng-links">Menu</button>
+      <nav class="eng-nav__links" id="eng-links" aria-label="Main"><a href="./">Home</a><a href="courtroom-animation.html" aria-current="page">Courtroom animation</a><a href="m1ndseye-educational-assets.html">Workbooks</a><a href="about.html">About</a><a href="about.html#projects">Projects</a></nav>
+    </header>
+    <main id="main">
+      <section class="scene" data-video="assets/_Jane_Doe_Depo_Clip_.mp4" data-poster="assets/FES_ePort_PRO_Histor_Vid_3d.jpg" aria-labelledby="c-h1">
+        <div class="scene__media"></div>
+        <div class="scene__inner"><div class="scene__copy">
+          <h1 class="eng-h1" id="c-h1">Courtroom animation that a jury can follow</h1>
+          <p class="eng-lede">I turn testimony, records and reports into clear 3D video. AI builds the scene quickly. I verify every frame against your evidence.</p>
+          <div class="hero__cta"><a class="btn btn--solid" href="#contact">Request a quote</a><a class="btn" href="#examples">Watch examples</a></div>
+          <p class="scene__caption">Playing: AI-simulated deposition clip with a fictional witness.</p>
+        </div></div>
+        <button class="scene__ctrl" type="button" aria-pressed="false">Pause background video</button>
+      </section>
+
+      <section class="scene scene--right scene--auto" id="examples" data-youtube="RJOpfjCFITc" aria-labelledby="c-h2">
+        <div class="scene__media"></div>
+        <div class="scene__inner"><div class="scene__copy">
+          <h2 class="eng-h2" id="c-h2">Medical procedures, shown step by step</h2>
+          <p class="eng-lede">The Providence histotripsy launch film explained a new cancer treatment to patients and doctors, and earned over a million views. The same 3D approach shows a jury what a surgery or injury looked like.</p>
+          <p class="scene__caption"><a href="providence-histotripsy-campaign.html" style="text-decoration:underline">Read the full Providence case study</a></p>
+        </div></div>
+        <button class="scene__ctrl" type="button" aria-pressed="false">Pause background video</button>
+      </section>
+
+      <section class="eng-section">
+        <div class="eng-wrap">
+          <div class="eng-section__head">
+            <h2 class="eng-h2">What I can animate</h2>
+            <p class="eng-p">Each animation is built from your exhibits: photos, measurements, medical records, police reports and testimony.</p>
+          </div>
+          <ul class="services" style="max-width:760px">
+            <li><b>Accident and collision reconstruction</b><span>Vehicles, roadways and timing, shown from any camera angle.</span></li>
+            <li><b>Medical and surgical illustration</b><span>Injuries, procedures and recovery explained in plain visuals.</span></li>
+            <li><b>Deposition and testimony simulation</b><span>Illustrative re-creations that follow the transcript.</span></li>
+            <li><b>Premises and scene models</b><span>Hospital rooms, intersections and workplaces built to scale.</span></li>
+          </ul>
+          <h2 class="eng-h2" style="margin-top:clamp(56px,8vw,96px)">How a project runs</h2>
+          <ol class="steps" style="max-width:760px">
+            <li><div><b>Send the facts</b><span>Exhibits, reports and your goal for the animation.</span></div></li>
+            <li><div><b>Storyboard and quote</b><span>You approve the sequence and price before production.</span></div></li>
+            <li><div><b>Build and review</b><span>Draft video, your corrections, then final delivery.</span></div></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="eng-section" id="contact" aria-labelledby="f-h">
+        <div class="eng-wrap contact-grid">
+          <div>
+            <h2 class="eng-h2" id="f-h">Request a quote</h2>
+            <p class="eng-lede" style="margin-top:18px">Tell me about the case type and timeline. I reply by email, usually within one business day.</p>
+            <p class="eng-p" style="margin-top:18px">Please leave out client names and privileged details. We can share those after we talk.</p>
+          </div>
+          <form class="cform" id="court-form">
+            <div class="cform__row">
+              <label>Your name<input name="name" required autocomplete="name" /></label>
+              <label>Email<input name="email" type="email" required autocomplete="email" /></label>
+            </div>
+            <div class="cform__row">
+              <label>Firm or company<input name="firm" autocomplete="organization" /></label>
+              <label>Animation type
+                <select name="type"><option value="">Choose one</option><option>Accident reconstruction</option><option>Medical or surgical</option><option>Deposition simulation</option><option>Scene or premises model</option><option>Not sure yet</option></select>
+              </label>
+            </div>
+            <label>Needed by <small>(optional)</small><input name="needed" type="date" /></label>
+            <label>Project details<textarea name="details" required placeholder="What should the jury understand after watching?"></textarea></label>
+            <div class="hp" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off" /></label></div>
+            <button class="btn btn--solid" type="submit">Send request</button>
+            <p class="cform__status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+    <footer class="eng-footer">
+      <div class="eng-wrap">
+        <span>&copy; 2026 Steve Padilla &middot; M1ndseye, Costa Mesa CA</span>
+        <nav aria-label="Footer"><a href="about.html">About</a><a href="courtroom-animation.html#contact">Contact</a><a href="https://www.linkedin.com/in/stevemichaelpadilla/" rel="noopener">LinkedIn</a></nav>
+      </div>
+    </footer>
+    <script src="engine.js?v=1" defer></script>
+  </body>
+</html>
