@@ -26,498 +26,94 @@
     </script>
     <!-- end Pinterest tag -->
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#060912" />
     <title>Steve Padilla | Senior Brand &amp; Motion Designer</title>
     <meta name="description" content="Senior brand and motion designer with 18+ years of experience. 3D, motion and campaign systems, including a launch film that earned 1M+ views." />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Steve Padilla | Senior Brand &amp; Motion Designer" />
-    <meta property="og:description" content="18+ years building brands from nothing: 3D, motion and campaign systems. Launch film for Providence earned 1M+ views." />
+    <meta property="og:description" content="Senior brand and motion designer with 18+ years of experience. Launch film for Providence earned 1M+ views." />
     <meta property="og:url" content="https://m1ndseye.com/about.html" />
     <meta property="og:image" content="https://m1ndseye.com/assets/FES_ePort_PRO_Histor_Vid_3d.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="canonical" href="https://m1ndseye.com/about.html" />
-    <link rel="stylesheet" href="style.css?v=11" />
-    <script src="index.js?v=7" defer></script>
-    <link rel="icon" href="/assets/M1E_icon.svg" type="image/x-icon" />
-<script src="https://kit.fontawesome.com/01087b1b84.js" crossorigin="anonymous" defer></script>
-    <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
-    </script>
-    <script type="text/javascript">
-      (function(){
-        emailjs.init({
-          publicKey: "jf8G_9wc-MGeb3w95",
-        });
-    })();
-  </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="engine.css?v=5" />
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
   </head>
+  <body class="engine">
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="eng-nav">
+      <a class="eng-nav__brand" href="./"><img src="./assets/M1E_icon_2.svg" alt="" /><span>M1ndseye</span></a>
+      <button class="eng-nav__toggle" aria-expanded="false" aria-controls="eng-links">Menu</button>
+      <nav class="eng-nav__links" id="eng-links" aria-label="Main"><a href="./">Home</a><a href="courtroom-animation.html">Courtroom animation</a><a href="workbook/">Workbooks</a><a href="about.html" aria-current="page">About</a><a href="about.html#projects">Projects</a></nav>
+    </header>
+    <main id="main">
+      <section class="about-hero">
+        <div class="eng-wrap about-hero__grid">
+          <div>
+            <h1 class="eng-h1">Hey, I&rsquo;m Steve.</h1>
+            <p class="eng-lede" style="margin-top:24px">I&rsquo;m a senior brand and motion designer with 18+ years of experience building brands from nothing: launch films, 3D worlds and campaign systems that turn complex subjects into clear, high-performing creative.</p>
+            <div class="hero__cta"><a class="btn btn--solid" href="#contact">Get in touch</a><a class="btn" href="assets/Steve-Padilla-Resume-2026.pdf" target="_blank" rel="noopener">Resume (PDF)</a></div>
+            <p class="about-links"><a href="https://www.linkedin.com/in/stevemichaelpadilla/" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/M1ndseye" target="_blank" rel="noopener">GitHub</a><a href="https://www.behance.net/m1ndseye" target="_blank" rel="noopener">Behance</a></p>
+          </div>
+          <div class="about-eye" aria-hidden="true"><img src="assets/eye/prismatic.webp" alt="" width="1400" height="875" /></div>
+        </div>
+      </section>
 
-  <body class="dark-theme">
-    <section id="landing-page">
-      <nav>
-        <figure>
-          <a href="./" aria-label="M1ndseye home"><img id="personal-logo" src="./assets/M1E_icon_2.svg" alt="M1ndseye logo" /></a>
-        </figure>
-        <ul class="nav__link--list">
-          <li class="nav__link">
-            <a href="./" class="nav__link--anchor link__hover-effect link__hover-effect--black">Home</a>
-          </li>
-          <li class="nav__link">
-            <a href="courtroom-animation.html" class="nav__link--anchor link__hover-effect link__hover-effect--black">Courtroom animation</a>
-          </li>
-          <li class="nav__link">
-            <a href="workbook/" class="nav__link--anchor link__hover-effect link__hover-effect--black">Workbooks</a>
-          </li>
-          <li class="nav__link" onclick="toggleModal()">
-            <a
-              href="#"
-              class="nav__link--anchor link__hover-effect link__hover-effect--black"
-              >About</a
-            >
-          </li>
-          <li class="nav__link">
-            <a
-              href="#projects"
-              class="nav__link--anchor link__hover-effect link__hover-effect--black"
-              >Projects</a
-            >
-          </li>
-          <li class="nav__link" onclick="toggleModal()">
-            <a
-              href="#"
-              class="nav__link--anchor 
-              link__hover-effect 
-              link__hover-effect--black"
-              >Contact</a
-            >
-          </li>
-          <li class="nav__link">
-            <a
-              href="./assets/Steve-Padilla-Resume-2026.pdf"
-              target="_blank"
-              rel="noopener"
-              class="nav__link--anchor link__hover-effect link__hover-effect--black"
-              >Resume</a
-            >
-          </li>
-          <li class="nav__link click" onclick="toggleContrast()">
-            <a href="#" class="
-              nav__link--anchor 
-              link__hover-effect 
-              link__hover-effect--black"
-              ><i class="fa-solid fa-circle-half-stroke"></i></a>
-          </li>
-        </ul>
-      </nav>
-      <header class="header">
-        <div class="header__content">
-          <h1 class="title">Hey</h1>
-          <h1 class="title accent-color">I'm Steve</h1>
-          <p class="header__para">
-            I'm a senior <b class="accent-color">Brand &amp; Motion Designer</b> with
-            18+ years of experience building brands from nothing: launch films, 3D worlds and campaign systems that turn complex subjects into clear, high-performing creative.
-            <br />
-            Here's a bit more <b class="accent-color click" onclick="toggleModal()">about me.</b>
-          </p>
-          <div class="social__list">
-            <a
-              href="https://www.linkedin.com/in/stevemichaelpadilla/"
-              target="_blank"
-              class="social__link click"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-                <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-                <path
-                  d="M196.3 512L103.4 512L103.4 212.9L196.3 212.9L196.3 512zM149.8 172.1C120.1 172.1 96 147.5 96 117.8C96 103.5 101.7 89.9 111.8 79.8C121.9 69.7 135.6 64 149.8 64C164 64 177.7 69.7 187.8 79.8C197.9 89.9 203.6 103.6 203.6 117.8C203.6 147.5 179.5 172.1 149.8 172.1zM543.9 512L451.2 512L451.2 366.4C451.2 331.7 450.5 287.2 402.9 287.2C354.6 287.2 347.2 324.9 347.2 363.9L347.2 512L254.4 512L254.4 212.9L343.5 212.9L343.5 253.7L344.8 253.7C357.2 230.2 387.5 205.4 432.7 205.4C526.7 205.4 544 267.3 544 347.7L544 512L543.9 512z"
-                />
-              </svg>
-            </a>
-            <a
-              href="https://github.com/M1ndseye"
-              target="_blank"
-              class="social__link click"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-                <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-                <path
-                  d="M237.9 461.4C237.9 463.4 235.6 465 232.7 465C229.4 465.3 227.1 463.7 227.1 461.4C227.1 459.4 229.4 457.8 232.3 457.8C235.3 457.5 237.9 459.1 237.9 461.4zM206.8 456.9C206.1 458.9 208.1 461.2 211.1 461.8C213.7 462.8 216.7 461.8 217.3 459.8C217.9 457.8 216 455.5 213 454.6C210.4 453.9 207.5 454.9 206.8 456.9zM251 455.2C248.1 455.9 246.1 457.8 246.4 460.1C246.7 462.1 249.3 463.4 252.3 462.7C255.2 462 257.2 460.1 256.9 458.1C256.6 456.2 253.9 454.9 251 455.2zM316.8 72C178.1 72 72 177.3 72 316C72 426.9 141.8 521.8 241.5 555.2C254.3 557.5 258.8 549.6 258.8 543.1C258.8 536.9 258.5 502.7 258.5 481.7C258.5 481.7 188.5 496.7 173.8 451.9C173.8 451.9 162.4 422.8 146 415.3C146 415.3 123.1 399.6 147.6 399.9C147.6 399.9 172.5 401.9 186.2 425.7C208.1 464.3 244.8 453.2 259.1 446.6C261.4 430.6 267.9 419.5 275.1 412.9C219.2 406.7 162.8 398.6 162.8 302.4C162.8 274.9 170.4 261.1 186.4 243.5C183.8 237 175.3 210.2 189 175.6C209.9 169.1 258 202.6 258 202.6C278 197 299.5 194.1 320.8 194.1C342.1 194.1 363.6 197 383.6 202.6C383.6 202.6 431.7 169 452.6 175.6C466.3 210.3 457.8 237 455.2 243.5C471.2 261.2 481 275 481 302.4C481 398.9 422.1 406.6 366.2 412.9C375.4 420.8 383.2 435.8 383.2 459.3C383.2 493 382.9 534.7 382.9 542.9C382.9 549.4 387.5 557.3 400.2 555C500.2 521.8 568 426.9 568 316C568 177.3 455.5 72 316.8 72zM169.2 416.9C167.9 417.9 168.2 420.2 169.9 422.1C171.5 423.7 173.8 424.4 175.1 423.1C176.4 422.1 176.1 419.8 174.4 417.9C172.8 416.3 170.5 415.6 169.2 416.9zM158.4 408.8C157.7 410.1 158.7 411.7 160.7 412.7C162.3 413.7 164.3 413.4 165 412C165.7 410.7 164.7 409.1 162.7 408.1C160.7 407.5 159.1 407.8 158.4 408.8zM190.8 444.4C189.2 445.7 189.8 448.7 192.1 450.6C194.4 452.9 197.3 453.2 198.6 451.6C199.9 450.3 199.3 447.3 197.3 445.4C195.1 443.1 192.1 442.8 190.8 444.4zM179.4 429.7C177.8 430.7 177.8 433.3 179.4 435.6C181 437.9 183.7 438.9 185 437.9C186.6 436.6 186.6 434 185 431.7C183.6 429.4 181 428.4 179.4 429.7z"
-                />
-              </svg>
-            </a>
-            <a
-              href="https://www.behance.net/m1ndseye"
-              target="_blank"
-              class="social__link click"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-                <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-                <path
-                  d="M264 301.2C295.8 286 312.4 263 312.4 227.2C312.4 156.6 259.8 139.4 199.1 139.4L32 139.4L32 493.8L203.8 493.8C268.2 493.8 328.7 462.9 328.7 390.9C328.7 346.4 307.6 313.5 264 301.2zM109.9 199.9L183 199.9C211.1 199.9 236.4 207.8 236.4 240.4C236.4 270.5 216.7 282.6 188.9 282.6L109.9 282.6L109.9 199.9zM193.2 433.6L109.9 433.6L109.9 336L194.8 336C229.1 336 250.8 350.3 250.8 386.6C250.8 422.4 224.9 433.6 193.2 433.6zM551.7 192.9L408 192.9L408 158L551.7 158L551.7 192.9zM608 369.2C608 293.3 563.6 230 483.1 230C404.9 230 351.8 288.8 351.8 365.8C351.8 445.7 402.1 500.5 483.1 500.5C544.4 500.5 584.1 472.9 603.2 414.2L541 414.2C534.3 436.1 506.7 447.7 485.3 447.7C444 447.7 422.3 423.5 422.3 382.4L607.4 382.4C607.7 378.2 608 373.7 608 369.2zM422.4 338C424.7 304.3 447.1 283.2 480.9 283.2C516.3 283.2 534.1 304 537.1 338L422.4 338z"
-                />
-              </svg>
-            </a>
-            <!-- <a
-              href="./assets/ME_Resume_26.pdf"
-              target="_blank"
-              class="social__link click"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-                <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-                <path
-                  d="M128 64C92.7 64 64 92.7 64 128L64 512C64 547.3 92.7 576 128 576L208 576L208 464C208 428.7 236.7 400 272 400L448 400L448 234.5C448 217.5 441.3 201.2 429.3 189.2L322.7 82.7C310.7 70.7 294.5 64 277.5 64L128 64zM389.5 240L296 240C282.7 240 272 229.3 272 216L272 122.5L389.5 240zM272 444C261 444 252 453 252 464L252 592C252 603 261 612 272 612C283 612 292 603 292 592L292 564L304 564C337.1 564 364 537.1 364 504C364 470.9 337.1 444 304 444L272 444zM304 524L292 524L292 484L304 484C315 484 324 493 324 504C324 515 315 524 304 524zM400 444C389 444 380 453 380 464L380 592C380 603 389 612 400 612L432 612C460.7 612 484 588.7 484 560L484 496C484 467.3 460.7 444 432 444L400 444zM420 572L420 484L432 484C438.6 484 444 489.4 444 496L444 560C444 566.6 438.6 572 432 572L420 572zM508 464L508 592C508 603 517 612 528 612C539 612 548 603 548 592L548 548L576 548C587 548 596 539 596 528C596 517 587 508 576 508L548 508L548 484L576 484C587 484 596 475 596 464C596 453 587 444 576 444L528 444C517 444 508 453 508 464z"
-                />
-              </svg>
-            </a>
+      <section class="eng-section about-bio" aria-labelledby="b-h">
+        <div class="eng-wrap about-bio__grid">
+          <h2 class="eng-h2" id="b-h">Branding, UI/UX, 3D and motion graphics</h2>
+          <div>
+            <p class="eng-p">I turn complex ideas into clear, compelling visual stories. I work across branding, UI/UX, 3D, motion and front-end fundamentals to create visuals that communicate with clarity and purpose.</p>
+            <p class="eng-p" style="margin-top:16px">I&rsquo;m a rare hybrid creative focused on engagement and impact. I combine 3D environments with AI-driven characters to create continuous visual narratives that connect, persuade and perform.</p>
           </div>
         </div>
-</header>
-      <button class="mail__btn click" onclick="toggleModal()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-          <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-          <path
-            d="M112 128C85.5 128 64 149.5 64 176C64 191.1 71.1 205.3 83.2 214.4L291.2 370.4C308.3 383.2 331.7 383.2 348.8 370.4L556.8 214.4C568.9 205.3 576 191.1 576 176C576 149.5 554.5 128 528 128L112 128zM64 260L64 448C64 483.3 92.7 512 128 512L512 512C547.3 512 576 483.3 576 448L576 260L377.6 408.8C343.5 434.4 296.5 434.4 262.4 408.8L64 260z"/>
-        </svg>
-      </button>
-      <a href="#projects" class="scroll">
-        <div class="scroll__icon click"></div>
-      </a>
-      <div class="modal">
-        <div class="modal__half modal__about">
-          <h3 class="modal__title modal__title--about">
-            Here's a bit about me.
-          </h3>
-          <h4 class="modal__sub-title modal__sub-title--about">Senior Graphic Designer | Branding, UI/UX, 3D & Motion Graphics</h4>
-          <p class="modal__para">
-            Senior designer with 18+ years of experience turning complex ideas into clear, compelling visual stories.
-I work across branding, UI/UX, 3D, motion, and front-end fundamentals to create visuals that communicate with clarity and purpose.<br/>A rare hybrid creative focused on engagement and impact, combining 3D environments with AI-driven characters to create continuous visual narratives that connect, persuade, and perform.
-          </p>
-          <div class="modal__languages">
-            <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/icon-ai.svg" alt="" loading="lazy">
-            <span class="language__name">Illustrator</span>
-          </figure>
-          <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/icon-ps.svg" alt="" loading="lazy">
-            <span class="language__name">Photoshop</span>
-          </figure>
-          <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/icon-id.svg" alt="" loading="lazy">
-            <span class="language__name">InDesign</span>
-          </figure>
-          <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/icon-xd.svg" alt="" loading="lazy">
-            <span class="language__name">Adobe XD</span>
-          </figure>
-          <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/icon-ae.svg" alt="" loading="lazy">
-            <span class="language__name">After Effects</span>
-          </figure>
-          <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/icon-pr.svg" alt="" loading="lazy">
-            <span class="language__name">Premiere Pro</span>
-          </figure>
-          <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/icon-blender.svg" alt="" loading="lazy">
-            <span class="language__name">Blender</span>
-          </figure>
-          <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/icon-html5.png" alt="" loading="lazy">
-            <span class="language__name">HTML5</span>
-          </figure>
-          <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/icon-css3.svg" alt="" loading="lazy">
-            <span class="language__name">CSS3</span>
-          </figure>
-          <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/icon-js.svg" alt="" loading="lazy">
-            <span class="language__name">JavaScript</span>
-          </figure>
-          <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/icon-react.svg" alt="" loading="lazy">
-            <span class="language__name">React</span>
-          </figure>
-          <figure class="modal__language">
-            <img class="modal__language--img" src="./assets/icon-ppt.svg" alt="" loading="lazy">
-            <span class="language__name">PowerPoint</span>
-          </figure>
-          </div>
-        </div>
-        <div class="modal__half modal__contact">
-          <i class="fa-solid fa-x modal__exit click" onclick="toggleModal()"></i>
-          <h3 class="modal__title modal__title--contact">
-            Let's have a chat!
-          </h3>
-          <h3 class="modal__sub-title modal__sub-title--contact">
-            Whether you have a project in mind, want to discuss potential collaboration, or just want to connect, feel free to reach out.
-          </h3>
-          <p class="modal__direct">Prefer email? <a href="mailto:steve.mindseye@gmail.com">steve.mindseye@gmail.com</a></p>
-          <form id="contact__form" onsubmit="contact(event)">
-            <div class="form__item">
-              <label class="form__item-label">Name</label>
-              <input class="input" name="user_name" type="text" required></input>
-            </div>
-          <div class="form__item">
-              <label class="form__item-label">Email</label>
-              <input class="input" name="user_email" type="email" required></input>
-          </div>
-          <div class="form__item">
-              <label class="form__item-label">Message</label>
-              <textarea class="input" name="message" type="text" required></textarea>
-          </div>
-          <button id="contact__submit" class="form__submit">Send it!</button>
-        </form>
-        <div class="modal__overlay modal__overlay--loading">
-          <i class="fa-solid fa-spinner"></i>
-        </div>
-        <div class="modal__overlay modal__overlay--success">
-          Thanks for the message! Looking forward to speaking with you soon.
-        </div>
-      </div>
-    </div>
-    <canvas id="network-canvas" aria-hidden="true"></canvas>
-</section>
-<section id="projects">
-      <div class="container">
-        <div class="row">
-          <h1 class="section__title">
-            Here are some of my <span class="orange">projects</span>
-          </h1>
-          <ul class="project__list">
-            
-            <li class="project">
-              <div class="project__wrapper">
-                <img
-                  src="./assets/FES_ePort_PRO_Histor_Vid_3d.jpg" alt="3D medical animation frame from the Providence histotripsy launch film" decoding="async"
-                  class="project__img"
-                />
-                <div class="project__wrapper--bg"></div>
-                <div class="project__description">
-                  <h3 class="project__description--title">
-                    Providence Histotripsy Procedure 3d Animation & Campaign
-                  </h3>
-                  <h4 class="project__description--subtitle">
-                    Branding, Video Editing, Motion Graphics
-                   &middot; <b>1M+ views</b></h4>
-                  <p class="project__description--para">
-                    When Providence needed to promote Histotripsy, a groundbreaking liver tumor treatment, I created a concise, engaging video and web ads without access to the equipment, using Blender, After Effects, and AI voiceover—garnering over a million views.
-                  </p>
-                  <div class="project__description--links">
-                    <a href="./providence-histotripsy-campaign.html" class="project-page-btn">View Project</a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="project">
-              <div class="project__wrapper">
-                <img
-                  src="./assets/ME-Render-TS-Social-Blog.jpg" alt="TrialSupport branded social graphic rendered in 3D" loading="lazy" decoding="async"
-                  class="project__img"
-                />
-                <div class="project__wrapper--bg"></div>
-                <div class="project__description">
-                  <h3 class="project__description--title">
-                    TrialSupport Branding & Motion Graphics
-                  </h3>
-                  <h4 class="project__description--subtitle">
-                    Branding, Motion Graphics, Video Editing<!-- Branding, Video Editing, Motion Graphics -->
-                   &middot; <b>52% click-through lift on video vs. static posts</b></h4>
-                  <p class="project__description--para">
-                    Designed and produced social content for TrialSupport, blending motion graphics and brand design to turn complex information into clear, engaging visuals—building a consistent look and feel while keeping the feed dynamic and easy to follow.<!-- This section features selected work for TrialSupport.us, spanning social campaigns, email marketing, web design, trial visuals, and 3D video. Each project demonstrates a strategic blend of design, technology, and storytelling to simplify complex ideas and deliver results. -->
-                  </p>
-                  <div class="project__description--links">
-                             <a href="./2026-multi-channel-brand-campaign-showcase.html" class="project-page-btn">View Project</a>
-                   </div>
-                </div>
-              </div>
-            </li>
-            <li class="project">
-              <div class="project__wrapper">
-                <img
-                  src="./assets/FES_ePort_Sesame_Duo_Spiral_.jpg" alt="M1ndseye illustrated alphabet tracing workbook pages" loading="lazy" decoding="async"
-                  class="project__img"
-                />
-                <div class="project__wrapper--bg"></div>
-                <div class="project__description">
-                  <h3 class="project__description--title">
-                    M1ndseye Illustrated Alphabet Tracing Workbook
-                  </h3>
-                  <h4 class="project__description--subtitle">
-                   Meet the M1ndseye Illustrated Alphabet Tracing Workbook
-                  </h4>
-                  <p class="project__description--para">
-                    A six-level learning system created to help my son regain dexterity after a stroke. Designed to build confidence, fine motor skills, and joyful learning through thoughtful, inclusive design.
-                  </p>
-                  <div class="project__description--links">
-                   <a href="./m1ndseye-educational-assets.html" class="project-page-btn">View Project</a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="project">
-              <div class="project__wrapper">
-                <img
-                  src="./assets/FES_ePort_NDM_Sizzle_Reel.jpg" alt="Frame from the NDM Communication trade show sizzle reel" loading="lazy" decoding="async"
-                  class="project__img"
-                />
-                <div class="project__wrapper--bg"></div>
-                <div class="project__description">
-                  <h3 class="project__description--title">NDM Brand Social & Sizzle Reel</h3>
-                  <h4 class="project__description--subtitle">
-                    Branding, Motion Graphics, Video Editing
-                  </h4>
-                  <p class="project__description--para">
-                    Delivered high-impact digital content, including a fast-turnaround trade show sizzle reel and engaging social media campaigns, combining 3D, motion graphics, editing, and AI voiceover to bring NDM’s brand to life across channels.</p>
-                  <div class="project__description--links">
-                    <a href="./2024-ndm-sizzle-reel.html" class="project-page-btn">View Project</a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="project">
-              <div class="project__wrapper">
-                <img
-                  src="./assets/FES_ePort_TMMC_Map_3d.jpg" alt="3D map of the Torrance Memorial campus from the healthcare publication system" loading="lazy" decoding="async"
-                  class="project__img"
-                />
-                <div class="project__wrapper--bg"></div>
-                <div class="project__description">
-                  <h3 class="project__description--title">
-                    Healthcare Editorial Systems
-                  </h3>
-                  <h4 class="project__description--subtitle">
-                    Branding, Print Production, Motion Graphics
-                  </h4>
-                  <p class="project__description--para">
-                    Developed a cohesive suite of branded patient materials for Torrance Memorial and MemorialCare, including flyers, guidebooks, and seasonal publications, elevating each touchpoint through custom illustration, clear hierarchy, and accessible, audience-focused design systems.
-                  </p>
-                  <div class="project__description--links">
-                    <a href="./healthcare-editorial-systems-complete.html" class="project-page-btn">View Project</a>
-                  </div>
-                </div>
-              </div>
-            </li>
+        <div class="eng-wrap"><ul class="tools" aria-label="Tools"><li><img src="assets/icon-ai.svg" alt="" loading="lazy" width="36" height="36"><span>Illustrator</span></li><li><img src="assets/icon-ps.svg" alt="" loading="lazy" width="36" height="36"><span>Photoshop</span></li><li><img src="assets/icon-id.svg" alt="" loading="lazy" width="36" height="36"><span>InDesign</span></li><li><img src="assets/icon-xd.svg" alt="" loading="lazy" width="36" height="36"><span>Adobe XD</span></li><li><img src="assets/icon-ae.svg" alt="" loading="lazy" width="36" height="36"><span>After Effects</span></li><li><img src="assets/icon-pr.svg" alt="" loading="lazy" width="36" height="36"><span>Premiere</span></li><li><img src="assets/icon-blender.svg" alt="" loading="lazy" width="36" height="36"><span>Blender</span></li><li><img src="assets/icon-html5.png" alt="" loading="lazy" width="36" height="36"><span>HTML5</span></li><li><img src="assets/icon-css3.svg" alt="" loading="lazy" width="36" height="36"><span>CSS3</span></li><li><img src="assets/icon-js.svg" alt="" loading="lazy" width="36" height="36"><span>JavaScript</span></li><li><img src="assets/icon-react.svg" alt="" loading="lazy" width="36" height="36"><span>React</span></li><li><img src="assets/icon-ppt.svg" alt="" loading="lazy" width="36" height="36"><span>PowerPoint</span></li></ul></div>
+      </section>
 
-            <li class="project">
-              <div class="project__wrapper">
-                <img
-                  src="./assets/EDW_Program_Collect_.jpg" alt="Program and Collect station from the Boston Museum of Science Engineering Design Workshop" loading="lazy" decoding="async"
-                  class="project__img"
-                />
-                <div class="project__wrapper--bg"></div>
-                  <div class="project__description">
-                    <h3 class="project__description--title">
-                      Engineering Design Workshop: Program & Collection
-                    </h3>
-                    <h4 class="project__description--subtitle">
-                      Print, 3d Printed elements, Motion Graphics
-                    </h4>
-                    <p class="project__description--para">
-                      I designed digital and print graphics with complex die-cuts and 3D-printed icons for a STEM exhibit enabling blind visitors to program a hedgehog from physical to digital form, demonstrating innovation, accessibility, and collaborative execution.
-                    </p>
-                  <div class="project__description--links">
-                    <a href="./2022-mos-edw-case-study.html" class="project-page-btn">View Project</a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="project">
-              <div class="project__wrapper">
-                <img
-                  src="./assets/FES_ePort_NDM_MSF_3d_Map.jpg" alt="3D community site map for Reata Glen and Morningside" loading="lazy" decoding="async"
-                  class="project__img"
-                />
-                <div class="project__wrapper--bg"></div>
-                <div class="project__description">
-                  <h3 class="project__description--title">
-                    Reata Glen / <br> Morningside 3D Maps
-                  </h3>
-                  <h4 class="project__description--subtitle">
-                    Branding, Video Editing, Motion Graphics
-                  </h4>
-                  <p class="project__description--para">
-                    Reimagined traditional community maps as immersive 3D experiences that feel intuitive and visually rich. Owned the process end-to-end—from spatial planning through modeling, lighting, and final render—turning standard collateral into standout assets that improved clarity and perceived value.
-                  </p>
-                  <div class="project__description--links">
-                    <a href="./reata-glen-morningside-3d-maps.html" class="project-page-btn">View Project</a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="project">
-              <div class="project__wrapper">
-                <img
-                  src="./assets/FES_ePort_11_Fe_.jpg" alt="Enzoani Bridal fashion event invitation and branding" loading="lazy" decoding="async"
-                  class="project__img"
-                />
-                <div class="project__wrapper--bg"></div>
-                  <div class="project__description">
-                    <h3 class="project__description--title">
-                      Enzoani Fashion Event Branding: 2008-2016
-                    </h3>
-                    <h4 class="project__description--subtitle">
-                      Print, Invitation Design, Event Branding, Email Campaigns
-                    </h4>
-                    <p class="project__description--para">
-                      From 2008–2016, I led creative direction for Enzoani’s global fashion events and global tradeshows, designing invitations, pins, stamps, email campaigns, signage, and trade show assets. I developed floorplans, lighting concepts, environmental graphics, and custom installations that transformed venues into cohesive, immersive brand experiences.
-                    </p>
-                  <div class="project__description--links">
-                    <a href="./enzoani-fashion-events.html" class="project-page-btn">View Project</a>
-                  </div>
-                </div>
-              </div>
-            </li>
-
+      <section class="eng-section" id="projects" aria-labelledby="p-h">
+        <div class="eng-wrap">
+          <h2 class="eng-h2" id="p-h" style="margin-bottom:clamp(28px,4vw,56px)">Selected projects</h2>
+          <ul class="works">
+<li class="work work--feature"><a href="./providence-histotripsy-campaign.html"><img src="assets/FES_ePort_PRO_Histor_Vid_3d.jpg" alt="3D medical animation frame from the Providence histotripsy launch film" loading="lazy" decoding="async"><span class="work__body"><span class="work__title">Providence Histotripsy Procedure 3d Animation & Campaign</span><span class="work__sub">Branding, Video Editing, Motion Graphics · 1M+ views</span></span></a></li>
+<li class="work"><a href="./2026-multi-channel-brand-campaign-showcase.html"><img src="assets/ME-Render-TS-Social-Blog.jpg" alt="TrialSupport branded social graphic rendered in 3D" loading="lazy" decoding="async"><span class="work__body"><span class="work__title">TrialSupport Branding & Motion Graphics</span><span class="work__sub">Branding, Motion Graphics, Video Editing · 52% click-through lift on video vs. static posts</span></span></a></li>
+<li class="work"><a href="./m1ndseye-educational-assets.html"><img src="assets/FES_ePort_Sesame_Duo_Spiral_.jpg" alt="M1ndseye illustrated alphabet tracing workbook pages" loading="lazy" decoding="async"><span class="work__body"><span class="work__title">M1ndseye Illustrated Alphabet Tracing Workbook</span><span class="work__sub">Meet the M1ndseye Illustrated Alphabet Tracing Workbook</span></span></a></li>
+<li class="work"><a href="./2024-ndm-sizzle-reel.html"><img src="assets/FES_ePort_NDM_Sizzle_Reel.jpg" alt="Frame from the NDM Communication trade show sizzle reel" loading="lazy" decoding="async"><span class="work__body"><span class="work__title">NDM Brand Social & Sizzle Reel</span><span class="work__sub">Branding, Motion Graphics, Video Editing</span></span></a></li>
+<li class="work"><a href="./healthcare-editorial-systems-complete.html"><img src="assets/FES_ePort_TMMC_Map_3d.jpg" alt="3D map of the Torrance Memorial campus from the healthcare publication system" loading="lazy" decoding="async"><span class="work__body"><span class="work__title">Healthcare Editorial Systems</span><span class="work__sub">Branding, Print Production, Motion Graphics</span></span></a></li>
+<li class="work"><a href="./2022-mos-edw-case-study.html"><img src="assets/EDW_Program_Collect_.jpg" alt="Program and Collect station from the Boston Museum of Science Engineering Design Workshop" loading="lazy" decoding="async"><span class="work__body"><span class="work__title">Engineering Design Workshop: Program & Collection</span><span class="work__sub">Print, 3d Printed elements, Motion Graphics</span></span></a></li>
+<li class="work"><a href="./reata-glen-morningside-3d-maps.html"><img src="assets/FES_ePort_NDM_MSF_3d_Map.jpg" alt="3D community site map for Reata Glen and Morningside" loading="lazy" decoding="async"><span class="work__body"><span class="work__title">Reata Glen / Morningside 3D Maps</span><span class="work__sub">Branding, Video Editing, Motion Graphics</span></span></a></li>
+<li class="work"><a href="./enzoani-fashion-events.html"><img src="assets/FES_ePort_11_Fe_.jpg" alt="Enzoani Bridal fashion event invitation and branding" loading="lazy" decoding="async"><span class="work__body"><span class="work__title">Enzoani Fashion Event Branding: 2008-2016</span><span class="work__sub">Print, Invitation Design, Event Branding, Email Campaigns</span></span></a></li>
           </ul>
         </div>
-      </div>
-    </section>
-    <footer>
-      <div class="container">
-        <div class="row footer__row">
-          <figure>
-            <img
-              class="footer__logo--img"
-              src="./assets/M1E_icon_2.svg"
-              alt=""
-            />
-          </figure>
-          <div class="footer__social--list">
-            <a
-              href="https://github.com/M1ndseye"
-              class="footer__social--link link__hover-effect link__hover-effect--white"  target="_blank"
-            >
-              GitHub
-            </a>
-            <a
-              href="https://www.linkedin.com/in/stevemichaelpadilla/" target="_blank"
-              class="footer__social--link link__hover-effect link__hover-effect--white"
-            >
-              LinkedIn
-            </a>
-            <a href="mailto:steve.mindseye@gmail.com" class="
-            footer__social--link 
-            link__hover-effect 
-            link__hover-effect--white">
-              Email
-            </a>
-            <a href="#" onclick="toggleModal()" class="
-            footer__social--link 
-            link__hover-effect 
-            link__hover-effect--white">
-              Contact
-            </a>
-            <a
-              href="./assets/Steve-Padilla-Resume-2026.pdf" target="_blank"
-              class="footer__social--link 
-              link__hover-effect 
-              link__hover-effect--white
-            ">
-              Resume
-            </a>
+      </section>
+
+      <section class="eng-section" id="contact" aria-labelledby="c-h">
+        <div class="eng-wrap contact-grid">
+          <div>
+            <h2 class="eng-h2" id="c-h">Let&rsquo;s have a chat</h2>
+            <p class="eng-lede" style="margin-top:18px">Have a project in mind, want to collaborate, or just want to connect? Send a note.</p>
+            <p class="eng-p" style="margin-top:18px">Prefer email? <a class="ulink" href="mailto:steve.mindseye@gmail.com">steve.mindseye@gmail.com</a></p>
           </div>
-          <div class="footer__copyright">Copyright © Steve Padilla</div>
+          <form class="cform" id="about-form">
+            <label>Your name<input name="name" required autocomplete="name" /></label>
+            <label>Email<input name="email" type="email" required autocomplete="email" /></label>
+            <label>Message<textarea name="details" required></textarea></label>
+            <div class="hp" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off" /></label></div>
+            <button class="btn btn--solid" type="submit">Send message</button>
+            <p class="cform__status" role="status" aria-live="polite"></p>
+          </form>
         </div>
+      </section>
+    </main>
+    <footer class="eng-footer">
+      <div class="eng-wrap">
+        <span>&copy; 2026 Steve Padilla &middot; M1ndseye, Costa Mesa CA</span>
+        <nav aria-label="Footer"><a href="./">Home</a><a href="https://github.com/M1ndseye" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/stevemichaelpadilla/" rel="noopener">LinkedIn</a><a href="mailto:steve.mindseye@gmail.com">Email</a><a href="assets/Steve-Padilla-Resume-2026.pdf" rel="noopener">Resume</a></nav>
       </div>
     </footer>
+    <script src="engine.js?v=4" defer></script>
   </body>
 </html>

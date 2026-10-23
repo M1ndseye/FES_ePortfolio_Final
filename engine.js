@@ -171,6 +171,30 @@
     });
   }
 
+
+  /* ---------- about page contact form ---------- */
+  var aform = document.getElementById("about-form");
+  if (aform) {
+    var ast = aform.querySelector(".cform__status"), abtn = aform.querySelector("button[type=submit]");
+    aform.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (aform.website && aform.website.value) return;
+      if (!window.emailjs) { ast.className = "cform__status is-err"; ast.textContent = "The form could not load. Email steve.mindseye@gmail.com instead."; return; }
+      var d = new FormData(aform);
+      abtn.disabled = true; ast.className = "cform__status"; ast.textContent = "Sending...";
+      emailjs.send("service_x9xwlsf", "template_57nss0a", { user_name: d.get("name"), user_email: d.get("email"), message: d.get("details") }, "jf8G_9wc-MGeb3w95").then(function () {
+        ast.className = "cform__status is-ok"; ast.textContent = "Message sent. I will reply by email.";
+        if (window.gtag) gtag("event", "generate_lead", { form: "about" });
+        aform.reset(); abtn.disabled = false;
+      }).catch(function (err) {
+        console.error("EmailJS send failed:", err && err.status, err && err.text, err);
+        ast.className = "cform__status is-err"; ast.textContent = "The message did not send. Email steve.mindseye@gmail.com instead.";
+        abtn.disabled = false;
+      });
+    });
+    if (/[?&]contact=1/.test(location.search)) { var ct = document.getElementById("contact"); if (ct) ct.scrollIntoView(); }
+  }
+
   /* ---------- courtroom case-type cards: preview plays on hover, focus, or when scrolled into view on touch ---------- */
   var cards = document.querySelectorAll(".case");
   var touchOnly = window.matchMedia && window.matchMedia("(hover: none)").matches;
