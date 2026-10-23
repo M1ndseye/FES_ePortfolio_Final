@@ -208,3 +208,33 @@ body.engine {
   .gaze-foot { position: relative; bottom: auto; margin-top: 24px; }
 }
 @media (prefers-reduced-motion: reduce) { .door__title, .door__line, .door__veil { transition: none; } }
+
+/* ---------- courtroom: case type cards ---------- */
+.cases { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2vw, 24px); margin-bottom: clamp(48px, 7vw, 88px); }
+.case { position: relative; display: flex; flex-direction: column; justify-content: flex-end; height: 100%; min-height: clamp(300px, 30vw, 400px); padding: clamp(22px, 2.6vw, 34px); border-radius: 22px; overflow: hidden; isolation: isolate;
+  background: rgba(19,27,48,.42); -webkit-backdrop-filter: blur(16px) saturate(1.3); backdrop-filter: blur(16px) saturate(1.3);
+  border: 1px solid rgba(244,242,251,.12); box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 24px 50px -32px rgba(0,0,0,.85);
+  transition: transform .5s cubic-bezier(.2,.8,.2,1), box-shadow .5s, border-color .5s; }
+.case::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; z-index: 2; pointer-events: none; opacity: .4; transition: opacity .5s;
+  background: linear-gradient(135deg, rgba(111,155,255,.75), rgba(111,155,255,0) 38%, rgba(255,157,66,0) 62%, rgba(255,157,66,.7));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.case::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(180deg, rgba(6,9,18,.05) 0%, rgba(6,9,18,.86) 78%); }
+.case__media { position: absolute; inset: 0; z-index: -2; background: var(--poster, none) center / cover no-repeat; opacity: .5; transform: scale(1.01); transition: opacity .7s, transform 1.4s cubic-bezier(.2,.8,.2,1); overflow: hidden; }
+.case--blank .case__media { background: radial-gradient(80% 70% at 30% 20%, rgba(47,107,255,.35), transparent 70%), radial-gradient(70% 60% at 85% 90%, rgba(255,157,66,.25), transparent 70%), #0b1020; opacity: .9; }
+.case--blank .case__media::before { content: ""; position: absolute; left: -10%; right: -10%; top: 46%; height: 3px; background: repeating-linear-gradient(90deg, rgba(244,242,251,.35) 0 36px, transparent 36px 84px); transform: rotate(-4deg); animation: lane 6s linear infinite; }
+@keyframes lane { to { background-position: -168px 0; } }
+.case__media--drift { filter: brightness(.5) saturate(.8); animation: drift 24s ease-in-out infinite alternate; }
+@keyframes drift { from { transform: scale(1.04) translate(0, 0); } to { transform: scale(1.12) translate(-2%, -2%); } }
+.case__media video, .case__media iframe { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; opacity: 0; transition: opacity .8s; pointer-events: none; }
+.case__media iframe { width: max(100%, 177.78%); height: 100%; left: 50%; transform: translateX(-50%); }
+.case.is-playing .case__media video, .case.is-playing .case__media iframe { opacity: 1; }
+.case__title { font-family: "Instrument Serif", "Bricolage Grotesque", Georgia, serif; font-weight: 400; font-size: clamp(1.8rem, 2.8vw, 2.5rem); line-height: 1.04; letter-spacing: -.01em; max-width: 16ch; }
+.case__text { margin-top: 10px; max-width: 38ch; color: rgba(244,242,251,.8); }
+.case__tag { align-self: flex-start; margin-top: 20px; padding: 9px 18px; border-radius: 999px; font-weight: 600; font-size: .92rem; border: 1px solid rgba(244,242,251,.28); background: rgba(244,242,251,.07); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: background .4s, color .4s, border-color .4s; }
+.case:hover, .case:focus-visible { transform: translateY(-8px); border-color: rgba(111,155,255,.4); box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 34px 70px -30px rgba(47,107,255,.6), 0 0 44px -10px rgba(111,155,255,.4); }
+.case:hover::before, .case:focus-visible::before { opacity: 1; }
+.case:hover .case__media, .case:focus-visible .case__media, .case.is-playing .case__media { opacity: .95; }
+.case:hover .case__media:not(.case__media--drift), .case:focus-visible .case__media:not(.case__media--drift) { transform: scale(1.05); }
+.case:hover .case__tag, .case:focus-visible .case__tag { background: var(--oi); border-color: var(--oi); color: #1a1208; }
+@media (max-width: 760px) { .cases { grid-template-columns: 1fr; } .case { min-height: 280px; } .case__media { opacity: .7; } }
+@media (prefers-reduced-motion: reduce) { .case, .case__media, .case__tag { transition: none; } .case:hover, .case:focus-visible { transform: none; } .case__media--drift, .case--blank .case__media::before { animation: none; } }

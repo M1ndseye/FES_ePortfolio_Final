@@ -39,7 +39,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="engine.css?v=1" />
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="engine.css?v=2" />
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
   </head>
   <body class="engine">
@@ -75,13 +76,41 @@
         <div class="eng-wrap">
           <div class="eng-section__head">
             <h2 class="eng-h2">What I can animate</h2>
-            <p class="eng-p">Each animation is built from your exhibits: photos, measurements, medical records, police reports and testimony.</p>
+            <p class="eng-p">Every animation is built from your exhibits: photos, measurements, medical records, police reports and testimony. Pick a case type to start your quote.</p>
           </div>
-          <ul class="services" style="max-width:760px">
-            <li><b>Accident and collision reconstruction</b><span>Vehicles, roadways and timing, shown from any camera angle.</span></li>
-            <li><b>Medical and surgical illustration</b><span>Injuries, procedures and recovery explained in plain visuals.</span></li>
-            <li><b>Deposition and testimony simulation</b><span>Illustrative re-creations that follow the transcript.</span></li>
-            <li><b>Premises and scene models</b><span>Hospital rooms, intersections and workplaces built to scale.</span></li>
+          <ul class="cases">
+            <li>
+              <a class="case case--blank" href="#contact" data-type="Accident reconstruction">
+                <span class="case__media" aria-hidden="true"></span>
+                <h3 class="case__title">Accident reconstruction</h3>
+                <p class="case__text">Show exactly how a collision unfolded, from any camera angle and at any speed.</p>
+                <span class="case__tag">Explore Case Type</span>
+              </a>
+            </li>
+            <li>
+              <a class="case" href="#contact" data-type="Medical or surgical" data-youtube="RJOpfjCFITc" style="--poster: url('assets/FES_ePort_PRO_Histor_Vid_3d.jpg')">
+                <span class="case__media" aria-hidden="true"></span>
+                <h3 class="case__title">Medical and surgical illustration</h3>
+                <p class="case__text">Make an injury or a procedure clear to jurors who have no medical training.</p>
+                <span class="case__tag">Explore Case Type</span>
+              </a>
+            </li>
+            <li>
+              <a class="case" href="#contact" data-type="Deposition simulation" data-video="assets/_Jane_Doe_Depo_Clip_.mp4" style="--poster: url('assets/FES_ePort_PRO_Histor_Vid_3d_2.jpg')">
+                <span class="case__media" aria-hidden="true"></span>
+                <h3 class="case__title">Deposition simulation</h3>
+                <p class="case__text">Bring testimony to life with an illustrative re-creation that follows the transcript.</p>
+                <span class="case__tag">Explore Case Type</span>
+              </a>
+            </li>
+            <li>
+              <a class="case" href="#contact" data-type="Scene or premises model" style="--poster: url('assets/RG-Map-Iso-Plaza.jpg')">
+                <span class="case__media case__media--drift" aria-hidden="true"></span>
+                <h3 class="case__title">Premises and scene models</h3>
+                <p class="case__text">Walk the jury through the room, intersection or worksite exactly as it was.</p>
+                <span class="case__tag">Explore Case Type</span>
+              </a>
+            </li>
           </ul>
           <h2 class="eng-h2" style="margin-top:clamp(56px,8vw,96px)">How a project runs</h2>
           <ol class="steps" style="max-width:760px">
@@ -125,6 +154,6 @@
         <nav aria-label="Footer"><a href="about.html">About</a><a href="courtroom-animation.html#contact">Contact</a><a href="https://www.linkedin.com/in/stevemichaelpadilla/" rel="noopener">LinkedIn</a></nav>
       </div>
     </footer>
-    <script src="engine.js?v=1" defer></script>
+    <script src="engine.js?v=2" defer></script>
   </body>
 </html>

@@ -170,4 +170,43 @@
       });
     });
   }
+
+  /* ---------- courtroom case-type cards: preview plays on hover, focus, or when scrolled into view on touch ---------- */
+  var cards = document.querySelectorAll(".case");
+  var touchOnly = window.matchMedia && window.matchMedia("(hover: none)").matches;
+  cards.forEach(function (card) {
+    var media = card.querySelector(".case__media"), el = null, ready = false;
+    function build() {
+      if (el || reduce) return;
+      if (card.dataset.video) {
+        el = document.createElement("video");
+        el.muted = true; el.loop = true; el.playsInline = true; el.preload = "auto"; el.setAttribute("playsinline", ""); el.setAttribute("aria-hidden", "true");
+        el.src = card.dataset.video; media.appendChild(el);
+      } else if (card.dataset.youtube) {
+        var id = card.dataset.youtube;
+        el = document.createElement("iframe");
+        el.src = "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1&mute=1&controls=0&loop=1&playlist=" + id + "&playsinline=1&modestbranding=1&rel=0&disablekb=1&enablejsapi=1";
+        el.setAttribute("allow", "autoplay; encrypted-media"); el.setAttribute("tabindex", "-1"); el.setAttribute("aria-hidden", "true"); el.setAttribute("title", "Case type preview");
+        media.appendChild(el);
+      }
+    }
+    function yt(cmd) { if (el && el.tagName === "IFRAME" && el.contentWindow) el.contentWindow.postMessage(JSON.stringify({ event: "command", func: cmd, args: [] }), "*"); }
+    function start() { build(); if (!el) return; card.classList.add("is-playing"); if (el.tagName === "VIDEO") { var p = el.play(); if (p && p.catch) p.catch(function () {}); } else yt("playVideo"); }
+    function stop() { card.classList.remove("is-playing"); if (!el) return; if (el.tagName === "VIDEO") el.pause(); else yt("pauseVideo"); }
+    if (!touchOnly) {
+      card.addEventListener("mouseenter", start); card.addEventListener("mouseleave", stop);
+      card.addEventListener("focus", start); card.addEventListener("blur", stop);
+    } else if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (e) { e[0].isIntersecting ? start() : stop(); }, { threshold: .65 }).observe(card);
+    }
+    // choosing a case type fills the quote form and jumps to it
+    card.addEventListener("click", function (e) {
+      var f = document.getElementById("court-form"); if (!f) return;
+      e.preventDefault();
+      if (f.type) f.type.value = card.dataset.type || "";
+      var target = document.getElementById("contact");
+      if (target) target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      setTimeout(function () { if (f.name) f.name.focus({ preventScroll: true }); }, reduce ? 0 : 600);
+    });
+  });
 })();
