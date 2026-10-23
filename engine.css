@@ -21,8 +21,8 @@ html { scroll-behavior: smooth; }
 body.engine {
   background: var(--ink);
   color: var(--text);
-  font-family: "Bricolage Grotesque", "Roboto", system-ui, sans-serif;
-  font-size: 1.0625rem;
+  font-family: "Roboto Condensed", "Arial Narrow", system-ui, sans-serif;
+  font-size: 1.125rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
@@ -63,7 +63,7 @@ body.engine {
 .btn--ghost { border-color: var(--line); }
 
 /* ---------- type ---------- */
-.eng-h1 { font-weight: 800; font-size: clamp(2.7rem, 7.4vw, 6.6rem); line-height: .98; letter-spacing: -.035em; text-wrap: balance; }
+.eng-h1 { font-weight: 800; font-size: clamp(2.7rem, 7.4vw, 6.6rem); line-height: .98; letter-spacing: -.02em; text-wrap: balance; }
 .eng-h2 { font-weight: 700; font-size: clamp(1.9rem, 4vw, 3.3rem); line-height: 1.04; letter-spacing: -.025em; text-wrap: balance; }
 .eng-h3 { font-weight: 700; font-size: clamp(1.35rem, 2.2vw, 1.8rem); line-height: 1.12; letter-spacing: -.015em; }
 .eng-lede { font-size: clamp(1.1rem, 1.7vw, 1.4rem); line-height: 1.55; color: rgba(244,242,251,.86); max-width: 56ch; }
@@ -186,7 +186,7 @@ body.engine {
 .door { position: absolute; top: 0; bottom: 0; width: max(26%, calc((100vw - 1440px) / 2 + 380px)); display: flex; flex-direction: column; justify-content: center; gap: 14px; padding: 0 var(--edge); z-index: 3; isolation: isolate; }
 .door--left { left: 0; align-items: flex-start; text-align: left; padding-right: var(--pad); }
 .door--right { right: 0; align-items: flex-end; text-align: right; padding-left: var(--pad); }
-.door__title { font-family: "Bricolage Grotesque", "Roboto", system-ui, sans-serif; font-weight: 600; font-size: clamp(1.8rem, 3vw, 2.9rem); line-height: 1.02; letter-spacing: -.01em; opacity: .5; transition: opacity .6s, transform .6s; }
+.door__title { font-family: "Roboto Condensed", "Arial Narrow", system-ui, sans-serif; font-weight: 600; font-size: clamp(1.8rem, 3vw, 2.9rem); line-height: 1.02; letter-spacing: -.01em; opacity: .5; transition: opacity .6s, transform .6s; }
 .door__line { max-width: 24ch; color: var(--muted); font-size: .98rem; opacity: 0; transform: translateY(6px); transition: opacity .6s, transform .6s; }
 .door__veil { position: absolute; inset: 0; z-index: -1; background-size: cover; background-position: center; opacity: 0; filter: blur(2px) saturate(.8); transition: opacity 1s; -webkit-mask-image: radial-gradient(70% 55% at var(--vx, 50%) 50%, #000 0%, transparent 100%); mask-image: radial-gradient(70% 55% at var(--vx, 50%) 50%, #000 0%, transparent 100%); }
 .door__veil video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -228,7 +228,7 @@ body.engine {
 .case__media video, .case__media iframe { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; opacity: 0; transition: opacity .8s; pointer-events: none; }
 .case__media iframe { width: max(100%, 177.78%); height: 100%; left: 50%; transform: translateX(-50%); }
 .case.is-playing .case__media video, .case.is-playing .case__media iframe { opacity: 1; }
-.case__title { font-family: "Bricolage Grotesque", "Roboto", system-ui, sans-serif; font-weight: 600; font-size: clamp(1.8rem, 2.8vw, 2.5rem); line-height: 1.04; letter-spacing: -.01em; max-width: 16ch; }
+.case__title { font-family: "Roboto Condensed", "Arial Narrow", system-ui, sans-serif; font-weight: 600; font-size: clamp(1.8rem, 2.8vw, 2.5rem); line-height: 1.04; letter-spacing: -.01em; max-width: 16ch; }
 .case__text { margin-top: 10px; max-width: 38ch; color: rgba(244,242,251,.8); }
 .case__tag { align-self: flex-start; margin-top: 20px; padding: 9px 18px; border-radius: 999px; font-weight: 600; font-size: .92rem; border: 1px solid rgba(244,242,251,.28); background: rgba(244,242,251,.07); -webkit-backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: background .4s, color .4s, border-color .4s; }
 .case:hover, .case:focus-visible { transform: translateY(-8px); border-color: rgba(111,155,255,.4); box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 34px 70px -30px rgba(47,107,255,.6), 0 0 44px -10px rgba(111,155,255,.4); }
