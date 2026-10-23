@@ -50,21 +50,24 @@
       new IntersectionObserver(function (e) { courtVideo(e[0].isIntersecting); }, { threshold: .3 }).observe(doors.left);
   }
 
-  /* educational door: the Vimeo film that opens the educational assets page, as a muted background loop */
-  var eduLoaded = false;
-  function eduVideo() {
-    if (eduLoaded || reduce || !doors.right) return;
-    eduLoaded = true;
-    var f = document.createElement("iframe");
-    f.src = "https://player.vimeo.com/video/1061083069?background=1&autoplay=1&loop=1&muted=1&autopause=0";
-    f.setAttribute("allow", "autoplay; fullscreen; picture-in-picture"); f.setAttribute("tabindex", "-1");
-    f.setAttribute("aria-hidden", "true"); f.setAttribute("title", "Educational assets background video"); f.setAttribute("loading", "lazy");
-    doors.right.querySelector(".door__veil").appendChild(f);
+  /* educational door: the workbook commercial (vertical, compressed for the web), loaded on first interest */
+  var eduV = null;
+  function eduVideo(play) {
+    if (reduce || !doors.right) return;
+    if (!eduV) {
+      if (!play) return;
+      eduV = document.createElement("video");
+      eduV.muted = true; eduV.loop = true; eduV.playsInline = true; eduV.preload = "auto";
+      eduV.setAttribute("playsinline", ""); eduV.setAttribute("aria-hidden", "true");
+      eduV.src = "assets/ME_Vid_Workbook_Door.mp4";
+      doors.right.querySelector(".door__veil").appendChild(eduV);
+    }
+    if (play) { var p = eduV.play(); if (p && p.catch) p.catch(function () {}); } else eduV.pause();
   }
   if (doors.right) {
-    ["mouseenter", "focus"].forEach(function (ev) { doors.right.addEventListener(ev, eduVideo); });
+    ["mouseenter", "focus"].forEach(function (ev) { doors.right.addEventListener(ev, function () { eduVideo(true); }); });
     if ("IntersectionObserver" in window && window.matchMedia("(max-width: 860px)").matches)
-      new IntersectionObserver(function (e) { if (e[0].isIntersecting) eduVideo(); }, { threshold: .3 }).observe(doors.right);
+      new IntersectionObserver(function (e) { eduVideo(e[0].isIntersecting); }, { threshold: .3 }).observe(doors.right);
   }
 
   var gazed = { left: false, right: false };
@@ -77,7 +80,7 @@
     eye.style.transform = "perspective(1400px) translate3d(" + (gx * 18) + "px," + (gy * 12) + "px,0) rotateY(" + (gx * 7) + "deg) rotateX(" + (-gy * 5) + "deg) scale(" + (1 + m * .015) + ")";
     var L = gx < -.42, Rr = gx > .42;
     if (L !== gazed.left && doors.left) { gazed.left = L; doors.left.classList.toggle("is-gazed", L); courtVideo(L); }
-    if (Rr !== gazed.right && doors.right) { gazed.right = Rr; doors.right.classList.toggle("is-gazed", Rr); if (Rr) eduVideo(); }
+    if (Rr !== gazed.right && doors.right) { gazed.right = Rr; doors.right.classList.toggle("is-gazed", Rr); eduVideo(Rr); }
   }
 
   /* ---------- caustics (WebGL) ---------- */

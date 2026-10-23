@@ -191,7 +191,7 @@ body.engine {
 .door__veil video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .door__veil iframe { position: absolute; left: 50%; top: 50%; height: 100%; width: max(100%, 177.78svh); transform: translate(-50%, -50%); border: 0; pointer-events: none; }
 .door--left .door__veil { --vx: 20%; background-image: url("assets/FES_ePort_PRO_Histor_Vid_3d.jpg"); }
-.door--right .door__veil { --vx: 80%; background-image: url("assets/ME_Social_Sesame_Mazes_.jpg"); }
+.door--right .door__veil { --vx: 80%; background-image: url("assets/ME_Vid_Workbook_Door.jpg"); }
 .door.is-gazed .door__title, .door:hover .door__title, .door:focus-visible .door__title { opacity: 1; transform: translateX(var(--shift, 0)); }
 .door--left { --shift: 6px; } .door--right { --shift: -6px; }
 .door.is-gazed .door__line, .door:hover .door__line, .door:focus-visible .door__line { opacity: 1; transform: none; }
