@@ -21,12 +21,15 @@
         var a = e.target.closest && e.target.closest('a[href]');
         if (!a) return;
         var href = a.getAttribute('href');
+        var sec = a.closest('section');
+        var section = sec ? (sec.id || (sec.className || '').split(' ').pop() || 'section') : 'none';
+        var linkText = (a.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 100);
         if (/\.(pdf|zip)(\?|#|$)/i.test(href)) {
           pintrk('track', 'lead', { lead_type: 'Free printable', event_id: 'dl-' + Date.now() });
-          if (window.gtag) gtag('event', 'free_printable_download', { file_name: href.split('/').pop(), page: 'educational_assets' });
+          if (window.gtag) gtag('event', 'free_printable_download', { file_name: href.split('/').pop(), section: section, link_text: linkText, click_label: section + '__' + href.split('/').pop(), page: 'educational_assets' });
         }
         if (/amazon\./i.test(href)) {
-          if (window.gtag) gtag('event', 'amazon_click', { link_location: a.getAttribute('data-loc') || 'unknown', page: 'educational_assets' });
+          if (window.gtag) gtag('event', 'amazon_click', { link_location: a.getAttribute('data-loc') || 'unknown', section: section, link_text: linkText, click_label: section + '__' + (a.getAttribute('data-loc') || 'amazon'), page: 'educational_assets' });
           pintrk('track', 'custom', { event_name: 'amazon_click', event_id: 'amz-' + Date.now() });
         }
       });
