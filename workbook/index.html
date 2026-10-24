@@ -307,9 +307,19 @@
       .hero--scene p.lead { color: #efe6f0; }
       .hero--scene .fine, .hero--scene .fine a { color: #efe6f0; }
       @media (max-width: 900px) {
-        /* phones: copy on plum, the scene sits whole underneath */
-        .hero--scene { min-height: 0; padding: 96px 0 calc(78vw + 28px); background: #1f0526 url("../assets/wk-hero-bg-sm.webp") center bottom / 100% auto no-repeat; }
-        .hero--scene::before { background: linear-gradient(180deg, #1f0526 0%, #1f0526 calc(100% - 100vw + 16px), rgba(31, 5, 38, .55) calc(100% - 82vw), rgba(31, 5, 38, 0) calc(100% - 66vw)); }
+        /* phones: the whole scene stays the backdrop; the copy sits in a glass card at the bottom */
+        .hero--scene { min-height: 0; align-items: start; padding: calc(100vh - 318px) 0 28px; padding-top: calc(100svh - 318px); background: #1f0526 url("../assets/wk-hero-bg-sm.webp") 62% 62% / auto 150% no-repeat; }
+        .hero--scene::before { background: linear-gradient(180deg, rgba(31, 5, 38, .55) 0%, rgba(31, 5, 38, 0) 22%, rgba(31, 5, 38, 0) 100%); }
+        .hero--scene .wrap > div { max-width: none; display: flex; flex-direction: column; padding: 20px 18px 18px; border-radius: 24px; border: 1px solid rgba(244, 238, 248, .16);
+          background: linear-gradient(160deg, rgba(48, 12, 58, .62), rgba(31, 5, 38, .74)); -webkit-backdrop-filter: blur(14px) saturate(1.3); backdrop-filter: blur(14px) saturate(1.3);
+          box-shadow: 0 24px 60px -24px rgba(0, 0, 0, .7), inset 0 1px 0 rgba(255, 255, 255, .12); }
+        .hero--scene .eyebrow { font-size: .68rem; letter-spacing: .1em; margin-bottom: 6px; }
+        .hero--scene h1 { font-size: clamp(1.9rem, 8vw, 2.4rem); margin: 0 0 10px; }
+        .hero--scene p.lead { font-size: .95rem; line-height: 1.45; margin: 0 0 12px; order: 3; }
+        .hero--scene .edition-label { order: 1; margin: 0 0 8px; font-size: .88rem; }
+        .hero--scene .btn-row { order: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0 !important; }
+        .hero--scene .btn-row .btn { padding: 12px 8px; font-size: .92rem; text-align: center; justify-content: center; white-space: nowrap; }
+        .hero--scene .fine { order: 4; margin: 10px 0 0; font-size: .82rem; }
       }
     </style>
   </head>
