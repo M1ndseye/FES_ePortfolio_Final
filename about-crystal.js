@@ -13,7 +13,7 @@
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var fb = root.querySelector(".crystal__fb");
   var dots = [].slice.call(root.querySelectorAll(".crystal__dot"));
-  var cur = 0, mixc = 0, mixn = 0, MIX = .72, busy = false, visible = true, auto = null;
+  var MIX = .72, cur = 0, mixc = MIX, mixn = MIX, busy = false, visible = true, auto = null;
 
   function mark(i) {
     dots.forEach(function (d, k) { d.setAttribute("aria-current", k === i ? "true" : "false"); });
@@ -197,20 +197,20 @@
 
   var frozen = (location.search.match(/crystalT=([\d.]+)/) || [])[1];
   function go(i, from, mx) {
-    mx = mx || 0;
+    mx = mx === undefined ? MIX : mx;
     if (!ready || busy || (i === cur && mx === mixc)) return;
     mixn = mx;
     nxt = i; org = from || [.5, .3];
      busy = true; T = frozen ? parseFloat(frozen) : 0; t0 = performance.now();
     mark(i); draw(performance.now()); kick(); scheduleAuto();
   }
-  function step(from) { if (mixc === 0) go(cur, from, MIX); else go((cur + 1) % SHOTS.length, from, 0); }
+  function step(from) { go((cur + 1) % SHOTS.length, from, MIX); }
   function scheduleAuto() {
     clearTimeout(auto);
     auto = setTimeout(function () {
       if (visible && !document.hidden) step([.5 + (Math.random() - .5) * .3, .22 + Math.random() * .2]);
       else scheduleAuto();
-    }, 5000);
+    }, 5500);
   }
   function uvOf(e) { var r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width, 1 - (e.clientY - r.top) / r.height]; }
 
@@ -220,7 +220,7 @@
   dots.forEach(function (d, k) {
     d.addEventListener("click", function () {
       var r = d.getBoundingClientRect(), c = cv.getBoundingClientRect();
-      go(k, [Math.min(1, Math.max(0, (r.left + r.width / 2 - c.left) / c.width)), 0.04]);
+      go(k, [Math.min(1, Math.max(0, (r.left + r.width / 2 - c.left) / c.width)), 0.04], MIX);
     });
   });
   window.addEventListener("resize", function () { if (ready) { size(); draw(); } });
