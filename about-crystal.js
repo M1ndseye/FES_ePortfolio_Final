@@ -217,16 +217,32 @@
       if (soundOn) sfx(.5);
     });
   }
+  /* iOS only lets audio start from a real touch/click, and mutes Web Audio on the ring/silent switch unless the page is in "playback" mode */
+  var SILENT = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=", keep = null;
+  function ensure() {
+    if (!AC) return false;
+    if (!ac) {
+      ac = new AC(); master = ac.createGain(); master.gain.value = .6;
+      var comp = ac.createDynamicsCompressor(); master.connect(comp); comp.connect(ac.destination);
+      noiseBuf = ac.createBuffer(1, ac.sampleRate * .25, ac.sampleRate);
+      var d = noiseBuf.getChannelData(0); for (var n = 0; n < d.length; n++) d[n] = Math.random() * 2 - 1;
+    }
+    try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}
+    if (!keep) {
+      try { keep = new Audio(SILENT); keep.loop = true; keep.setAttribute("playsinline", ""); keep.volume = .01; var pp = keep.play(); if (pp && pp.catch) pp.catch(function () {}); } catch (e) {}
+    }
+    if (ac.state !== "running") { var r = ac.resume(); if (r && r.catch) r.catch(function () {}); }
+    try { var b = ac.createBufferSource(); b.buffer = ac.createBuffer(1, 1, 22050); b.connect(ac.destination); b.start(0); } catch (e) {}
+    return true;
+  }
+  ["touchend", "pointerup", "click"].forEach(function (ev) { document.addEventListener(ev, function () { if (soundOn) ensure(); }, { passive: true }); });
   function sfx(x) {
-    if (!AC || !soundOn) return;
+    if (!AC || !soundOn || !ensure()) return;
+    if (ac.state === "running") play(x);
+    else { var r = ac.resume(); if (r && r.then) r.then(function () { play(x); }, function () {}); }
+  }
+  function play(x) {
     try {
-      if (!ac) {
-        ac = new AC(); master = ac.createGain(); master.gain.value = .55;
-        var comp = ac.createDynamicsCompressor(); master.connect(comp); comp.connect(ac.destination);
-        noiseBuf = ac.createBuffer(1, ac.sampleRate * .25, ac.sampleRate);
-        var d = noiseBuf.getChannelData(0); for (var n = 0; n < d.length; n++) d[n] = Math.random() * 2 - 1;
-      }
-      if (ac.state === "suspended") ac.resume();
       var t = ac.currentTime + .02, pan = Math.max(-1, Math.min(1, (x - .5) * 1.4));
       function out(g) {
         if (ac.createStereoPanner) { var p = ac.createStereoPanner(); p.pan.value = pan; g.connect(p); p.connect(master); } else g.connect(master);
