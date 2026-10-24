@@ -297,8 +297,8 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 @media (max-width: 860px) {
   .gaze-stage .door {
     width: auto; margin: 0 var(--pad) 14px; padding: 24px 56px 24px 24px; min-height: 124px; border: 0; border-radius: 22px; overflow: hidden;
-    justify-content: center; background: rgba(19, 27, 48, .38);
-    -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4);
+    justify-content: center; background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.02) 60%, rgba(19,27,48,.14));
+    -webkit-backdrop-filter: blur(20px) saturate(1.6); backdrop-filter: blur(20px) saturate(1.6);
     box-shadow: 0 14px 40px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .12);
     -webkit-tap-highlight-color: transparent; transition: transform .25s, background .25s;
   }
@@ -313,7 +313,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-size: 1.1rem; color: var(--ink); background: var(--oi);
   }
   .gaze-stage .door:active { transform: scale(.985); background: rgba(19, 27, 48, .6); }
-  .gaze-stage .door__veil { opacity: .36; filter: none; -webkit-mask-image: none; mask-image: none; z-index: -1; }
+  .gaze-stage .door__veil { display: none; }
   .gaze-stage .door__title { font-size: 1.75rem; }
   .gaze-stage .door__line { max-width: 28ch; }
 }

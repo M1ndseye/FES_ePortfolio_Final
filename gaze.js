@@ -36,7 +36,7 @@
   function lazyVideo(door, src) {
     var v = null;
     return function (play) {
-      if (reduce || !door) return;
+      if (reduce || !door || window.matchMedia("(max-width: 860px)").matches) return;
       if (!v) {
         if (!play) return;
         v = document.createElement("video");
