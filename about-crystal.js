@@ -13,7 +13,7 @@
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var fb = root.querySelector(".crystal__fb");
   var dots = [].slice.call(root.querySelectorAll(".crystal__dot"));
-  var cur = 0, busy = false, visible = true, auto = null;
+  var cur = 0, mixc = 0, mixn = 0, MIX = .72, busy = false, visible = true, auto = null;
 
   function mark(i) {
     dots.forEach(function (d, k) { d.setAttribute("aria-current", k === i ? "true" : "false"); });
@@ -48,7 +48,7 @@
     "precision highp float;",
     "varying vec2 vUv;",
     "uniform sampler2D u0, u1, u2, u3, u4;",
-    "uniform float uT, uAsp, uPtrOn, uCur, uNxt;",
+    "uniform float uT, uAsp, uPtrOn, uCur, uNxt, uMixC, uMixN;",
     "uniform vec2 uOrg, uPtr;",
     "vec2 h2(vec2 p){ p = vec2(dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3))); return fract(sin(p)*43758.5453); }",
     "float h1(vec2 p){ return fract(sin(dot(p,vec2(41.3,289.1)))*45758.5453); }",
@@ -59,10 +59,10 @@
     "  return c*inb(q);",
     "}",
     "// which portrait a facet shows when the whole is 'base': most facets show base, some show another Steve",
-    "float facetShot(vec2 cid, float base){",
+    "float facetShot(vec2 cid, float base, float mixAmt){",
     "  float r = h1(cid+4.3);",
     "  float alt = mod(base + 1. + floor(h1(cid+9.1)*4.), 5.);",
-    "  return r < .72 ? alt : base;",
+    "  return r < mixAmt ? alt : base;",
     "}",
     "vec2 vid(vec2 pp){",
     "  vec2 ip = floor(pp), fp = fract(pp); float dm = 9.; vec2 id = ip;",
@@ -105,7 +105,7 @@
     "  float dd = length((c-uOrg)*asp);",
     "  float local = clamp((uT*1.5 - dd*.8 - hs.x*.15)/.5, 0., 1.);",
     "  float s = sin(local*3.14159);",
-    "  float k = local < .5 ? facetShot(cid,uCur) : facetShot(cid,uNxt);",
+    "  float k = local < .5 ? facetShot(cid,uCur,uMixC) : facetShot(cid,uNxt,uMixN);",
     "  // refraction: each facet bends the view a little, more as the light (pointer) moves and as it tips",
     "  vec2 t = (uPtr-.5)*uPtrOn;",
     "  vec2 off = n*.008 + t*(hs.yx-.5)*.05 + n*.07*s;",
@@ -126,12 +126,13 @@
     "  float dep = .85 + .9*s;",
     "  float cR = cover(p, cid, L, dep*1.0, .62), cB = cover(p, cid, L, dep*1.0, .72);",
     "  vec3 cv = vec3(cR, .5*(cR+cB), cB);",
-    "  float amt = .4 + .7*s + .5*near;",
+    "  float amt = (.1 + .4*(local < .5 ? uMixC : uMixN)) + .7*s + .5*near;",
     "  float caus = pow(max(lit,0.),7.)*(.25+.5*s+.4*near);",
     "  vec3 rgb = col.rgb;",
     "  rgb = mix(rgb, rgb*.35, gap*.8*vis);",
-    "  rgb *= 1. + (cv-1.)*.28*amt;",
-    "  vec3 focus = max(cv-1.,0.)*vec3(.5,.6,.85);",
+    "  float cm = .5*(cR+cB);",
+    "  rgb *= 1. + (cm-1.)*.22*amt;",
+    "  vec3 focus = max(cm-1.,0.)*vec3(.5,.6,.85) + (cv-cm)*.1;",
     "  rgb += (focus*amt*.55 + tint*flank*glow*.5 + vec3(1.,.97,.9)*(caus*.4 + gap*glow*.7))*vis;",
     "  float a = clamp(col.a + (flank*glow*.25 + caus*.3)*vis, 0., 1.);",
     "  gl_FragColor = vec4(rgb*min(1.,a/max(col.a,.001)), a);",
@@ -147,7 +148,7 @@
   var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
   var loc = gl.getAttribLocation(pr, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-  var U = {}; ["u0", "u1", "u2", "u3", "u4", "uT", "uAsp", "uPtrOn", "uOrg", "uPtr", "uCur", "uNxt"].forEach(function (n) { U[n] = gl.getUniformLocation(pr, n); });
+  var U = {}; ["u0", "u1", "u2", "u3", "u4", "uT", "uAsp", "uPtrOn", "uOrg", "uPtr", "uCur", "uNxt", "uMixC", "uMixN"].forEach(function (n) { U[n] = gl.getUniformLocation(pr, n); });
   for (var u = 0; u < 5; u++) gl.uniform1i(U["u" + u], u);
   gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -178,7 +179,7 @@
   function draw() {
     if (!ready) return;
     gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.uniform1f(U.uT, T); gl.uniform1f(U.uAsp, ASP); gl.uniform1f(U.uCur, cur); gl.uniform1f(U.uNxt, busy ? nxt : cur);
+    gl.uniform1f(U.uT, T); gl.uniform1f(U.uAsp, ASP); gl.uniform1f(U.uCur, cur); gl.uniform1f(U.uMixC, mixc); gl.uniform1f(U.uNxt, busy ? nxt : cur); gl.uniform1f(U.uMixN, busy ? mixn : mixc);
     gl.uniform1f(U.uPtrOn, ptrOn); gl.uniform2f(U.uOrg, org[0], org[1]); gl.uniform2f(U.uPtr, ptr[0], ptr[1]);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
@@ -187,7 +188,7 @@
     ptrOn += (ptrTarget - ptrOn) * .12;
     if (busy && !frozen) {
       T = Math.min(1, (now - t0) / DUR);
-      if (T >= 1) { cur = nxt; busy = false; T = 0; mark(cur); }
+      if (T >= 1) { cur = nxt; mixc = mixn; busy = false; T = 0; mark(cur); }
     }
     draw(now);
     if (busy || Math.abs(ptrTarget - ptrOn) > .01) raf = requestAnimationFrame(loop);
@@ -195,22 +196,25 @@
   function kick() { if (!raf && ready) raf = requestAnimationFrame(loop); }
 
   var frozen = (location.search.match(/crystalT=([\d.]+)/) || [])[1];
-  function go(i, from) {
-    if (!ready || busy || i === cur) return;
+  function go(i, from, mx) {
+    mx = mx || 0;
+    if (!ready || busy || (i === cur && mx === mixc)) return;
+    mixn = mx;
     nxt = i; org = from || [.5, .3];
      busy = true; T = frozen ? parseFloat(frozen) : 0; t0 = performance.now();
     mark(i); draw(performance.now()); kick(); scheduleAuto();
   }
+  function step(from) { if (mixc === 0) go(cur, from, MIX); else go((cur + 1) % SHOTS.length, from, 0); }
   function scheduleAuto() {
     clearTimeout(auto);
     auto = setTimeout(function () {
-      if (visible && !document.hidden) go((cur + 1) % SHOTS.length, [.5 + (Math.random() - .5) * .3, .22 + Math.random() * .2]);
+      if (visible && !document.hidden) step([.5 + (Math.random() - .5) * .3, .22 + Math.random() * .2]);
       else scheduleAuto();
-    }, 6000);
+    }, 5000);
   }
   function uvOf(e) { var r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width, 1 - (e.clientY - r.top) / r.height]; }
 
-  cv.addEventListener("pointerdown", function (e) { go((cur + 1) % SHOTS.length, uvOf(e)); });
+  cv.addEventListener("pointerdown", function (e) { step(uvOf(e)); });
   cv.addEventListener("pointermove", function (e) { ptr = uvOf(e); ptrTarget = 1; kick(); });
   cv.addEventListener("pointerleave", function () { ptrTarget = 0; kick(); });
   dots.forEach(function (d, k) {
