@@ -293,6 +293,23 @@
       .hero .btn--alt { background: transparent; color: #f2f5f6; box-shadow: inset 0 0 0 2px #bfd2d1; }
       .hero .btn--alt:hover { background: rgba(191, 210, 209, 0.14); }
       .hero-media { box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35); }
+      /* hero scene: the 3D world as the backdrop */
+      .hero--scene { position: relative; isolation: isolate; display: grid; align-items: center; min-height: clamp(560px, 88vh, 860px); padding: 110px 0 72px;
+        background: #2a0a33 url("../assets/wk-hero-bg.webp") 62% 58% / cover no-repeat; }
+      .hero--scene::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+        background: linear-gradient(90deg, rgba(31, 5, 38, .92) 0%, rgba(31, 5, 38, .74) 38%, rgba(31, 5, 38, .18) 72%, rgba(31, 5, 38, 0) 100%),
+                    linear-gradient(180deg, rgba(31, 5, 38, .55) 0%, rgba(31, 5, 38, 0) 22%, rgba(31, 5, 38, 0) 70%, rgba(31, 5, 38, .6) 100%); }
+      .hero--scene .wrap { max-width: var(--wrap); }
+      .hero--scene .wrap > div { max-width: 600px; }
+      .hero--scene h1 { font-size: clamp(2.6rem, 6vw, 4.6rem); line-height: 1.02; text-shadow: 0 2px 30px rgba(31, 5, 38, .55); }
+      .hero--scene .eyebrow, .hero--scene p.lead, .hero--scene .fine { text-shadow: 0 1px 18px rgba(31, 5, 38, .7); }
+      .hero--scene .eyebrow { color: #d9c3dd; }
+      .hero--scene p.lead { color: #efe6f0; }
+      .hero--scene .fine, .hero--scene .fine a { color: #efe6f0; }
+      @media (max-width: 900px) {
+        .hero--scene { min-height: 0; padding: 96px 0 56px; background-image: url("../assets/wk-hero-bg-sm.webp"); background-position: 62% 100%; padding-bottom: 150px; }
+        .hero--scene::before { background: linear-gradient(180deg, rgba(31, 5, 38, .88) 0%, rgba(31, 5, 38, .74) 50%, rgba(31, 5, 38, .1) 100%); }
+      }
     </style>
   </head>
   <body>
@@ -304,17 +321,10 @@
     </header>
 
     <main>
-      <section class="hero" style="padding-top: 100px">
+      <section class="hero hero--scene">
         <div class="wrap">
           <div>
             <span class="eyebrow">Illustrated Alphabet Tracing Workbook · Ages 3–6</span>
-            <div class="hero-media">
-              <img
-                src="../assets/ME_Social_Sesame_Duo_Intro_to_French_.jpg"
-                alt="Two editions of the M1ndseye Illustrated Alphabet Tracing Workbook for ages 3–6, one with a bonus Spanish chapter and one with a bonus French chapter"
-                width="1920" height="1080"
-              />
-            </div>
             <h1>Unlock Your Child's Potential.</h1>
             <p class="lead">
               Get ahead of the curve with tracing, mazes, word searches and early
