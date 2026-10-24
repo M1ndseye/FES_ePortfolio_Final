@@ -196,7 +196,7 @@
   function kick() { if (!raf && ready) raf = requestAnimationFrame(loop); }
 
 
-  /* ---------- sound: a glassy crack, a scatter of crystal chimes and a low hum, only when someone pushes it ---------- */
+  /* ---------- sound: a crack, shards clicking apart and back together, and a low hum, only when someone pushes it ---------- */
   var AC = window.AudioContext || window.webkitAudioContext, ac = null, master = null, noiseBuf = null, soundOn = true;
   try { soundOn = localStorage.getItem("crystalSound") !== "off"; } catch (e) {}
   var sndBtn = document.createElement("button");
@@ -231,27 +231,39 @@
       function out(g) {
         if (ac.createStereoPanner) { var p = ac.createStereoPanner(); p.pan.value = pan; g.connect(p); p.connect(master); } else g.connect(master);
       }
-      /* the crack */
-      var ns = ac.createBufferSource(); ns.buffer = noiseBuf;
-      var hp = ac.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 2600;
-      var ng = ac.createGain(); ng.gain.setValueAtTime(.38, t); ng.gain.exponentialRampToValueAtTime(.001, t + .16);
-      ns.connect(hp); hp.connect(ng); out(ng); ns.start(t); ns.stop(t + .2);
-      /* the chimes */
-      var NOTES = [1318.5, 1568, 1760, 2093, 2349.3, 2637, 3136, 3520];
-      var count = 7 + Math.floor(Math.random() * 3);
-      for (var k = 0; k < count; k++) {
-        var f = NOTES[Math.floor(Math.random() * NOTES.length)], st = t + .03 + k * (.11 + Math.random() * .08), vol = .075 * (1 - k / (count * 1.4)), dur = 1 + Math.random() * .9;
-        [[1, 1], [2.76, .38], [5.4, .14]].forEach(function (p) {
-          var o = ac.createOscillator(), g = ac.createGain(); o.type = "sine"; o.frequency.value = f * p[0];
-          g.gain.setValueAtTime(0.0001, st); g.gain.exponentialRampToValueAtTime(vol * p[1], st + .004); g.gain.exponentialRampToValueAtTime(.0001, st + dur / p[0] * 1.6);
-          o.connect(g); out(g); o.start(st); o.stop(st + dur * 1.7);
-        });
+      /* a short glass click: filtered noise plus a tiny resonant tick */
+      function click(at, vol, freq, q, tickF) {
+        var src = ac.createBufferSource(); src.buffer = noiseBuf;
+        var bp = ac.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = freq; bp.Q.value = q;
+        var g = ac.createGain(); g.gain.setValueAtTime(vol, at); g.gain.exponentialRampToValueAtTime(.0001, at + .035 + Math.random() * .03);
+        src.connect(bp); bp.connect(g); out(g); src.start(at, Math.random() * .15); src.stop(at + .09);
+        if (tickF) {
+          var o = ac.createOscillator(), tg = ac.createGain(); o.type = "sine"; o.frequency.value = tickF;
+          tg.gain.setValueAtTime(vol * .35, at); tg.gain.exponentialRampToValueAtTime(.0001, at + .05);
+          o.connect(tg); out(tg); o.start(at); o.stop(at + .07);
+        }
       }
+      /* the fracture: one hard crack, then shards scattering */
+      click(t, .5, 3800, .7, 0);
+      click(t + .012, .3, 1700, 1.2, 640);
+      for (var k = 0; k < 14; k++) {
+        var at = t + .05 + Math.pow(Math.random(), 1.4) * .6;
+        click(at, .09 + Math.random() * .16, 2200 + Math.random() * 4800, 2 + Math.random() * 5, Math.random() < .5 ? 1800 + Math.random() * 2600 : 0);
+      }
+      /* the reassembly: clicks that speed up as the shards lock into place, then a soft settle */
+      var rt = t + .75, gap = .17;
+      for (var j = 0; j < 16; j++) {
+        click(rt, .12 + j * .008, 2600 + Math.random() * 3200, 3 + Math.random() * 4, Math.random() < .6 ? 2200 + Math.random() * 2200 : 0);
+        rt += gap; gap = Math.max(.028, gap * .8);
+      }
+      click(rt + .02, .42, 1500, .9, 520);
+      var th = ac.createOscillator(), thg = ac.createGain(); th.type = "sine"; th.frequency.setValueAtTime(150, rt); th.frequency.exponentialRampToValueAtTime(70, rt + .14);
+      thg.gain.setValueAtTime(.22, rt); thg.gain.exponentialRampToValueAtTime(.0001, rt + .22); th.connect(thg); out(thg); th.start(rt); th.stop(rt + .25);
       /* the hum */
       var lp = ac.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 520;
-      var hg = ac.createGain(); hg.gain.setValueAtTime(.0001, t); hg.gain.exponentialRampToValueAtTime(.085, t + .45); hg.gain.exponentialRampToValueAtTime(.0001, t + 2.6);
+      var hg = ac.createGain(); hg.gain.setValueAtTime(.0001, t); hg.gain.exponentialRampToValueAtTime(.06, t + .5); hg.gain.exponentialRampToValueAtTime(.0001, t + 2.4);
       [[98, "sine", 0], [147.2, "triangle", 4], [196.5, "sine", -5]].forEach(function (h) {
-        var o = ac.createOscillator(); o.type = h[1]; o.frequency.value = h[0]; o.detune.value = h[2]; o.connect(lp); o.start(t); o.stop(t + 2.7);
+        var o = ac.createOscillator(); o.type = h[1]; o.frequency.value = h[0]; o.detune.value = h[2]; o.connect(lp); o.start(t); o.stop(t + 2.5);
       });
       lp.connect(hg); out(hg);
     } catch (e) {}
