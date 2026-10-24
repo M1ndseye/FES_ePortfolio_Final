@@ -195,16 +195,79 @@
   }
   function kick() { if (!raf && ready) raf = requestAnimationFrame(loop); }
 
+
+  /* ---------- sound: a glassy crack, a scatter of crystal chimes and a low hum, only when someone pushes it ---------- */
+  var AC = window.AudioContext || window.webkitAudioContext, ac = null, master = null, noiseBuf = null, soundOn = true;
+  try { soundOn = localStorage.getItem("crystalSound") !== "off"; } catch (e) {}
+  var sndBtn = document.createElement("button");
+  sndBtn.type = "button"; sndBtn.className = "crystal__snd";
+  function paintSnd() {
+    sndBtn.setAttribute("aria-pressed", soundOn ? "true" : "false");
+    sndBtn.setAttribute("aria-label", soundOn ? "Sound on. Turn crystal sound off" : "Sound off. Turn crystal sound on");
+    sndBtn.innerHTML = soundOn
+      ? '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>'
+      : '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>';
+  }
+  paintSnd();
+  if (AC) {
+    root.appendChild(sndBtn);
+    sndBtn.addEventListener("click", function (e) {
+      e.stopPropagation(); soundOn = !soundOn; paintSnd();
+      try { localStorage.setItem("crystalSound", soundOn ? "on" : "off"); } catch (er) {}
+      if (soundOn) sfx(.5);
+    });
+  }
+  function sfx(x) {
+    if (!AC || !soundOn) return;
+    try {
+      if (!ac) {
+        ac = new AC(); master = ac.createGain(); master.gain.value = .55;
+        var comp = ac.createDynamicsCompressor(); master.connect(comp); comp.connect(ac.destination);
+        noiseBuf = ac.createBuffer(1, ac.sampleRate * .25, ac.sampleRate);
+        var d = noiseBuf.getChannelData(0); for (var n = 0; n < d.length; n++) d[n] = Math.random() * 2 - 1;
+      }
+      if (ac.state === "suspended") ac.resume();
+      var t = ac.currentTime + .02, pan = Math.max(-1, Math.min(1, (x - .5) * 1.4));
+      function out(g) {
+        if (ac.createStereoPanner) { var p = ac.createStereoPanner(); p.pan.value = pan; g.connect(p); p.connect(master); } else g.connect(master);
+      }
+      /* the crack */
+      var ns = ac.createBufferSource(); ns.buffer = noiseBuf;
+      var hp = ac.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 2600;
+      var ng = ac.createGain(); ng.gain.setValueAtTime(.38, t); ng.gain.exponentialRampToValueAtTime(.001, t + .16);
+      ns.connect(hp); hp.connect(ng); out(ng); ns.start(t); ns.stop(t + .2);
+      /* the chimes */
+      var NOTES = [1318.5, 1568, 1760, 2093, 2349.3, 2637, 3136, 3520];
+      var count = 7 + Math.floor(Math.random() * 3);
+      for (var k = 0; k < count; k++) {
+        var f = NOTES[Math.floor(Math.random() * NOTES.length)], st = t + .03 + k * (.11 + Math.random() * .08), vol = .075 * (1 - k / (count * 1.4)), dur = 1 + Math.random() * .9;
+        [[1, 1], [2.76, .38], [5.4, .14]].forEach(function (p) {
+          var o = ac.createOscillator(), g = ac.createGain(); o.type = "sine"; o.frequency.value = f * p[0];
+          g.gain.setValueAtTime(0.0001, st); g.gain.exponentialRampToValueAtTime(vol * p[1], st + .004); g.gain.exponentialRampToValueAtTime(.0001, st + dur / p[0] * 1.6);
+          o.connect(g); out(g); o.start(st); o.stop(st + dur * 1.7);
+        });
+      }
+      /* the hum */
+      var lp = ac.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 520;
+      var hg = ac.createGain(); hg.gain.setValueAtTime(.0001, t); hg.gain.exponentialRampToValueAtTime(.085, t + .45); hg.gain.exponentialRampToValueAtTime(.0001, t + 2.6);
+      [[98, "sine", 0], [147.2, "triangle", 4], [196.5, "sine", -5]].forEach(function (h) {
+        var o = ac.createOscillator(); o.type = h[1]; o.frequency.value = h[0]; o.detune.value = h[2]; o.connect(lp); o.start(t); o.stop(t + 2.7);
+      });
+      lp.connect(hg); out(hg);
+    } catch (e) {}
+  }
+
   var frozen = (location.search.match(/crystalT=([\d.]+)/) || [])[1];
-  function go(i, from, mx) {
+  function go(i, from, mx, audible) {
     mx = mx === undefined ? MIX : mx;
     if (!ready || busy || (i === cur && mx === mixc)) return;
+    if (audible) sfx((from || [.5])[0]);
     mixn = mx;
     nxt = i; org = from || [.5, .3];
      busy = true; T = frozen ? parseFloat(frozen) : 0; t0 = performance.now();
     mark(i); draw(performance.now()); kick(); scheduleAuto();
   }
-  function step(from) { go((cur + 1) % SHOTS.length, from, MIX); }
+  function step(from, audible) { go((cur + 1) % SHOTS.length, from, MIX, audible); }
   function scheduleAuto() {
     clearTimeout(auto);
     auto = setTimeout(function () {
@@ -214,13 +277,13 @@
   }
   function uvOf(e) { var r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width, 1 - (e.clientY - r.top) / r.height]; }
 
-  cv.addEventListener("pointerdown", function (e) { step(uvOf(e)); });
+  cv.addEventListener("pointerdown", function (e) { step(uvOf(e), true); });
   cv.addEventListener("pointermove", function (e) { ptr = uvOf(e); ptrTarget = 1; kick(); });
   cv.addEventListener("pointerleave", function () { ptrTarget = 0; kick(); });
   dots.forEach(function (d, k) {
     d.addEventListener("click", function () {
       var r = d.getBoundingClientRect(), c = cv.getBoundingClientRect();
-      go(k, [Math.min(1, Math.max(0, (r.left + r.width / 2 - c.left) / c.width)), 0.04], MIX);
+      go(k, [Math.min(1, Math.max(0, (r.left + r.width / 2 - c.left) / c.width)), 0.04], MIX, true);
     });
   });
   window.addEventListener("resize", function () { if (ready) { size(); draw(); } });
