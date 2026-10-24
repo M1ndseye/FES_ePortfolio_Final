@@ -307,8 +307,9 @@
       .hero--scene p.lead { color: #efe6f0; }
       .hero--scene .fine, .hero--scene .fine a { color: #efe6f0; }
       @media (max-width: 900px) {
-        .hero--scene { min-height: 0; padding: 96px 0 56px; background-image: url("../assets/wk-hero-bg-sm.webp"); background-position: 62% 100%; padding-bottom: 150px; }
-        .hero--scene::before { background: linear-gradient(180deg, rgba(31, 5, 38, .88) 0%, rgba(31, 5, 38, .74) 50%, rgba(31, 5, 38, .1) 100%); }
+        /* phones: copy on plum, the scene sits whole underneath */
+        .hero--scene { min-height: 0; padding: 96px 0 calc(78vw + 28px); background: #1f0526 url("../assets/wk-hero-bg-sm.webp") center bottom / 100% auto no-repeat; }
+        .hero--scene::before { background: linear-gradient(180deg, #1f0526 0%, #1f0526 calc(100% - 100vw + 16px), rgba(31, 5, 38, .55) calc(100% - 82vw), rgba(31, 5, 38, 0) calc(100% - 66vw)); }
       }
     </style>
   </head>
