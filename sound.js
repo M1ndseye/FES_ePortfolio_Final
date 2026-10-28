@@ -1,4 +1,4 @@
-/* M1ndseye home: optional sound. Crystal Cavern bed + crystal keys + pointer-driven crystal swell (short licensed samples in assets/audio).
+/* M1ndseye home: optional sound. Crystal Cavern bed + pointer-driven crystal swell (short licensed samples in assets/audio).
    Off until the visitor taps the Sound button (browsers block autoplay anyway).
    Preference remembered in localStorage. */
 (function () {
@@ -50,7 +50,7 @@
         .then(function (ab) { return new Promise(function (ok, no) { ctx.decodeAudioData(ab, ok, no); }); })
         .then(function (b) { buf[n] = b; });
     }
-    loading = Promise.all([get("keys"), get("swell")]).then(start).catch(function () {});
+    loading = Promise.all([get("swell")]).then(start).catch(function () {});
     return loading;
   }
 
@@ -86,15 +86,6 @@
 
   function start() {
     if (started) return; started = true;
-    /* Takama: crystal keys phrase, locked to 122 BPM (two bars = 3.93 s), played in about 1 of every 4 slots */
-    (function keys() {
-      if (!ctx) return;
-      if (on && ctx.state === "running" && Math.random() < .26) {
-        var s = shot("keys", .5, 1, master);
-        var g = ctx.createGain(); g.gain.value = .35; s.connect(g); g.connect(send);
-      }
-      setTimeout(keys, 3934);
-    })();
   }
   var started = false;
 
