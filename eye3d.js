@@ -94,46 +94,63 @@
     "  return 1. - exp(-col*1.1);",
     "}",
     "void main(){ vec2 uv = gl_FragCoord.xy / uRes; vec2 p = (uv - .5) * vec2(uRes.x/uRes.y, 1.);",
-    "  vec3 col = plasma(p);",
+    "  vec3 col = plasma(p); float lum = dot(col, vec3(.33,.34,.33)); col = mix(col, vec3(lum)*vec3(.86,.88,1.), .5) * 1.35 + vec3(.15,.16,.24) * exp(-dot(p,p) * 3.2);",
     "  col += (fract(sin(dot(gl_FragCoord.xy, vec2(12.9898,78.233)))*43758.5453) - .5) / 255.;",
     "  gl_FragColor = vec4(col, 1.); }"
   ].join("\n");
   var QUAD_VS = "attribute vec2 q; void main(){ gl_Position = vec4(q, 0., 1.); }";
-  var BLIT_FS = "precision highp float; uniform sampler2D bg; uniform vec2 uRes; void main(){ gl_FragColor = vec4(texture2D(bg, gl_FragCoord.xy / uRes).rgb * .85, 1.); }";
+  var BLIT_FS = "precision highp float; uniform sampler2D bg; uniform vec2 uRes; void main(){ gl_FragColor = vec4(texture2D(bg, gl_FragCoord.xy / uRes).rgb, 1.); }";
 
   var MESH_VS = "attribute vec3 p;attribute vec3 n;uniform mat4 M,V,P;varying vec3 vn;" +
     "void main(){vec4 w=M*vec4(p,1.);vn=mat3(V)*(mat3(M)*n);gl_Position=P*V*w;}";
   var MESH_FS = [
-    "precision highp float; varying vec3 vn; uniform sampler2D bg; uniform vec2 uRes; uniform vec2 uGaze; uniform float uPhase; uniform float uGain;",
-    "// bars of light that exist only to be bent by the glass",
-    "vec3 bars(vec2 s, vec2 m){",
+    "precision highp float; varying vec3 vn; uniform sampler2D bg; uniform vec2 uRes; uniform vec2 uGaze; uniform float uPhase; uniform float uGain; uniform float uThick;",
+    "// broad strips of light behind the glass: they exist to be bent and split by it",
+    "vec3 strips(vec2 p, vec2 m){",
     "  vec3 c = vec3(0.);",
-    "  vec2 a = vec2(cos(1.15), sin(1.15)), b = vec2(cos(-1.0), sin(-1.0)), e = vec2(cos(.3), sin(.3));",
-    "  c += vec3(.45,.65,1.) * smoothstep(.05, 0., abs(dot(s - vec2(-.22,0.) - m, vec2(-a.y, a.x))));",
-    "  c += vec3(1.,.66,.30) * smoothstep(.03, 0., abs(dot(s - vec2(.20,0.) + m*1.4, vec2(-b.y, b.x))));",
-    "  c += vec3(1.) * .8 * smoothstep(.015, 0., abs(dot(s - vec2(-.05,0.) - m*.7, vec2(-e.y, e.x))));",
+    "  float a1 = 1.15, a2 = -1.0, a3 = .3, a4 = 1.9, a5 = -.35;",
+    "  c += vec3(.55,.75,1.)  * smoothstep(.075, 0., abs(dot(p - vec2(-.30,0.) - m*.9,  vec2(-sin(a1), cos(a1)))));",
+    "  c += vec3(1.,.62,.26)  * smoothstep(.060, 0., abs(dot(p - vec2(.26,0.)  + m*1.4, vec2(-sin(a2), cos(a2)))));",
+    "  c += vec3(1.)          * smoothstep(.030, 0., abs(dot(p - vec2(-.04,0.) - m*.6,  vec2(-sin(a3), cos(a3))))) * 1.2;",
+    "  c += vec3(.35,.55,1.)  * smoothstep(.050, 0., abs(dot(p - vec2(.05,.10) + m*1.1, vec2(-sin(a4), cos(a4)))));",
+    "  c += vec3(1.,.8,.5)    * smoothstep(.035, 0., abs(dot(p - vec2(-.15,-.1) - m*1.7, vec2(-sin(a5), cos(a5))))) * .9;",
     "  return c;",
     "}",
     "void main(){",
     "  vec3 N = normalize(vn); if (!gl_FrontFacing) N = -N;",
-    "  vec2 uv = gl_FragCoord.xy / uRes; vec2 p = (uv - .5) * vec2(uRes.x/uRes.y, 1.);",
-    "  float edge = smoothstep(.0, .9, 1. - abs(N.z));",
-    "  vec2 off = -N.xy * (.030 + .05*edge);",
-    "  vec3 r;",
-    "  r.r = texture2D(bg, clamp(uv + off*.8, 0., 1.)).r;",
-    "  r.g = texture2D(bg, clamp(uv + off, 0., 1.)).g;",
-    "  r.b = texture2D(bg, clamp(uv + off*1.45, 0., 1.)).b;",
-    "  vec2 g = vec2(uGaze.x, -uGaze.y); vec2 s = p / .9;",
+    "  vec2 uv = gl_FragCoord.xy / uRes; float asp = uRes.x / uRes.y; vec2 p = (uv - .5) * vec2(asp, 1.);",
+    "  float edge = smoothstep(.0, .8, 1. - abs(N.z));",
+    "  float bend = (.035 + .14*edge) * uThick;",
+    "  vec2 g = vec2(uGaze.x, -uGaze.y);",
+    "  vec3 acc = vec3(0.); vec3 wsum = vec3(.0001);",
+    "  for (int k = 0; k < 8; k++) {",
+    "    float t = float(k) / 7.;",
+    "    vec2 off = -N.xy * bend * (.55 + 1.75*t);",
+    "    vec2 uvk = clamp(uv + off, 0., 1.); vec2 pk = (uvk - .5) * vec2(asp, 1.);",
+    "    vec3 w = .5 + .5*cos(6.28318*(t*.78 - vec3(0., .33, .67) + .02));",
+    "    w = w*w;",
+    "    vec3 smp = texture2D(bg, uvk).rgb*.8 + strips(pk, g*.07)*1.5;",
+    "    acc += smp * w; wsum += w;",
+    "  }",
+    "  vec3 r = acc / wsum;",
+    "  vec2 s = p / .9;",
     "  float hu = dot(s, normalize(g + vec2(1e-3))) * 2.6 + uPhase*.05;",
     "  vec3 rb = .5 + .5*cos(6.28318*(hu + vec3(0., .33, .67)));",
     "  float lenG = min(1., length(g));",
-    "  vec3 col = r * (.05 + .85*edge);",
-    "  col += bars(s, g*.05) * (.04 + .45*edge) * .5;",
-    "  col += rb * edge * (.12 + .38*lenG);",
-    "  vec3 L = normalize(vec3(uGaze.x*.9, -uGaze.y*.9, .8));",
-    "  float spec = pow(max(dot(N, normalize(L + vec3(0.,0.,1.))), 0.), 70.) * (.25 + edge);",
-    "  col += vec3(1.) * spec * .7;",
-    "  col *= uGain; col = col / (1. + col*.45); gl_FragColor = vec4(col, 1.);",
+    "  float e2 = edge*edge;",
+    "  vec2 pf = p + g*.10*uThick + N.xy*.05;",
+    "  vec3 face = (strips(pf, g*.05) * .55 + texture2D(bg, clamp(uv + g*.02*uThick, 0., 1.)).rgb * .55) * (1. - e2);",
+    "  vec3 col = r * (.03 + 1.35*e2) + face * .34;",
+    "  col += rb * e2 * (.14 + .42*lenG);",
+    "  vec3 L1 = normalize(vec3(uGaze.x*1.1 - .35, -uGaze.y*1.1 + .45, .7));",
+    "  vec3 L2 = normalize(vec3(-uGaze.x*.9 + .5, uGaze.y*.7 - .3, .8));",
+    "  float sp1 = pow(max(dot(N, normalize(L1 + vec3(0.,0.,1.))), 0.), 160.);",
+    "  float sp2 = pow(max(dot(N, normalize(L2 + vec3(0.,0.,1.))), 0.), 90.);",
+    "  col += vec3(1.) * sp1 * (.35 + 1.1*edge) + vec3(.65,.8,1.) * sp2 * (.2 + .8*edge);",
+    "  float glint = smoothstep(.72, .98, edge) * (.5 + .5*sin(dot(p, vec2(9.,5.)) + g.x*6. - g.y*4.));",
+    "  col += vec3(1.,.95,.9) * glint * .35;",
+    "  col *= uGain; col = col / (1. + col*.4); col = pow(col, vec3(.95));",
+    "  gl_FragColor = vec4(col, 1.);",
     "}"
   ].join("\n");
 
@@ -141,7 +158,7 @@
   function U(pr, names) { var o = {}; names.forEach(function (k) { o[k] = gl.getUniformLocation(pr, k); }); return o; }
   var uPl = U(plasmaProg, ["uRes","uPhase","uPtr","uPull","uEnergy","uTint","uR"]);
   var uBl = U(blitProg, ["bg","uRes"]);
-  var uMe = U(meshProg, ["M","V","P","bg","uRes","uGaze","uPhase","uGain"]);
+  var uMe = U(meshProg, ["M","V","P","bg","uRes","uGaze","uPhase","uGain","uThick"]);
   var aPl = gl.getAttribLocation(plasmaProg, "q"), aBl = gl.getAttribLocation(blitProg, "q");
   var aP = gl.getAttribLocation(meshProg, "p"), aN = gl.getAttribLocation(meshProg, "n");
   var quad = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, quad); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
@@ -276,7 +293,7 @@
       if (spin[p.name] !== undefined) local = mul(local, rotZ(spin[p.name]));
       else if (p.irisSpeed) local = mul(local, rotY((still ? 0 : t) * p.irisSpeed * 6.2832));
       gl.uniformMatrix4fv(uMe.M, false, new Float32Array(local));
-      gl.uniform1f(uMe.uGain, p.pane ? .8 : 1);
+      gl.uniform1f(uMe.uGain, p.pane ? .9 : 1); gl.uniform1f(uMe.uThick, p.pane ? 3.0 : 1.15);
       gl.bindBuffer(gl.ARRAY_BUFFER, p.vb); gl.enableVertexAttribArray(aP); gl.vertexAttribPointer(aP, 3, gl.FLOAT, false, 0, 0);
       gl.bindBuffer(gl.ARRAY_BUFFER, p.nb); gl.enableVertexAttribArray(aN); gl.vertexAttribPointer(aN, 3, gl.FLOAT, false, 0, 0);
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, p.ib); gl.drawElements(gl.TRIANGLES, p.count, p.type, 0);
