@@ -263,7 +263,7 @@
   window.addEventListener("pointermove", ptr, { passive: true });
   window.addEventListener("pointerdown", ptr, { passive: true });
 
-  var CENTER = [0, 0, .9], lookX = 0, lookY = 0;
+  var CENTER = [0, 0, .9], lookA = 2.28, PUPIL_REST = 2.28;   /* PUPIL_REST: where the pupil's circle sits around the centre in the model (about 131 degrees) */
   var t0 = performance.now(), running = true;
   function drawQuad(prog, attr) { gl.bindBuffer(gl.ARRAY_BUFFER, quad); gl.enableVertexAttribArray(attr); gl.vertexAttribPointer(attr, 2, gl.FLOAT, false, 0, 0); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); }
   function draw(now, still) {
@@ -296,13 +296,20 @@
     gl.uniform1i(uMe.bg, 0); gl.uniform1f(uMe.uHome, HOME ? 1 : 0); gl.uniform2f(uMe.uRes, W, H); gl.uniform2f(uMe.uGaze, gx, gy); gl.uniform1f(uMe.uPhase, ph);
     gl.enable(gl.DEPTH_TEST); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE); gl.disable(gl.CULL_FACE);
     var spin = train ? train(still ? 0 : t) : {};
-    lookX += (gx - lookX) * .2; lookY += (gy - lookY) * .2;
+    if (Math.hypot(gx, gy) > .06) {
+      var want = Math.atan2(-gy, gx), dA = want - lookA;
+      dA = Math.atan2(Math.sin(dA), Math.cos(dA));   /* shortest way round */
+      lookA += dA * .14;
+    }
     function drawPart(p) {
       var local = trs(p.t, p.q, p.s);
       if (p.name === "pupil") {
-        /* the pupil pivots about its origin (the centre of the eye) and looks toward the pointer */
-        var Rg = mul(rotY(lookX * .9), rotX(lookY * .7));
-        local = mul(trs(p.t, [0, 0, 0, 1], [1, 1, 1]), mul(Rg, trs([0, 0, 0], p.q, p.s)));
+        /* the pupil turns about the eye's centre axis (its origin) and stays parallel to the iris gear:
+           the offset circle orbits around the centre toward the pointer */
+        local = mul(trs(p.t, [0, 0, 0, 1], [1, 1, 1]), mul(rotZ(lookA - PUPIL_REST), trs([0, 0, 0], p.q, p.s)));
+      }
+      if (p.name === "iris") {
+        local = mul([1,0,0,0, 0,1,0,0, 0,0,1,0, gx * .06, -gy * .045, 0, 1], local);
       }
       if (spin[p.name] !== undefined) local = mul(local, rotZ(spin[p.name]));
       else if (p.irisSpeed) local = mul(local, rotY((still ? 0 : t) * p.irisSpeed * 6.2832));
@@ -342,5 +349,5 @@
   document.addEventListener("visibilitychange", function () { running = !document.hidden; if (running) requestAnimationFrame(loop); });
   fetch(cv.getAttribute("data-eye3d")).then(function (r) { return r.arrayBuffer(); }).then(function (b) { build(b); if (HOME) { window.__eye3dActive = true; } else requestAnimationFrame(loop); })
     .catch(function (e) { console.log("eye3d failed", e); cv.dispatchEvent(new Event("eye3d-fail")); });
-  window.__eye3d = { draw: function (tm) { draw(t0 + tm * 1000, false); }, gears: function () { return train; } };
+  window.__eye3d = { look: function () { return [lookA, gx, gy]; }, draw: function (tm) { draw(t0 + tm * 1000, false); }, gears: function () { return train; } };
 })();
