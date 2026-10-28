@@ -7,7 +7,7 @@
   if (!cv) return;
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var HOME = cv.hasAttribute("data-home");   /* home page: transparent canvas drawn on top of the stage plasma, driven by gaze.js */
-  var FIT = parseFloat(cv.getAttribute("data-dist")) || 8.2;
+  var FIT = parseFloat(cv.getAttribute("data-dist")) || 10.6;
   var gl = cv.getContext("webgl", { antialias: true, alpha: HOME, premultipliedAlpha: true, stencil: true });
   if (!gl) { cv.dispatchEvent(new Event("eye3d-fail")); return; }
 
@@ -106,7 +106,7 @@
   var MESH_VS = "attribute vec3 p;attribute vec3 n;uniform mat4 M,V,P;varying vec3 vn;" +
     "void main(){vec4 w=M*vec4(p,1.);vn=mat3(V)*(mat3(M)*n);gl_Position=P*V*w;}";
   var MESH_FS = [
-    "precision highp float; varying vec3 vn; uniform sampler2D bg; uniform vec2 uRes; uniform vec2 uGaze; uniform float uPhase; uniform float uGain; uniform float uThick; uniform float uHome;",
+    "precision highp float; varying vec3 vn; uniform sampler2D bg; uniform vec2 uRes; uniform vec2 uGaze; uniform float uPhase; uniform float uGain; uniform float uThick; uniform float uHome; uniform vec3 uMetal; uniform float uIsMetal;",
     "// broad strips of light behind the glass: they exist to be bent and split by it",
     "vec3 strips(vec2 p, vec2 m){",
     "  vec3 c = vec3(0.);",
@@ -121,6 +121,15 @@
     "void main(){",
     "  vec3 N = normalize(vn); if (!gl_FrontFacing) N = -N;",
     "  vec2 uv = gl_FragCoord.xy / uRes; float asp = uRes.x / uRes.y; vec2 p = (uv - .5) * vec2(asp, 1.);",
+    "  if (uIsMetal > .5) {",
+    "    vec2 gm = vec2(uGaze.x, -uGaze.y); vec3 R = reflect(vec3(0., 0., -1.), N);",
+    "    vec3 env = texture2D(bg, clamp(uv + R.xy*.28, 0., 1.)).rgb * 1.1 + strips((uv + R.xy*.28 - .5) * vec2(asp, 1.), gm*.07) * .9;",
+    "    vec3 Lm = normalize(vec3(uGaze.x*1.1 - .3, -uGaze.y*1.1 + .5, .8));",
+    "    float dm = max(dot(N, Lm), 0.), sm = pow(max(dot(N, normalize(Lm + vec3(0.,0.,1.))), 0.), 38.);",
+    "    vec3 mc = uMetal * (.10 + .55*dm) + uMetal * env * .55 + vec3(1.) * sm * .8 + vec3(.5,.6,.85) * pow(1. - abs(N.z), 3.) * .35;",
+    "    mc = mc / (1. + mc*.4);",
+    "    gl_FragColor = vec4(mc, 1.); return;",
+    "  }",
     "  float edge = smoothstep(.0, .8, 1. - abs(N.z));",
     "  float bend = (.035 + .14*edge) * uThick;",
     "  vec2 g = vec2(uGaze.x, -uGaze.y);",
@@ -160,7 +169,7 @@
   function U(pr, names) { var o = {}; names.forEach(function (k) { o[k] = gl.getUniformLocation(pr, k); }); return o; }
   var uPl = U(plasmaProg, ["uRes","uPhase","uPtr","uPull","uEnergy","uTint","uR","uScale","uHomeP"]);
   var uBl = U(blitProg, ["bg","uRes"]);
-  var uMe = U(meshProg, ["M","V","P","bg","uRes","uGaze","uPhase","uGain","uThick","uHome"]);
+  var uMe = U(meshProg, ["M","V","P","bg","uRes","uGaze","uPhase","uGain","uThick","uHome","uMetal","uIsMetal"]);
   var aPl = gl.getAttribLocation(plasmaProg, "q"), aBl = gl.getAttribLocation(blitProg, "q");
   var aP = gl.getAttribLocation(meshProg, "p"), aN = gl.getAttribLocation(meshProg, "n");
   var quad = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, quad); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
@@ -182,39 +191,28 @@
      Meshing pairs: big wheel - tiny gear - toothed ring, and the two right-hand gears.
      Speeds follow 1/N with alternating direction; each pair's start angles put a tooth into the neighbour's gap. */
   var GEAR = {
-    "Cube.004": { N: 88, tip: 0.00002, rot: -0.91364, pr: 1.540 },
-    "Cube.002": { N: 10, tip: -0.31416, rot: 0, pr: 0.221 },
-    "Cube.007": { N: 45, tip: 0.03467, rot: 0, pr: 0.868 },
-    "Cube":     { N: 10, tip: -0.31416, rot: 0, pr: 0.356 },
-    "Cube.003": { N: 19, tip: -0.08277, rot: 0, pr: 0.760 }
+    "Cube.004": { N: 88, tip: 0.00002 },     /* big wheel */
+    "gear.tiny": { N: 10, tip: -0.31416 },
+    "gear.iris": { N: 45, tip: 0.03467 },    /* toothed ring */
+    "gear.10":  { N: 10, tip: -0.31416 },
+    "Cube.003": { N: 19, tip: -0.08277 }
   };
   var parts = [], byName = {}, train = null;
   function ang(a, b) { return Math.atan2(b.t[1] - a.t[1], b.t[0] - a.t[0]); }
-  function dist(a, b) { return Math.hypot(b.t[0] - a.t[0], b.t[1] - a.t[1]); }
   function setupTrain() {
-    var g4 = byName["Cube.004"], g2 = byName["Cube.002"], g7 = byName["Cube.007"], gC = byName.Cube, g3 = byName["Cube.003"];
+    var g4 = byName["Cube.004"], g2 = byName["gear.tiny"], g7 = byName["gear.iris"], gC = byName["gear.10"], g3 = byName["Cube.003"];
     if (!(g4 && g2 && g7 && gC && g3)) return;
-    /* spacing: the tiny gear sits just clear of both neighbours (their teeth are far deeper than its own, so a true mesh would overlap); right-hand gear slides to the small one. */
-    var r4 = 1.633 + .249 + .014, r7 = .963 + .249 + .014;   /* tip radii plus a hair of clearance: the tiny gear can never touch its neighbours */
-    var dx = g7.t[0] - g4.t[0], dy = g7.t[1] - g4.t[1], d = Math.hypot(dx, dy);
-    var a = (r4 * r4 - r7 * r7 + d * d) / (2 * d), h = Math.sqrt(Math.max(r4 * r4 - a * a, 0));
-    var mx = g4.t[0] + a * dx / d, my = g4.t[1] + a * dy / d;
-    var s1 = [mx + h * dy / d, my - h * dx / d], s2 = [mx - h * dy / d, my + h * dx / d];
-    var pick = Math.hypot(s1[0] - g2.t[0], s1[1] - g2.t[1]) < Math.hypot(s2[0] - g2.t[0], s2[1] - g2.t[1]) ? s1 : s2;
-    g2.t = [pick[0], pick[1], g2.t[2]];
-    var an = ang(gC, g3), rr = GEAR.Cube.pr + GEAR["Cube.003"].pr;
-    g3.t = [gC.t[0] + Math.cos(an) * rr, gC.t[1] + Math.sin(an) * rr, g3.t[2]];
-    var G = function (n) { return GEAR[n]; }, base = function (n) { return GEAR[n].tip + GEAR[n].rot; };
+    var G = function (n) { return GEAR[n]; }, base = function (n) { return GEAR[n].tip + byName[n].rotZ; };
     var b42 = ang(g4, g2), b27 = ang(g2, g7), bC3 = ang(gC, g3), PI = Math.PI;
     var w4 = .10, wC = .45;
     train = function (t) {
       var th4 = w4 * t, th4r = b42 - base("Cube.004");
-      var th2 = -(G("Cube.004").N / G("Cube.002").N) * (th4 - th4r) + (b42 + PI - base("Cube.002") - PI / G("Cube.002").N);
-      var th2p = b27 - base("Cube.002");
-      var th7 = -(G("Cube.002").N / G("Cube.007").N) * (th2 - th2p) + (b27 + PI - base("Cube.007") - PI / G("Cube.007").N);
-      var thC = wC * t, thCr = bC3 - base("Cube");
-      var th3 = -(G("Cube").N / G("Cube.003").N) * (thC - thCr) + (bC3 + PI - base("Cube.003") - PI / G("Cube.003").N);
-      return { "Cube.004": th4, "Cube.002": th2, "Cube.007": th7, "Cube": thC, "Cube.003": th3 };
+      var th2 = -(G("Cube.004").N / G("gear.tiny").N) * (th4 - th4r) + (b42 + PI - base("gear.tiny") - PI / G("gear.tiny").N);
+      var th2p = b27 - base("gear.tiny");
+      var th7 = -(G("gear.tiny").N / G("gear.iris").N) * (th2 - th2p) + (b27 + PI - base("gear.iris") - PI / G("gear.iris").N);
+      var thC = wC * t, thCr = bC3 - base("gear.10");
+      var th3 = -(G("gear.10").N / G("Cube.003").N) * (thC - thCr) + (bC3 + PI - base("Cube.003") - PI / G("Cube.003").N);
+      return { "Cube.004": th4, "gear.tiny": th2, "gear.iris": th7, "gear.10": thC, "Cube.003": th3 };
     };
   }
   function build(buf) {
@@ -227,13 +225,16 @@
       var nb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, nb); gl.bufferData(gl.ARRAY_BUFFER, N, gl.STATIC_DRAW);
       var ib = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, I, gl.STATIC_DRAW);
       var part = { name: nd.name, vb: vb, nb: nb, ib: ib, count: I.length, type: I instanceof Uint16Array ? gl.UNSIGNED_SHORT : gl.UNSIGNED_INT,
-        t: (nd.translation || [0,0,0]).slice(), q: nd.rotation || [0,0,0,1], s: nd.scale || [1,1,1], pane: nd.name === "Plane", irisSpeed: nd.name === "Circle" ? -.08 : 0 };
+        t: (nd.translation || [0,0,0]).slice(), q: nd.rotation || [0,0,0,1], s: nd.scale || [1,1,1], pane: nd.name === "eye.frame", irisSpeed: nd.name === "iris" ? -.08 : 0,
+        rotZ: nd.rotation ? 2 * Math.atan2(nd.rotation[2], nd.rotation[3]) : 0, metal: null };
+      var mt = pr.material !== undefined ? j.materials[pr.material] : null;
+      if (mt && mt.pbrMetallicRoughness && mt.pbrMetallicRoughness.baseColorFactor) part.metal = mt.pbrMetallicRoughness.baseColorFactor.slice(0, 3);
       parts.push(part); byName[nd.name] = part;
     });
     /* eye-shaped mask: outer silhouette of the glass frame, so the frame's opening is filled too */
-    var pl = byName.Plane;
+    var pl = byName["eye.frame"];
     if (pl) {
-      var pr0 = j.meshes[j.nodes.filter(function (n) { return n.name === "Plane"; })[0].mesh].primitives[0], PP = g.acc(pr0.attributes.POSITION);
+      var pr0 = j.meshes[j.nodes.filter(function (n) { return n.name === "eye.frame"; })[0].mesh].primitives[0], PP = g.acc(pr0.attributes.POSITION);
       var NB = 720, rad = new Float32Array(NB), k;
       for (k = 0; k < PP.length; k += 3) { var ax = Math.atan2(PP[k + 1], PP[k]), b = Math.floor((ax + Math.PI) / (2 * Math.PI) * NB) % NB, rr = Math.hypot(PP[k], PP[k + 1]); if (rr > rad[b]) rad[b] = rr; }
       for (var pass = 0; pass < 4; pass++) for (k = 0; k < NB; k++) if (rad[k] === 0) { var lo = rad[(k + NB - 1) % NB], hi = rad[(k + 1) % NB]; if (lo && hi) rad[k] = (lo + hi) / 2; else if (lo || hi) rad[k] = lo || hi; }
@@ -262,7 +263,7 @@
   window.addEventListener("pointermove", ptr, { passive: true });
   window.addEventListener("pointerdown", ptr, { passive: true });
 
-  var CENTER = [0, 0, .4];
+  var CENTER = [0, 0, .9];
   var t0 = performance.now(), running = true;
   function drawQuad(prog, attr) { gl.bindBuffer(gl.ARRAY_BUFFER, quad); gl.enableVertexAttribArray(attr); gl.vertexAttribPointer(attr, 2, gl.FLOAT, false, 0, 0); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); }
   function draw(now, still) {
@@ -287,8 +288,8 @@
     if (!HOME) { gl.useProgram(blitProg); gl.uniform1i(uBl.bg, 0); gl.uniform2f(uBl.uRes, W, H); drawQuad(blitProg, aBl); }
     /* 3. the glass, additive so overlapping layers glow through each other */
     gl.useProgram(meshProg);
-    var dist = (asp > 1.7 ? FIT : FIT * (1.7 / asp) * .9);
-    var tiltY = gx * .30, tiltX = gy * .20;
+    var dist = (asp > 1.7 ? FIT : FIT * (1.7 / asp) * .84);
+    var tiltY = gx * .22, tiltX = gy * .14;
     var V = mul(mul([1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,-dist,1], mul(rotX(tiltX), rotY(tiltY))), [1,0,0,0, 0,1,0,0, 0,0,1,0, -CENTER[0], -CENTER[1], -CENTER[2], 1]);
     gl.uniformMatrix4fv(uMe.V, false, new Float32Array(V));
     gl.uniformMatrix4fv(uMe.P, false, new Float32Array(persp(.55, asp, .5, 60)));
@@ -301,11 +302,16 @@
       else if (p.irisSpeed) local = mul(local, rotY((still ? 0 : t) * p.irisSpeed * 6.2832));
       gl.uniformMatrix4fv(uMe.M, false, new Float32Array(local));
       gl.uniform1f(uMe.uGain, p.pane ? .9 : 1); gl.uniform1f(uMe.uThick, p.pane ? 3.0 : 1.15);
+      gl.uniform1f(uMe.uIsMetal, p.metal ? 1 : 0); if (p.metal) gl.uniform3f(uMe.uMetal, p.metal[0], p.metal[1], p.metal[2]);
       gl.bindBuffer(gl.ARRAY_BUFFER, p.vb); gl.enableVertexAttribArray(aP); gl.vertexAttribPointer(aP, 3, gl.FLOAT, false, 0, 0);
       gl.bindBuffer(gl.ARRAY_BUFFER, p.nb); gl.enableVertexAttribArray(aN); gl.vertexAttribPointer(aN, 3, gl.FLOAT, false, 0, 0);
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, p.ib); gl.drawElements(gl.TRIANGLES, p.count, p.type, 0);
     }
-    var pane = byName.Plane;
+    /* metal first: opaque, writes depth, so glass behind it is hidden and glass in front still adds light */
+    gl.enable(gl.DEPTH_TEST); gl.depthMask(true); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    parts.forEach(function (p) { if (p.metal) drawPart(p); });
+    gl.depthMask(false); gl.blendFunc(gl.ONE, gl.ONE);
+    var pane = byName["eye.frame"];
     if (pane) {
       gl.enable(gl.STENCIL_TEST); gl.stencilFunc(gl.ALWAYS, 1, 255); gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
       gl.colorMask(false, false, false, false); gl.depthMask(false);
@@ -319,9 +325,9 @@
       gl.stencilFunc(gl.EQUAL, 1, 255); gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
     }
     gl.depthMask(false);
-    parts.forEach(function (p) { if (!p.pane) drawPart(p); });
+    parts.forEach(function (p) { if (!p.pane && !p.metal) drawPart(p); });
     gl.disable(gl.STENCIL_TEST);
-    if (pane) drawPart(pane);
+    if (pane) { gl.uniform1f(uMe.uIsMetal, 0); drawPart(pane); }
     gl.depthMask(true);
     document.documentElement.setAttribute("data-eye3d", "ready");
   }
