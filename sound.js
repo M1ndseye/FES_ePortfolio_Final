@@ -60,19 +60,37 @@
     tone.connect(dly); dly.connect(dlp); dlp.connect(fb); fb.connect(dly); dlp.connect(wet); wet.connect(master);
     master.connect(ctx.destination);
 
-    /* ambient pad: detuned saws on an open A-minor stack, slow filter drift */
+    /* ambient pad: detuned saws on an open D-lydian open stack, slow filter drift */
     var pad = ctx.createGain(); pad.gain.value = .075;
-    var pf = ctx.createBiquadFilter(); pf.type = "lowpass"; pf.frequency.value = 420; pf.Q.value = 2.2;
+    var pf = ctx.createBiquadFilter(); pf.type = "lowpass"; pf.frequency.value = 760; pf.Q.value = 1.4;
     var lfo = ctx.createOscillator(), lg = ctx.createGain();
-    lfo.frequency.value = .07; lg.gain.value = 190; lfo.connect(lg); lg.connect(pf.frequency); lfo.start();
-    [55, 82.41, 110, 164.81, 220].forEach(function (f, n) {
+    lfo.frequency.value = .07; lg.gain.value = 320; lfo.connect(lg); lg.connect(pf.frequency); lfo.start();
+    [73.42, 110, 146.83, 185, 220, 329.63].forEach(function (f, n) {
       [-7, 7].forEach(function (d) {
         var o = ctx.createOscillator(); o.type = "sawtooth"; o.frequency.value = f; o.detune.value = d + n;
-        var g = ctx.createGain(); g.gain.value = n > 2 ? .35 : 1;
+        var g = ctx.createGain(); g.gain.value = n > 3 ? .4 : 1;
         o.connect(g); g.connect(pf); o.start();
       });
     });
     pf.connect(pad); pad.connect(bus);
+
+
+    /* slow electronic plucks (D lydian), they ride the echo for a drifting, open-space feel */
+    var scale = [293.66, 369.99, 440, 493.88, 587.33, 739.99, 880], pi = 2;
+    (function pluck() {
+      if (!ctx) return;
+      if (on && ctx.state === "running" && Math.random() < .62) {
+        pi = Math.max(0, Math.min(scale.length - 1, pi + [-2, -1, 1, 2, 3][Math.floor(Math.random() * 5)]));
+        var t = ctx.currentTime + .02, f = scale[pi];
+        var a = ctx.createOscillator(), b = ctx.createOscillator(), e = ctx.createGain(), lp = ctx.createBiquadFilter();
+        a.type = "sawtooth"; b.type = "square"; a.frequency.value = f; b.frequency.value = f * 2.005;
+        lp.type = "lowpass"; lp.Q.value = 3; lp.frequency.setValueAtTime(3200, t); lp.frequency.exponentialRampToValueAtTime(500, t + .5);
+        e.gain.setValueAtTime(0, t); e.gain.linearRampToValueAtTime(.05, t + .012); e.gain.exponentialRampToValueAtTime(.0008, t + 1.1);
+        a.connect(lp); b.connect(lp); lp.connect(e); e.connect(bus);
+        a.start(t); b.start(t); a.stop(t + 1.2); b.stop(t + 1.2);
+      }
+      setTimeout(pluck, 520 + Math.random() * 520);
+    })();
 
     /* soft tape hiss */
     var nb = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate), d = nb.getChannelData(0);
@@ -84,9 +102,9 @@
 
     /* saber hum: two close saws beat against each other; speed opens the filter and lifts pitch */
     var h1 = ctx.createOscillator(), h2 = ctx.createOscillator(), hs = ctx.createOscillator();
-    h1.type = h2.type = "sawtooth"; h1.frequency.value = 62; h2.frequency.value = 63;
-    hs.type = "square"; hs.frequency.value = 31;
-    var hf = ctx.createBiquadFilter(); hf.type = "lowpass"; hf.frequency.value = 170; hf.Q.value = 4;
+    h1.type = h2.type = "sawtooth"; h1.frequency.value = 46.25; h2.frequency.value = 46.9;
+    hs.type = "square"; hs.frequency.value = 23.1;
+    var hf = ctx.createBiquadFilter(); hf.type = "lowpass"; hf.frequency.value = 150; hf.Q.value = 4;
     var hg = ctx.createGain(); hg.gain.value = .0;
     var tr = ctx.createOscillator(), trg = ctx.createGain();   /* slow shimmer */
     tr.frequency.value = 7.5; trg.gain.value = 6; tr.connect(trg); trg.connect(h1.detune); trg.connect(h2.detune); tr.start();
@@ -102,9 +120,9 @@
     var now = performance.now();
     speed *= Math.pow(.5, (now - (tick.t || now)) / 260); tick.t = now; /* ~260 ms half-life */
     var s = Math.min(1, speed / 2.2), t = ctx.currentTime;
-    hum.hg.gain.setTargetAtTime(.006 + .15 * s * s * (3 - 2 * s) , t, .06);
-    hum.hf.frequency.setTargetAtTime(160 + 1300 * s, t, .08);
-    var f = 62 * (1 + .22 * s);
+    hum.hg.gain.setTargetAtTime(.005 + .12 * s * s * (3 - 2 * s) , t, .06);
+    hum.hf.frequency.setTargetAtTime(140 + 1200 * s, t, .08);
+    var f = 46.25 * (1 + .22 * s);
     hum.h1.frequency.setTargetAtTime(f, t, .09);
     hum.h2.frequency.setTargetAtTime(f * 1.012, t, .09);
     hum.hs.frequency.setTargetAtTime(f / 2, t, .09);
