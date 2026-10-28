@@ -1,16 +1,15 @@
 /* M1ndseye 3D glass mechanism: loads a .glb and renders it with raw WebGL (no library).
-   Glass = analytic refraction + chromatic dispersion + fresnel, lit by a procedural studio of blue and amber light.
+   Look = the home eye's plasma light, refracted by the glass with chromatic dispersion, prismatic rim and white speculars.
+   Gears turn at ratios set by their tooth counts, with the teeth locked into each other.
    Usage: <canvas data-eye3d="assets/mechanical-eye.glb"> then include this script. */
 (function () {
   var cv = document.querySelector("canvas[data-eye3d]");
   if (!cv) return;
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var gl = cv.getContext("webgl", { antialias: true, alpha: true, premultipliedAlpha: false, stencil: true });
+  var gl = cv.getContext("webgl", { antialias: true, alpha: false, stencil: true });
   if (!gl) { cv.dispatchEvent(new Event("eye3d-fail")); return; }
-  var u32 = gl.getExtension("OES_element_index_uint");
 
   /* ---- tiny mat4 ---- */
-  function ident() { return [1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1]; }
   function mul(a, b) { var o = new Array(16); for (var c = 0; c < 4; c++) for (var r = 0; r < 4; r++) { var s = 0; for (var k = 0; k < 4; k++) s += a[k * 4 + r] * b[c * 4 + k]; o[c * 4 + r] = s; } return o; }
   function trs(t, q, s) {
     var x = q[0], y = q[1], z = q[2], w = q[3];
@@ -29,52 +28,176 @@
   function parse(buf) {
     var dv = new DataView(buf), jl = dv.getUint32(12, true);
     var j = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 20, jl)));
-    var off = 20 + jl, bin = off + 8;
+    var bin = 20 + jl + 8;
     function acc(i) {
       var a = j.accessors[i], bv = j.bufferViews[a.bufferView];
       var n = { SCALAR: 1, VEC2: 2, VEC3: 3 }[a.type], base = bin + (bv.byteOffset || 0) + (a.byteOffset || 0);
       var T = a.componentType === 5126 ? Float32Array : a.componentType === 5123 ? Uint16Array : Uint32Array;
-      var stride = bv.byteStride;
-      if (stride && stride !== n * T.BYTES_PER_ELEMENT) {
-        var out = new T(a.count * n), src = new DataView(buf);
-        for (var k = 0; k < a.count; k++) for (var c = 0; c < n; c++) out[k * n + c] = a.componentType === 5126 ? src.getFloat32(base + k * stride + c * 4, true) : src.getUint16(base + k * stride + c * 2, true);
-        return out;
-      }
       return new T(buf.slice(base, base + a.count * n * T.BYTES_PER_ELEMENT));
     }
     return { j: j, acc: acc };
   }
 
   /* ---- shaders ---- */
-  var VS = "attribute vec3 p;attribute vec3 n;uniform mat4 M,V,P;varying vec3 wn,wp;" +
-    "void main(){vec4 w=M*vec4(p,1.);wp=w.xyz;wn=normalize(mat3(M)*n);gl_Position=P*V*w;}";
-  var FS = "precision highp float;varying vec3 wn,wp;uniform vec3 cam;uniform float alpha,time;uniform vec2 gaze;" +
-    "vec3 studio(vec3 d,vec3 at){" +
-    " vec3 c=mix(vec3(.05,.08,.2),vec3(.12,.2,.46),smoothstep(-.7,.9,d.y));" +
-    " float a=dot(d,normalize(vec3(.75,.55,.5)+vec3(gaze*.25,0.)));c+=vec3(1.,.55,.16)*pow(max(a,0.),5.)*2.6;" +
-    " float b=dot(d,normalize(vec3(-.8,.2,.55)));c+=vec3(.32,.52,1.)*pow(max(b,0.),4.)*2.2;" +
-    " float s=dot(d,normalize(vec3(.1,.95,.3)));c+=vec3(.9,.95,1.)*pow(max(s,0.),60.)*2.2;" +
-    " float band=sin(at.x*2.1+at.y*3.3+d.x*5.+time*.15);c+=vec3(.45,.6,1.)*smoothstep(.7,1.,band)*.7;" +
-    " float band2=sin(at.x*-1.7+at.y*2.4+d.y*4.-time*.1);c+=vec3(1.,.6,.25)*smoothstep(.74,1.,band2)*.6;" +
-    " return c;}" +
-    "void main(){vec3 N=normalize(wn),V=normalize(wp-cam);if(dot(N,-V)<0.)N=-N;" +
-    " float cosT=clamp(dot(N,-V),0.,1.),fr=pow(1.-cosT,3.);" +
-    " vec3 rr=reflect(V,N);vec3 col=studio(rr,wp)*(.25+fr*1.6);" +
-    " vec3 t;for(int i=0;i<3;i++){float eta=1./(1.45+float(i)*.035);vec3 d=refract(V,N,eta);if(dot(d,d)<.001)d=rr;" +
-    "  vec3 s=studio(normalize(d+vec3(0.,0.,-.15)),wp+d*.7);" +
-    "  if(i==0)t.r=s.r;else if(i==1)t.g=s.g;else t.b=s.b;}" +
-    " col+=t*(.8+.5*(1.-fr));" +
-    " col+=vec3(.5,.65,1.)*pow(1.-cosT,4.)*1.1;" +
-    " col=col/(1.+col*.35);col=pow(col,vec3(.92));" +
-    " gl_FragColor=vec4(col,alpha*mix(.34,1.,clamp(fr*1.5+(1.-cosT),0.,1.)));}";
   function sh(t, s) { var o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o; }
-  var prog = gl.createProgram();
-  gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(prog);
-  gl.useProgram(prog);
-  var loc = {}; ["M","V","P","cam","alpha","time","gaze"].forEach(function (k) { loc[k] = gl.getUniformLocation(prog, k); });
-  var aP = gl.getAttribLocation(prog, "p"), aN = gl.getAttribLocation(prog, "n");
+  function mk(vs, fs) { var p = gl.createProgram(); gl.attachShader(p, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(p, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(p); return p; }
 
-  var parts = [], byName = {};
+  var PLASMA = [
+    "precision highp float;",
+    "uniform vec2 uRes; uniform float uPhase; uniform vec2 uPtr; uniform float uPull; uniform float uEnergy; uniform float uTint; uniform float uR;",
+    "const float PI = 3.14159265;",
+    "float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }",
+    "float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.-2.*f);",
+    "  return mix(mix(h(i), h(i+vec2(1.,0.)), f.x), mix(h(i+vec2(0.,1.)), h(i+vec2(1.,1.)), f.x), f.y); }",
+    "float caust(vec2 uv, float t){",
+    "  vec2 p = mod(uv*6.28318530718, 6.28318530718) - 250.0;",
+    "  vec2 i = p; float c = 1.0; const float inten = .005;",
+    "  for (int n = 0; n < 5; n++) {",
+    "    float tt = t*(1.0 - (3.5/float(n+1)));",
+    "    i = p + vec2(cos(tt - i.x) + sin(tt + i.y), sin(tt - i.y) + cos(tt + i.x));",
+    "    c += 1.0/length(vec2(p.x/(sin(i.x+tt)/inten), p.y/(cos(i.y+tt)/inten)));",
+    "  }",
+    "  c /= 5.0; c = 1.17 - pow(c, 1.4);",
+    "  return pow(abs(c), 8.0);",
+    "}",
+    "float lanes(float x, float wob, float seed, float t, float sc){",
+    "  x += wob;",
+    "  float id = floor(x), g = abs(fract(x) - .5);",
+    "  float on = smoothstep(.30, .62, vn(vec2(id*3.17 + seed, t*.55)));",
+    "  return exp(-g*g*sc*sc) * on;",
+    "}",
+    "// plasma light: tendrils from the eye, one bundle pulled toward the touch point; p is relative to the eye",
+    "vec3 plasma(vec2 p){",
+    "  float r = length(p), th = atan(p.y, p.x), t = uPhase;",
+    "  vec2 q = uPtr; float qr = length(q);",
+    "  float thp = atan(q.y, q.x);",
+    "  float d = th - thp; d = mod(d + PI, 2.*PI) - PI;",
+    "  float wf = (vn(vec2(r*5. + t*.45, 2.6*cos(th))) + vn(vec2(r*5. + t*.45 + 7., 2.6*sin(th))) - 1.) * 2.6 * smoothstep(0., uR, r);",
+    "  float free1 = lanes(th*13./(2.*PI), wf, 1., t, 6.28*max(r,.15)/13./.011) + .55*lanes(th*23./(2.*PI), wf*1.4, 7., t*1.3, 6.28*max(r,.15)/23./.011);",
+    "  float freeFade = smoothstep(.0, uR*.35, r) * (1. - smoothstep(uR*.7, uR*1.9, r)) / (1. + r*1.2);",
+    "  float pinch = uPull * smoothstep(.0, max(qr, .05), r);",
+    "  float dE = d / (1. - .94*pinch);",
+    "  float wb = (vn(vec2(r*7. - t*.9, dE*2. + t*.3)) - .5) * (1.2 + 3.*uEnergy) * pinch;",
+    "  float bund = lanes(dE*9./(2.*PI), wb, 3., t*1.6, 22.);",
+    "  float angMask = smoothstep(mix(1.7, .30, uPull), 0., abs(d));",
+    "  float endMask = smoothstep(qr + .02, qr - .05, r) * smoothstep(.0, uR*.3, r);",
+    "  float touch = bund * angMask * endMask * uPull;",
+    "  float fil = free1 * freeFade * (.5 - .3*uPull) + touch * 1.15;",
+    "  float dp = length(p - q);",
+    "  float hot = exp(-dp*dp*1400.) * uPull;",
+    "  float halo = exp(-dp*7.) * .22 * uPull;",
+    "  float ripple = exp(-pow((dp - fract(t*.32)*.2)*45., 2.)) * .35 * uPull * (1. - fract(t*.32));",
+    "  float amb = caust(p*1.1 + .15, t*.6) * .07 * exp(-r*1.6);",
+    "  vec3 sapph = vec3(.18,.42,1.), amber = vec3(1.,.62,.24);",
+    "  vec3 tint = mix(sapph, amber, smoothstep(-.28, .28, p.x + (uTint - .5)*.5));",
+    "  vec3 col = vec3(.015,.025,.06) + tint*(.05*exp(-r*2.2) + fil*.85 + halo + amb + ripple) + vec3(.8,.9,1.)*(hot*.9 + fil*.06);",
+    "  return 1. - exp(-col*1.1);",
+    "}",
+    "void main(){ vec2 uv = gl_FragCoord.xy / uRes; vec2 p = (uv - .5) * vec2(uRes.x/uRes.y, 1.);",
+    "  vec3 col = plasma(p);",
+    "  col += (fract(sin(dot(gl_FragCoord.xy, vec2(12.9898,78.233)))*43758.5453) - .5) / 255.;",
+    "  gl_FragColor = vec4(col, 1.); }"
+  ].join("\n");
+  var QUAD_VS = "attribute vec2 q; void main(){ gl_Position = vec4(q, 0., 1.); }";
+  var BLIT_FS = "precision highp float; uniform sampler2D bg; uniform vec2 uRes; void main(){ gl_FragColor = vec4(texture2D(bg, gl_FragCoord.xy / uRes).rgb * .85, 1.); }";
+
+  var MESH_VS = "attribute vec3 p;attribute vec3 n;uniform mat4 M,V,P;varying vec3 vn;" +
+    "void main(){vec4 w=M*vec4(p,1.);vn=mat3(V)*(mat3(M)*n);gl_Position=P*V*w;}";
+  var MESH_FS = [
+    "precision highp float; varying vec3 vn; uniform sampler2D bg; uniform vec2 uRes; uniform vec2 uGaze; uniform float uPhase; uniform float uGain;",
+    "// bars of light that exist only to be bent by the glass",
+    "vec3 bars(vec2 s, vec2 m){",
+    "  vec3 c = vec3(0.);",
+    "  vec2 a = vec2(cos(1.15), sin(1.15)), b = vec2(cos(-1.0), sin(-1.0)), e = vec2(cos(.3), sin(.3));",
+    "  c += vec3(.45,.65,1.) * smoothstep(.05, 0., abs(dot(s - vec2(-.22,0.) - m, vec2(-a.y, a.x))));",
+    "  c += vec3(1.,.66,.30) * smoothstep(.03, 0., abs(dot(s - vec2(.20,0.) + m*1.4, vec2(-b.y, b.x))));",
+    "  c += vec3(1.) * .8 * smoothstep(.015, 0., abs(dot(s - vec2(-.05,0.) - m*.7, vec2(-e.y, e.x))));",
+    "  return c;",
+    "}",
+    "void main(){",
+    "  vec3 N = normalize(vn); if (!gl_FrontFacing) N = -N;",
+    "  vec2 uv = gl_FragCoord.xy / uRes; vec2 p = (uv - .5) * vec2(uRes.x/uRes.y, 1.);",
+    "  float edge = smoothstep(.0, .9, 1. - abs(N.z));",
+    "  vec2 off = -N.xy * (.030 + .05*edge);",
+    "  vec3 r;",
+    "  r.r = texture2D(bg, clamp(uv + off*.8, 0., 1.)).r;",
+    "  r.g = texture2D(bg, clamp(uv + off, 0., 1.)).g;",
+    "  r.b = texture2D(bg, clamp(uv + off*1.45, 0., 1.)).b;",
+    "  vec2 g = vec2(uGaze.x, -uGaze.y); vec2 s = p / .9;",
+    "  float hu = dot(s, normalize(g + vec2(1e-3))) * 2.6 + uPhase*.05;",
+    "  vec3 rb = .5 + .5*cos(6.28318*(hu + vec3(0., .33, .67)));",
+    "  float lenG = min(1., length(g));",
+    "  vec3 col = r * (.05 + .85*edge);",
+    "  col += bars(s, g*.05) * (.04 + .45*edge) * .5;",
+    "  col += rb * edge * (.12 + .38*lenG);",
+    "  vec3 L = normalize(vec3(uGaze.x*.9, -uGaze.y*.9, .8));",
+    "  float spec = pow(max(dot(N, normalize(L + vec3(0.,0.,1.))), 0.), 70.) * (.25 + edge);",
+    "  col += vec3(1.) * spec * .7;",
+    "  col *= uGain; col = col / (1. + col*.45); gl_FragColor = vec4(col, 1.);",
+    "}"
+  ].join("\n");
+
+  var plasmaProg = mk(QUAD_VS, PLASMA), blitProg = mk(QUAD_VS, BLIT_FS), meshProg = mk(MESH_VS, MESH_FS);
+  function U(pr, names) { var o = {}; names.forEach(function (k) { o[k] = gl.getUniformLocation(pr, k); }); return o; }
+  var uPl = U(plasmaProg, ["uRes","uPhase","uPtr","uPull","uEnergy","uTint","uR"]);
+  var uBl = U(blitProg, ["bg","uRes"]);
+  var uMe = U(meshProg, ["M","V","P","bg","uRes","uGaze","uPhase","uGain"]);
+  var aPl = gl.getAttribLocation(plasmaProg, "q"), aBl = gl.getAttribLocation(blitProg, "q");
+  var aP = gl.getAttribLocation(meshProg, "p"), aN = gl.getAttribLocation(meshProg, "n");
+  var quad = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, quad); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+
+  /* ---- plasma light rendered once per frame into a half-resolution texture ---- */
+  var tex = gl.createTexture(), fbo = gl.createFramebuffer(), FW = 2, FH = 2;
+  function allocFBO(w, h) {
+    FW = Math.max(2, w); FH = Math.max(2, h);
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, FW, FH, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo); gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  }
+
+  /* ---- gear train ----
+     Measured from the model: tooth count N, pitch radius (mid-tooth), and the angle of a tooth tip at rest.
+     Meshing pairs: big wheel - tiny gear - toothed ring, and the two right-hand gears.
+     Speeds follow 1/N with alternating direction; each pair's start angles put a tooth into the neighbour's gap. */
+  var GEAR = {
+    "Cube.004": { N: 88, tip: 0.00002, rot: -0.91364, pr: 1.540 },
+    "Cube.002": { N: 10, tip: -0.31416, rot: 0, pr: 0.221 },
+    "Cube.007": { N: 45, tip: 0.03467, rot: 0, pr: 0.868 },
+    "Cube":     { N: 10, tip: -0.31416, rot: 0, pr: 0.356 },
+    "Cube.003": { N: 19, tip: -0.08277, rot: 0, pr: 0.760 }
+  };
+  var parts = [], byName = {}, train = null;
+  function ang(a, b) { return Math.atan2(b.t[1] - a.t[1], b.t[0] - a.t[0]); }
+  function dist(a, b) { return Math.hypot(b.t[0] - a.t[0], b.t[1] - a.t[1]); }
+  function setupTrain() {
+    var g4 = byName["Cube.004"], g2 = byName["Cube.002"], g7 = byName["Cube.007"], gC = byName.Cube, g3 = byName["Cube.003"];
+    if (!(g4 && g2 && g7 && gC && g3)) return;
+    /* spacing: pitch circles exactly tangent. Tiny gear sits where both circles (big wheel, ring) meet; right-hand gear slides to the small one. */
+    var r4 = GEAR["Cube.004"].pr + GEAR["Cube.002"].pr, r7 = GEAR["Cube.007"].pr + GEAR["Cube.002"].pr;
+    var dx = g7.t[0] - g4.t[0], dy = g7.t[1] - g4.t[1], d = Math.hypot(dx, dy);
+    var a = (r4 * r4 - r7 * r7 + d * d) / (2 * d), h = Math.sqrt(Math.max(r4 * r4 - a * a, 0));
+    var mx = g4.t[0] + a * dx / d, my = g4.t[1] + a * dy / d;
+    var s1 = [mx + h * dy / d, my - h * dx / d], s2 = [mx - h * dy / d, my + h * dx / d];
+    var pick = Math.hypot(s1[0] - g2.t[0], s1[1] - g2.t[1]) < Math.hypot(s2[0] - g2.t[0], s2[1] - g2.t[1]) ? s1 : s2;
+    g2.t = [pick[0], pick[1], g2.t[2]];
+    var an = ang(gC, g3), rr = GEAR.Cube.pr + GEAR["Cube.003"].pr;
+    g3.t = [gC.t[0] + Math.cos(an) * rr, gC.t[1] + Math.sin(an) * rr, g3.t[2]];
+    var G = function (n) { return GEAR[n]; }, base = function (n) { return GEAR[n].tip + GEAR[n].rot; };
+    var b42 = ang(g4, g2), b27 = ang(g2, g7), bC3 = ang(gC, g3), PI = Math.PI;
+    var w4 = .10, wC = .45;
+    train = function (t) {
+      var th4 = w4 * t, th4r = b42 - base("Cube.004");
+      var th2 = -(G("Cube.004").N / G("Cube.002").N) * (th4 - th4r) + (b42 + PI - base("Cube.002") - PI / G("Cube.002").N);
+      var th2p = b27 - base("Cube.002");
+      var th7 = -(G("Cube.002").N / G("Cube.007").N) * (th2 - th2p) + (b27 + PI - base("Cube.007") - PI / G("Cube.007").N);
+      var thC = wC * t, thCr = bC3 - base("Cube");
+      var th3 = -(G("Cube").N / G("Cube.003").N) * (thC - thCr) + (bC3 + PI - base("Cube.003") - PI / G("Cube.003").N);
+      return { "Cube.004": th4, "Cube.002": th2, "Cube.007": th7, "Cube": thC, "Cube.003": th3 };
+    };
+  }
   function build(buf) {
     var g = parse(buf), j = g.j;
     j.nodes.forEach(function (nd) {
@@ -85,12 +208,9 @@
       var nb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, nb); gl.bufferData(gl.ARRAY_BUFFER, N, gl.STATIC_DRAW);
       var ib = gl.createBuffer(); gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, I, gl.STATIC_DRAW);
       var part = { name: nd.name, vb: vb, nb: nb, ib: ib, count: I.length, type: I instanceof Uint16Array ? gl.UNSIGNED_SHORT : gl.UNSIGNED_INT,
-        t: nd.translation || [0,0,0], q: nd.rotation || [0,0,0,1], s: nd.scale || [1,1,1], spin: 0, axis: "z", speed: 0, pane: nd.name === "Plane" };
+        t: (nd.translation || [0,0,0]).slice(), q: nd.rotation || [0,0,0,1], s: nd.scale || [1,1,1], pane: nd.name === "Plane", irisSpeed: nd.name === "Circle" ? -.08 : 0 };
       parts.push(part); byName[nd.name] = part;
     });
-    /* gear train: speed ~ 1 / radius, neighbours turn opposite ways; spin axis is the thin axis of each part */
-    var rule = { "Cube.004": [-.07, "z"], "Cube.003": [.14, "z"], "Cube": [-.28, "z"], "Cube.002": [.5, "z"], "Cube.007": [.05, "z"], "Circle": [-.12, "y"] };
-    Object.keys(rule).forEach(function (k) { if (byName[k]) { byName[k].speed = rule[k][0]; byName[k].axis = rule[k][1]; } });
     /* eye-shaped mask: outer silhouette of the glass frame, so the frame's opening is filled too */
     var pl = byName.Plane;
     if (pl) {
@@ -104,6 +224,7 @@
       var fnb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, fnb); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fn), gl.STATIC_DRAW);
       pl.fan = { vb: fvb, nb: fnb, n: NB + 2 };
     }
+    setupTrain();
     parts.sort(function (a, b) { return (a.pane ? 1 : 0) - (b.pane ? 1 : 0); });
   }
 
@@ -113,7 +234,7 @@
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     var r = cv.getBoundingClientRect(); W = Math.max(2, Math.round(r.width * dpr)); H = Math.max(2, Math.round(r.height * dpr));
     if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
-    gl.viewport(0, 0, W, H);
+    allocFBO(Math.round(W / 2), Math.round(H / 2));
   }
   size(); window.addEventListener("resize", size);
   var tx = 0, ty = 0, gx = 0, gy = 0;
@@ -121,59 +242,68 @@
   window.addEventListener("pointermove", ptr, { passive: true });
   window.addEventListener("pointerdown", ptr, { passive: true });
 
-  var CENTER = [0, 0, .4];      /* model-space point the camera orbits around */
+  var CENTER = [0, 0, .4];
   var t0 = performance.now(), running = true;
+  function drawQuad(prog, attr) { gl.bindBuffer(gl.ARRAY_BUFFER, quad); gl.enableVertexAttribArray(attr); gl.vertexAttribPointer(attr, 2, gl.FLOAT, false, 0, 0); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); }
   function draw(now, still) {
-    var t = (now - t0) / 1000;
+    var t = (now - t0) / 1000, ph = still ? 3 : t;
     gx += (tx - gx) * .06; gy += (ty - gy) * .06;
-    gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
-    gl.enable(gl.DEPTH_TEST); gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.disable(gl.CULL_FACE);
-    var asp = W / H, dist = asp > 1.7 ? 8.2 : 8.2 * (1.7 / asp) * .9;
+    gl.disable(gl.DEPTH_TEST); gl.disable(gl.BLEND); gl.disable(gl.STENCIL_TEST);
+    /* 1. plasma light into the texture */
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo); gl.viewport(0, 0, FW, FH);
+    gl.useProgram(plasmaProg);
+    var asp = W / H;
+    gl.uniform2f(uPl.uRes, FW, FH); gl.uniform1f(uPl.uPhase, ph); gl.uniform2f(uPl.uPtr, gx * .35 * asp, -gy * .35); gl.uniform1f(uPl.uPull, 0);
+    gl.uniform1f(uPl.uEnergy, 0); gl.uniform1f(uPl.uTint, .42 + .4 * gx); gl.uniform1f(uPl.uR, .42);
+    drawQuad(plasmaProg, aPl);
+    /* 2. show it as the backdrop */
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, W, H);
+    gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+    gl.useProgram(blitProg); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex); gl.uniform1i(uBl.bg, 0); gl.uniform2f(uBl.uRes, W, H);
+    drawQuad(blitProg, aBl);
+    /* 3. the glass, additive so overlapping layers glow through each other */
+    gl.useProgram(meshProg);
+    var dist = asp > 1.7 ? 8.2 : 8.2 * (1.7 / asp) * .9;
     var tiltY = gx * .30, tiltX = gy * .20;
     var V = mul(mul([1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,-dist,1], mul(rotX(tiltX), rotY(tiltY))), [1,0,0,0, 0,1,0,0, 0,0,1,0, -CENTER[0], -CENTER[1], -CENTER[2], 1]);
-    var camPos = [0, 0, dist];
-    /* camera position in model space (inverse of the rotation applied above) */
-    var ry = -tiltY, rx = -tiltX;
-    var cx0 = Math.sin(ry) * Math.cos(rx) * dist, cy0 = -Math.sin(rx) * dist, cz0 = Math.cos(ry) * Math.cos(rx) * dist;
-    gl.uniformMatrix4fv(loc.V, false, new Float32Array(V));
-    gl.uniformMatrix4fv(loc.P, false, new Float32Array(persp(.55, asp, .5, 60)));
-    gl.uniform3f(loc.cam, cx0 + CENTER[0], cy0 + CENTER[1], cz0 + CENTER[2]);
-    gl.uniform1f(loc.time, t); gl.uniform2f(loc.gaze, gx, -gy);
+    gl.uniformMatrix4fv(uMe.V, false, new Float32Array(V));
+    gl.uniformMatrix4fv(uMe.P, false, new Float32Array(persp(.55, asp, .5, 60)));
+    gl.uniform1i(uMe.bg, 0); gl.uniform2f(uMe.uRes, W, H); gl.uniform2f(uMe.uGaze, gx, gy); gl.uniform1f(uMe.uPhase, ph);
+    gl.enable(gl.DEPTH_TEST); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE); gl.disable(gl.CULL_FACE);
+    var spin = train ? train(still ? 0 : t) : {};
     function drawPart(p) {
       var local = trs(p.t, p.q, p.s);
-      var ang = (still ? 0 : t) * p.speed * 6.2832;
-      if (p.speed) local = mul(local, p.axis === "y" ? rotY(ang) : rotZ(ang));
-      gl.uniformMatrix4fv(loc.M, false, new Float32Array(local));
-      gl.uniform1f(loc.alpha, p.pane ? .55 : .96);
+      if (spin[p.name] !== undefined) local = mul(local, rotZ(spin[p.name]));
+      else if (p.irisSpeed) local = mul(local, rotY((still ? 0 : t) * p.irisSpeed * 6.2832));
+      gl.uniformMatrix4fv(uMe.M, false, new Float32Array(local));
+      gl.uniform1f(uMe.uGain, p.pane ? .8 : 1);
       gl.bindBuffer(gl.ARRAY_BUFFER, p.vb); gl.enableVertexAttribArray(aP); gl.vertexAttribPointer(aP, 3, gl.FLOAT, false, 0, 0);
       gl.bindBuffer(gl.ARRAY_BUFFER, p.nb); gl.enableVertexAttribArray(aN); gl.vertexAttribPointer(aN, 3, gl.FLOAT, false, 0, 0);
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, p.ib); gl.drawElements(gl.TRIANGLES, p.count, p.type, 0);
     }
     var pane = byName.Plane;
-    /* 1. stamp the eye-shaped frame into the stencil buffer (no colour, no depth) */
     if (pane) {
       gl.enable(gl.STENCIL_TEST); gl.stencilFunc(gl.ALWAYS, 1, 255); gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
       gl.colorMask(false, false, false, false); gl.depthMask(false);
       if (pane.fan) {
-        gl.uniformMatrix4fv(loc.M, false, new Float32Array(trs(pane.t, pane.q, pane.s)));
+        gl.uniformMatrix4fv(uMe.M, false, new Float32Array(trs(pane.t, pane.q, pane.s)));
         gl.bindBuffer(gl.ARRAY_BUFFER, pane.fan.vb); gl.enableVertexAttribArray(aP); gl.vertexAttribPointer(aP, 3, gl.FLOAT, false, 0, 0);
         gl.bindBuffer(gl.ARRAY_BUFFER, pane.fan.nb); gl.enableVertexAttribArray(aN); gl.vertexAttribPointer(aN, 3, gl.FLOAT, false, 0, 0);
         gl.drawArrays(gl.TRIANGLE_FAN, 0, pane.fan.n);
-      } else drawPart(pane);
+      }
       gl.colorMask(true, true, true, true);
-      /* 2. gears and iris only where the frame is */
       gl.stencilFunc(gl.EQUAL, 1, 255); gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
     }
-    gl.depthMask(true);
+    gl.depthMask(false);
     parts.forEach(function (p) { if (!p.pane) drawPart(p); });
-    /* 3. the glass frame itself on top */
     gl.disable(gl.STENCIL_TEST);
-    if (pane) { gl.depthMask(false); drawPart(pane); gl.depthMask(true); }
+    if (pane) drawPart(pane);
+    gl.depthMask(true);
     document.documentElement.setAttribute("data-eye3d", "ready");
   }
   function loop(now) { if (!running) return; draw(now, reduce); if (!reduce) requestAnimationFrame(loop); }
   document.addEventListener("visibilitychange", function () { running = !document.hidden; if (running) requestAnimationFrame(loop); });
   fetch(cv.getAttribute("data-eye3d")).then(function (r) { return r.arrayBuffer(); }).then(function (b) { build(b); requestAnimationFrame(loop); })
     .catch(function (e) { console.log("eye3d failed", e); cv.dispatchEvent(new Event("eye3d-fail")); });
-  window.__eye3d = { draw: function (t) { draw(t0 + t * 1000, false); } };
+  window.__eye3d = { draw: function (tm) { draw(t0 + tm * 1000, false); }, gears: function () { return train; } };
 })();
