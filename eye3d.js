@@ -5,7 +5,7 @@
   var cv = document.querySelector("canvas[data-eye3d]");
   if (!cv) return;
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var gl = cv.getContext("webgl", { antialias: true, alpha: true, premultipliedAlpha: false });
+  var gl = cv.getContext("webgl", { antialias: true, alpha: true, premultipliedAlpha: false, stencil: true });
   if (!gl) { cv.dispatchEvent(new Event("eye3d-fail")); return; }
   var u32 = gl.getExtension("OES_element_index_uint");
 
@@ -91,6 +91,19 @@
     /* gear train: speed ~ 1 / radius, neighbours turn opposite ways; spin axis is the thin axis of each part */
     var rule = { "Cube.004": [-.07, "z"], "Cube.003": [.14, "z"], "Cube": [-.28, "z"], "Cube.002": [.5, "z"], "Cube.007": [.05, "z"], "Circle": [-.12, "y"] };
     Object.keys(rule).forEach(function (k) { if (byName[k]) { byName[k].speed = rule[k][0]; byName[k].axis = rule[k][1]; } });
+    /* eye-shaped mask: outer silhouette of the glass frame, so the frame's opening is filled too */
+    var pl = byName.Plane;
+    if (pl) {
+      var pr0 = j.meshes[j.nodes.filter(function (n) { return n.name === "Plane"; })[0].mesh].primitives[0], PP = g.acc(pr0.attributes.POSITION);
+      var NB = 720, rad = new Float32Array(NB), k;
+      for (k = 0; k < PP.length; k += 3) { var ax = Math.atan2(PP[k + 1], PP[k]), b = Math.floor((ax + Math.PI) / (2 * Math.PI) * NB) % NB, rr = Math.hypot(PP[k], PP[k + 1]); if (rr > rad[b]) rad[b] = rr; }
+      for (var pass = 0; pass < 4; pass++) for (k = 0; k < NB; k++) if (rad[k] === 0) { var lo = rad[(k + NB - 1) % NB], hi = rad[(k + 1) % NB]; if (lo && hi) rad[k] = (lo + hi) / 2; else if (lo || hi) rad[k] = lo || hi; }
+      var fan = [0, 0, 0], fn = [0, 0, 1];
+      for (k = 0; k <= NB; k++) { var a2 = (k % NB + .5) / NB * 2 * Math.PI - Math.PI; fan.push(Math.cos(a2) * rad[k % NB] * 1.003, Math.sin(a2) * rad[k % NB] * 1.003, 0); fn.push(0, 0, 1); }
+      var fvb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, fvb); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fan), gl.STATIC_DRAW);
+      var fnb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, fnb); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fn), gl.STATIC_DRAW);
+      pl.fan = { vb: fvb, nb: fnb, n: NB + 2 };
+    }
     parts.sort(function (a, b) { return (a.pane ? 1 : 0) - (b.pane ? 1 : 0); });
   }
 
@@ -108,14 +121,14 @@
   window.addEventListener("pointermove", ptr, { passive: true });
   window.addEventListener("pointerdown", ptr, { passive: true });
 
-  var CENTER = [-1.15, -.5, 0];      /* model-space point the camera orbits around */
+  var CENTER = [0, 0, .4];      /* model-space point the camera orbits around */
   var t0 = performance.now(), running = true;
   function draw(now, still) {
     var t = (now - t0) / 1000;
     gx += (tx - gx) * .06; gy += (ty - gy) * .06;
-    gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST); gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.disable(gl.CULL_FACE);
-    var asp = W / H, dist = asp > 1.6 ? 9.4 : 9.4 * (1.6 / asp) * .86;
+    var asp = W / H, dist = asp > 1.7 ? 8.2 : 8.2 * (1.7 / asp) * .9;
     var tiltY = gx * .30, tiltX = gy * .20;
     var V = mul(mul([1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,-dist,1], mul(rotX(tiltX), rotY(tiltY))), [1,0,0,0, 0,1,0,0, 0,0,1,0, -CENTER[0], -CENTER[1], -CENTER[2], 1]);
     var camPos = [0, 0, dist];
@@ -126,20 +139,36 @@
     gl.uniformMatrix4fv(loc.P, false, new Float32Array(persp(.55, asp, .5, 60)));
     gl.uniform3f(loc.cam, cx0 + CENTER[0], cy0 + CENTER[1], cz0 + CENTER[2]);
     gl.uniform1f(loc.time, t); gl.uniform2f(loc.gaze, gx, -gy);
-    parts.forEach(function (p) {
+    function drawPart(p) {
       var local = trs(p.t, p.q, p.s);
       var ang = (still ? 0 : t) * p.speed * 6.2832;
-      if (p.speed) {
-        var sp = p.axis === "y" ? rotY(ang) : rotZ(ang);
-        local = mul(local, sp);
-      }
+      if (p.speed) local = mul(local, p.axis === "y" ? rotY(ang) : rotZ(ang));
       gl.uniformMatrix4fv(loc.M, false, new Float32Array(local));
       gl.uniform1f(loc.alpha, p.pane ? .55 : .96);
-      gl.depthMask(!p.pane);
       gl.bindBuffer(gl.ARRAY_BUFFER, p.vb); gl.enableVertexAttribArray(aP); gl.vertexAttribPointer(aP, 3, gl.FLOAT, false, 0, 0);
       gl.bindBuffer(gl.ARRAY_BUFFER, p.nb); gl.enableVertexAttribArray(aN); gl.vertexAttribPointer(aN, 3, gl.FLOAT, false, 0, 0);
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, p.ib); gl.drawElements(gl.TRIANGLES, p.count, p.type, 0);
-    });
+    }
+    var pane = byName.Plane;
+    /* 1. stamp the eye-shaped frame into the stencil buffer (no colour, no depth) */
+    if (pane) {
+      gl.enable(gl.STENCIL_TEST); gl.stencilFunc(gl.ALWAYS, 1, 255); gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
+      gl.colorMask(false, false, false, false); gl.depthMask(false);
+      if (pane.fan) {
+        gl.uniformMatrix4fv(loc.M, false, new Float32Array(trs(pane.t, pane.q, pane.s)));
+        gl.bindBuffer(gl.ARRAY_BUFFER, pane.fan.vb); gl.enableVertexAttribArray(aP); gl.vertexAttribPointer(aP, 3, gl.FLOAT, false, 0, 0);
+        gl.bindBuffer(gl.ARRAY_BUFFER, pane.fan.nb); gl.enableVertexAttribArray(aN); gl.vertexAttribPointer(aN, 3, gl.FLOAT, false, 0, 0);
+        gl.drawArrays(gl.TRIANGLE_FAN, 0, pane.fan.n);
+      } else drawPart(pane);
+      gl.colorMask(true, true, true, true);
+      /* 2. gears and iris only where the frame is */
+      gl.stencilFunc(gl.EQUAL, 1, 255); gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
+    }
+    gl.depthMask(true);
+    parts.forEach(function (p) { if (!p.pane) drawPart(p); });
+    /* 3. the glass frame itself on top */
+    gl.disable(gl.STENCIL_TEST);
+    if (pane) { gl.depthMask(false); drawPart(pane); gl.depthMask(true); }
     document.documentElement.setAttribute("data-eye3d", "ready");
   }
   function loop(now) { if (!running) return; draw(now, reduce); if (!reduce) requestAnimationFrame(loop); }
