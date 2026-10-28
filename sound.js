@@ -1,6 +1,6 @@
-/* M1ndseye home: optional ambient synth + saber hum that follows pointer speed.
+/* M1ndseye home: optional sound. Ambient bed + crystal keys + pointer-driven crystal swell (short licensed samples in assets/audio).
    Off until the visitor taps the Sound button (browsers block autoplay anyway).
-   Pure WebAudio, no files. Preference remembered in localStorage. */
+   Preference remembered in localStorage. */
 (function () {
   var host = document.querySelector(".gaze-foot");
   var AC = window.AudioContext || window.webkitAudioContext;
@@ -8,7 +8,7 @@
 
   var KEY = "m1ndseye-sound";
   var ctx = null, on = false, speed = 0, lastX = null, lastY = null, lastT = 0;
-  var hum = null, master = null;
+  var master = null;
 
   /* ---------- button ---------- */
   var st = document.createElement("style");
@@ -40,94 +40,80 @@
   }
 
   /* ---------- audio graph ---------- */
+  var BASE = "assets/audio/";
+  var buf = {}, loading = null, lastSwell = 0;
+
+  function load() {
+    if (loading) return loading;
+    function get(n) {
+      return fetch(BASE + n + ".mp3").then(function (r) { return r.arrayBuffer(); })
+        .then(function (ab) { return new Promise(function (ok, no) { ctx.decodeAudioData(ab, ok, no); }); })
+        .then(function (b) { buf[n] = b; });
+    }
+    loading = Promise.all([get("ambient"), get("keys"), get("swell")]).then(start).catch(function () {});
+    return loading;
+  }
+
+  function shot(name, gain, rate, dest) {
+    var s = ctx.createBufferSource(), g = ctx.createGain();
+    s.buffer = buf[name]; s.playbackRate.value = rate || 1; g.gain.value = gain;
+    s.connect(g); g.connect(dest || master); s.start();
+    return s;
+  }
+
   function build() {
     ctx = new AC();
     master = ctx.createGain(); master.gain.value = 0;
-
-    /* lofi colour: gentle low-pass + soft saturation + tape-style delay */
-    var tone = ctx.createBiquadFilter(); tone.type = "lowpass"; tone.frequency.value = 2400; tone.Q.value = .4;
-    var sat = ctx.createWaveShaper(), c = new Float32Array(257);
-    for (var i = 0; i < 257; i++) { var x = i / 128 - 1; c[i] = Math.tanh(1.6 * x); }
-    sat.curve = c;
-    var dly = ctx.createDelay(1); dly.delayTime.value = .42;
-    var fb = ctx.createGain(); fb.gain.value = .38;
-    var dlp = ctx.createBiquadFilter(); dlp.type = "lowpass"; dlp.frequency.value = 1100;
-    var wet = ctx.createGain(); wet.gain.value = .5;
-    var wob = ctx.createOscillator(), wobG = ctx.createGain();
-    wob.frequency.value = .35; wobG.gain.value = .004; wob.connect(wobG); wobG.connect(dly.delayTime); wob.start();
-    var bus = ctx.createGain();
-    bus.connect(sat); sat.connect(tone); tone.connect(master);
-    tone.connect(dly); dly.connect(dlp); dlp.connect(fb); fb.connect(dly); dlp.connect(wet); wet.connect(master);
+    /* short, soft echo for glue */
+    var dly = ctx.createDelay(1); dly.delayTime.value = .38;
+    var fb = ctx.createGain(); fb.gain.value = .3;
+    var dlp = ctx.createBiquadFilter(); dlp.type = "lowpass"; dlp.frequency.value = 3500;
+    var wet = ctx.createGain(); wet.gain.value = .35;
+    send = ctx.createGain();
+    send.connect(dly); dly.connect(dlp); dlp.connect(fb); fb.connect(dly); dlp.connect(wet); wet.connect(master);
     master.connect(ctx.destination);
-
-    /* ambient pad: detuned saws on an open D-lydian open stack, slow filter drift */
-    var pad = ctx.createGain(); pad.gain.value = .075;
-    var pf = ctx.createBiquadFilter(); pf.type = "lowpass"; pf.frequency.value = 760; pf.Q.value = 1.4;
-    var lfo = ctx.createOscillator(), lg = ctx.createGain();
-    lfo.frequency.value = .07; lg.gain.value = 320; lfo.connect(lg); lg.connect(pf.frequency); lfo.start();
-    [73.42, 110, 146.83, 185, 220, 329.63].forEach(function (f, n) {
-      [-7, 7].forEach(function (d) {
-        var o = ctx.createOscillator(); o.type = "sawtooth"; o.frequency.value = f; o.detune.value = d + n;
-        var g = ctx.createGain(); g.gain.value = n > 3 ? .4 : 1;
-        o.connect(g); g.connect(pf); o.start();
-      });
-    });
-    pf.connect(pad); pad.connect(bus);
-
-
-    /* slow electronic plucks (D lydian), they ride the echo for a drifting, open-space feel */
-    var scale = [293.66, 369.99, 440, 493.88, 587.33, 739.99, 880], pi = 2;
-    (function pluck() {
-      if (!ctx) return;
-      if (on && ctx.state === "running" && Math.random() < .62) {
-        pi = Math.max(0, Math.min(scale.length - 1, pi + [-2, -1, 1, 2, 3][Math.floor(Math.random() * 5)]));
-        var t = ctx.currentTime + .02, f = scale[pi];
-        var a = ctx.createOscillator(), b = ctx.createOscillator(), e = ctx.createGain(), lp = ctx.createBiquadFilter();
-        a.type = "sawtooth"; b.type = "square"; a.frequency.value = f; b.frequency.value = f * 2.005;
-        lp.type = "lowpass"; lp.Q.value = 3; lp.frequency.setValueAtTime(3200, t); lp.frequency.exponentialRampToValueAtTime(500, t + .5);
-        e.gain.setValueAtTime(0, t); e.gain.linearRampToValueAtTime(.05, t + .012); e.gain.exponentialRampToValueAtTime(.0008, t + 1.1);
-        a.connect(lp); b.connect(lp); lp.connect(e); e.connect(bus);
-        a.start(t); b.start(t); a.stop(t + 1.2); b.stop(t + 1.2);
-      }
-      setTimeout(pluck, 520 + Math.random() * 520);
-    })();
-
-    /* soft tape hiss */
-    var nb = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate), d = nb.getChannelData(0);
-    for (var k = 0; k < d.length; k++) d[k] = Math.random() * 2 - 1;
-    var ns = ctx.createBufferSource(); ns.buffer = nb; ns.loop = true;
-    var nf = ctx.createBiquadFilter(); nf.type = "bandpass"; nf.frequency.value = 3200; nf.Q.value = .5;
-    var ng = ctx.createGain(); ng.gain.value = .006;
-    ns.connect(nf); nf.connect(ng); ng.connect(bus); ns.start();
-
-    /* saber hum: two close saws beat against each other; speed opens the filter and lifts pitch */
-    var h1 = ctx.createOscillator(), h2 = ctx.createOscillator(), hs = ctx.createOscillator();
-    h1.type = h2.type = "sawtooth"; h1.frequency.value = 46.25; h2.frequency.value = 46.9;
-    hs.type = "square"; hs.frequency.value = 23.1;
-    var hf = ctx.createBiquadFilter(); hf.type = "lowpass"; hf.frequency.value = 150; hf.Q.value = 4;
-    var hg = ctx.createGain(); hg.gain.value = .0;
-    var tr = ctx.createOscillator(), trg = ctx.createGain();   /* slow shimmer */
-    tr.frequency.value = 7.5; trg.gain.value = 6; tr.connect(trg); trg.connect(h1.detune); trg.connect(h2.detune); tr.start();
-    var sg = ctx.createGain(); sg.gain.value = .5;
-    h1.connect(hf); h2.connect(hf); hs.connect(sg); sg.connect(hf); hf.connect(hg); hg.connect(bus);
-    h1.start(); h2.start(); hs.start();
-    hum = { h1: h1, h2: h2, hs: hs, hf: hf, hg: hg };
-    tick();
+    load();
   }
+  var send = null;
 
-  function tick() {
-    if (!ctx) return;
+  function start() {
+    if (started) return; started = true;
+    /* Enzalla: ethereal bed. One-shot with a long tail, so re-trigger it before the last one dies and let them overlap. */
+    (function bed() {
+      if (!ctx) return;
+      if (on && ctx.state === "running") shot("ambient", .85, 1, master);
+      setTimeout(bed, 5600);
+    })();
+    /* Takama: crystal keys phrase, locked to 122 BPM (two bars = 3.93 s), played about 2 of every 3 slots */
+    (function keys() {
+      if (!ctx) return;
+      if (on && ctx.state === "running" && Math.random() < .66) {
+        var s = shot("keys", .5, 1, master);
+        var g = ctx.createGain(); g.gain.value = .35; s.connect(g); g.connect(send);
+      }
+      setTimeout(keys, 3934);
+    })();
+  }
+  var started = false;
+
+  /* Airborne: crystal swell on pointer movement; louder and a touch higher the faster you move */
+  function swellCheck() {
+    if (!ctx || !started) return;
     var now = performance.now();
-    speed *= Math.pow(.5, (now - (tick.t || now)) / 260); tick.t = now; /* ~260 ms half-life */
-    var s = Math.min(1, speed / 2.2), t = ctx.currentTime;
-    hum.hg.gain.setTargetAtTime(.005 + .12 * s * s * (3 - 2 * s) , t, .06);
-    hum.hf.frequency.setTargetAtTime(140 + 1200 * s, t, .08);
-    var f = 46.25 * (1 + .22 * s);
-    hum.h1.frequency.setTargetAtTime(f, t, .09);
-    hum.h2.frequency.setTargetAtTime(f * 1.012, t, .09);
-    hum.hs.frequency.setTargetAtTime(f / 2, t, .09);
+    if (speed > .35 && now - lastSwell > 900 && on && ctx.state === "running") {
+      lastSwell = now;
+      var s = Math.min(1, speed / 2);
+      var src = shot("swell", .22 + .55 * s, .94 + .14 * s, master);
+      var g = ctx.createGain(); g.gain.value = .4; src.connect(g); g.connect(send);
+    }
+  }
+  function tick() {
+    var now = performance.now();
+    speed *= Math.pow(.5, (now - (tick.t || now)) / 260); tick.t = now;
+    swellCheck();
     requestAnimationFrame(tick);
   }
+  requestAnimationFrame(tick);
 
   function move(e) {
     var now = performance.now();
@@ -136,6 +122,7 @@
       speed = Math.max(speed, Math.min(v, 4) * .85) * .6 + speed * .4;
     }
     lastX = e.clientX; lastY = e.clientY; lastT = now;
+    swellCheck();
   }
   window.addEventListener("pointermove", move, { passive: true });
   window.addEventListener("pointerleave", function () { lastX = null; });
