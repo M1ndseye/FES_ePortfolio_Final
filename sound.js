@@ -24,6 +24,7 @@
     ".snd[aria-pressed=true] .snd__bars i{animation:sndb 1.1s ease-in-out infinite}" +
     ".snd__bars i:nth-child(2){animation-delay:.18s!important}.snd__bars i:nth-child(3){animation-delay:.36s!important}.snd__bars i:nth-child(4){animation-delay:.54s!important}" +
     "@keyframes sndb{0%,100%{height:3px}50%{height:12px}}" +
+    "@media (max-width:860px){.snd{right:var(--pad,20px)}}" +
     "@media (prefers-reduced-motion:reduce){.snd[aria-pressed=true] .snd__bars i{animation:none;height:8px}}";
   document.head.appendChild(st);
   if (getComputedStyle(host).position === "static") host.style.position = "relative";
@@ -78,8 +79,8 @@
     var bsrc = ctx.createMediaElementSource(bedEl);
     var comp = ctx.createDynamicsCompressor();
     comp.threshold.value = -26; comp.ratio.value = 3; comp.knee.value = 12; comp.attack.value = .02; comp.release.value = .4;
-    var bg = ctx.createGain(); bg.gain.value = .3;
-    bsrc.connect(comp); comp.connect(bg); bg.connect(master); bg.connect(send);
+    var bg = ctx.createGain(); bg.gain.value = .225;
+    bsrc.connect(comp); comp.connect(bg); bg.connect(master);
     load();
   }
   var send = null, bedEl = null;
