@@ -84,10 +84,10 @@
       if (on && ctx.state === "running") shot("ambient", .85, 1, master);
       setTimeout(bed, 5600);
     })();
-    /* Takama: crystal keys phrase, locked to 122 BPM (two bars = 3.93 s), played about 2 of every 3 slots */
+    /* Takama: crystal keys phrase, locked to 122 BPM (two bars = 3.93 s), played in about 1 of every 4 slots */
     (function keys() {
       if (!ctx) return;
-      if (on && ctx.state === "running" && Math.random() < .66) {
+      if (on && ctx.state === "running" && Math.random() < .26) {
         var s = shot("keys", .5, 1, master);
         var g = ctx.createGain(); g.gain.value = .35; s.connect(g); g.connect(send);
       }
