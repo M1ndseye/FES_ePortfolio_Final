@@ -99,7 +99,7 @@
       "  vec2 q = uPtr; float qr = length(q);",
       "  float thp = atan(q.y, q.x);",
       "  float d = th - thp; d = mod(d + PI, 2.*PI) - PI;",
-      "  float wf = (vn(vec2(r*5. + t*.45, th*2.6)) - .5) * 2.6 * smoothstep(0., uR, r);",
+      "  float wf = (vn(vec2(r*5. + t*.45, 2.6*cos(th))) + vn(vec2(r*5. + t*.45 + 7., 2.6*sin(th))) - 1.) * 2.6 * smoothstep(0., uR, r);",
       "  float free1 = lanes(th*13./(2.*PI), wf, 1., t, 6.28*max(r,.15)/13./.011) + .55*lanes(th*23./(2.*PI), wf*1.4, 7., t*1.3, 6.28*max(r,.15)/23./.011);",
       "  float freeFade = smoothstep(.0, uR*.35, r) * (1. - smoothstep(uR*.7, uR*1.9, r)) / (1. + r*1.2);",
       "  float pinch = uPull * smoothstep(.0, max(qr, .05), r);",
@@ -225,7 +225,11 @@
     gl.uniform1f(U.uR, boxW * .5 / H);
     gl.uniform2f(U.uPtr, ((ptrX - sr.left) - sr.width / 2) / H - ecx, -((ptrY - sr.top) - sr.height / 2) / H - ecy);
     gl.uniform1f(U.uPull, pull); gl.uniform1f(U.uEnergy, energy); gl.uniform1f(U.uTint, .5 + gx * .45);
-    gl.uniform2f(U.uGaze, gx, gy); gl.uniform1f(U.uEyeOn, eyeReady ? 1 : 0);
+    gl.uniform2f(U.uGaze, gx, gy); gl.uniform1f(U.uEyeOn, (eyeReady && !window.__eye3dActive) ? 1 : 0);
+    if (window.__eye3dActive && fallbackImg) fallbackImg.style.visibility = "hidden";
+    /* share state with the 3D glass mechanism (eye3d.js) so its light matches this plasma exactly */
+    window.__gaze = { gx: gx, gy: gy, phase: phase, pull: pull, energy: energy, tint: .5 + gx * .45, R: boxW * .5 / H,
+      scale: (boxW / ASPECT) / H, ptr: [((ptrX - sr.left) - sr.width / 2) / H - ecx, -((ptrY - sr.top) - sr.height / 2) / H - ecy] };
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
 
@@ -243,7 +247,7 @@
     pull += ((touching ? 1 : 0) - pull) * pk;
     if (!touching) { rawX = cx + gx * R; rawY = cy + gy * R * .7; }
     var qk = reduce ? 1 : 1 - Math.pow(.0005, dt); ptrX += (rawX - ptrX) * qk; ptrY += (rawY - ptrY) * qk;
-    setDoors(); drawGL();
+    setDoors(); drawGL(); if (window.__eye3dDraw) window.__eye3dDraw(now);
   }
   function loop(now) { if (running) frame(now); requestAnimationFrame(loop); }
   frame(performance.now(), 0);

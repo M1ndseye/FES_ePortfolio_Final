@@ -182,6 +182,7 @@ body.engine {
 .gaze-stage::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(90% 80% at 50% 50%, rgba(6,9,18,0) 40%, rgba(6,9,18,.78) 100%); }
 .eye-stage { position: relative; width: min(56vw, 820px); aspect-ratio: 1586 / 992; z-index: 2; pointer-events: none; }
 .eye-stage img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.eye-stage .eye3d { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 
 .door { position: absolute; top: 0; bottom: 0; width: max(26%, calc((100vw - 1440px) / 2 + 380px)); display: flex; flex-direction: column; justify-content: center; gap: 14px; padding: 0 var(--edge); z-index: 3; isolation: isolate; }
 .door--left { left: 0; align-items: flex-start; text-align: left; padding-right: var(--pad); }

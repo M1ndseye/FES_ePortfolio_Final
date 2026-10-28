@@ -6,7 +6,9 @@
   var cv = document.querySelector("canvas[data-eye3d]");
   if (!cv) return;
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var gl = cv.getContext("webgl", { antialias: true, alpha: false, stencil: true });
+  var HOME = cv.hasAttribute("data-home");   /* home page: transparent canvas drawn on top of the stage plasma, driven by gaze.js */
+  var FIT = parseFloat(cv.getAttribute("data-dist")) || 8.2;
+  var gl = cv.getContext("webgl", { antialias: true, alpha: HOME, premultipliedAlpha: true, stencil: true });
   if (!gl) { cv.dispatchEvent(new Event("eye3d-fail")); return; }
 
   /* ---- tiny mat4 ---- */
@@ -44,7 +46,7 @@
 
   var PLASMA = [
     "precision highp float;",
-    "uniform vec2 uRes; uniform float uPhase; uniform vec2 uPtr; uniform float uPull; uniform float uEnergy; uniform float uTint; uniform float uR;",
+    "uniform vec2 uRes; uniform float uPhase; uniform vec2 uPtr; uniform float uPull; uniform float uEnergy; uniform float uTint; uniform float uR; uniform float uScale; uniform float uHomeP;",
     "const float PI = 3.14159265;",
     "float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }",
     "float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.-2.*f);",
@@ -72,7 +74,7 @@
     "  vec2 q = uPtr; float qr = length(q);",
     "  float thp = atan(q.y, q.x);",
     "  float d = th - thp; d = mod(d + PI, 2.*PI) - PI;",
-    "  float wf = (vn(vec2(r*5. + t*.45, 2.6*cos(th))) + vn(vec2(r*5. + t*.45 + 7., 2.6*sin(th))) - 1.) * 2.6 * smoothstep(0., uR, r);",
+    "  float wfn = (vn(vec2(r*5. + t*.45, 2.6*cos(th))) + vn(vec2(r*5. + t*.45 + 7., 2.6*sin(th))) - 1.) * 2.6 * smoothstep(0., uR, r); float wfo = (vn(vec2(r*5. + t*.45, th*2.6)) - .5) * 2.6 * smoothstep(0., uR, r); float wf = wfn;",
     "  float free1 = lanes(th*13./(2.*PI), wf, 1., t, 6.28*max(r,.15)/13./.011) + .55*lanes(th*23./(2.*PI), wf*1.4, 7., t*1.3, 6.28*max(r,.15)/23./.011);",
     "  float freeFade = smoothstep(.0, uR*.35, r) * (1. - smoothstep(uR*.7, uR*1.9, r)) / (1. + r*1.2);",
     "  float pinch = uPull * smoothstep(.0, max(qr, .05), r);",
@@ -89,12 +91,12 @@
     "  float ripple = exp(-pow((dp - fract(t*.32)*.2)*45., 2.)) * .35 * uPull * (1. - fract(t*.32));",
     "  float amb = caust(p*1.1 + .15, t*.6) * .07 * exp(-r*1.6);",
     "  vec3 sapph = vec3(.18,.42,1.), amber = vec3(1.,.62,.24);",
-    "  vec3 tint = mix(sapph, amber, smoothstep(-.28, .28, p.x + (uTint - .5)*.5));",
+    "  vec3 tint = mix(sapph, amber, mix(smoothstep(-.28, .28, p.x + (uTint - .5)*.5), clamp(uTint, 0., 1.), uHomeP));",
     "  vec3 col = vec3(.015,.025,.06) + tint*(.05*exp(-r*2.2) + fil*.85 + halo + amb + ripple) + vec3(.8,.9,1.)*(hot*.9 + fil*.06);",
     "  return 1. - exp(-col*1.1);",
     "}",
-    "void main(){ vec2 uv = gl_FragCoord.xy / uRes; vec2 p = (uv - .5) * vec2(uRes.x/uRes.y, 1.);",
-    "  vec3 col = plasma(p); float lum = dot(col, vec3(.33,.34,.33)); col = mix(col, vec3(lum)*vec3(.86,.88,1.), .5) * 1.35 + vec3(.15,.16,.24) * exp(-dot(p,p) * 3.2);",
+    "void main(){ vec2 uv = gl_FragCoord.xy / uRes; vec2 p = (uv - .5) * vec2(uRes.x/uRes.y, 1.) * uScale;",
+    "  vec3 col = plasma(p); float lum = dot(col, vec3(.33,.34,.33)); if (uHomeP < .5) col = mix(col, vec3(lum)*vec3(.86,.88,1.), .5) * 1.35 + vec3(.15,.16,.24) * exp(-dot(p,p) * 3.2);",
     "  col += (fract(sin(dot(gl_FragCoord.xy, vec2(12.9898,78.233)))*43758.5453) - .5) / 255.;",
     "  gl_FragColor = vec4(col, 1.); }"
   ].join("\n");
@@ -104,7 +106,7 @@
   var MESH_VS = "attribute vec3 p;attribute vec3 n;uniform mat4 M,V,P;varying vec3 vn;" +
     "void main(){vec4 w=M*vec4(p,1.);vn=mat3(V)*(mat3(M)*n);gl_Position=P*V*w;}";
   var MESH_FS = [
-    "precision highp float; varying vec3 vn; uniform sampler2D bg; uniform vec2 uRes; uniform vec2 uGaze; uniform float uPhase; uniform float uGain; uniform float uThick;",
+    "precision highp float; varying vec3 vn; uniform sampler2D bg; uniform vec2 uRes; uniform vec2 uGaze; uniform float uPhase; uniform float uGain; uniform float uThick; uniform float uHome;",
     "// broad strips of light behind the glass: they exist to be bent and split by it",
     "vec3 strips(vec2 p, vec2 m){",
     "  vec3 c = vec3(0.);",
@@ -150,15 +152,15 @@
     "  float glint = smoothstep(.72, .98, edge) * (.5 + .5*sin(dot(p, vec2(9.,5.)) + g.x*6. - g.y*4.));",
     "  col += vec3(1.,.95,.9) * glint * .35;",
     "  col *= uGain; col = col / (1. + col*.4); col = pow(col, vec3(.95));",
-    "  gl_FragColor = vec4(col, 1.);",
+    "  gl_FragColor = vec4(col, uHome > .5 ? clamp(max(col.r, max(col.g, col.b)), 0., 1.) : 1.);",
     "}"
   ].join("\n");
 
   var plasmaProg = mk(QUAD_VS, PLASMA), blitProg = mk(QUAD_VS, BLIT_FS), meshProg = mk(MESH_VS, MESH_FS);
   function U(pr, names) { var o = {}; names.forEach(function (k) { o[k] = gl.getUniformLocation(pr, k); }); return o; }
-  var uPl = U(plasmaProg, ["uRes","uPhase","uPtr","uPull","uEnergy","uTint","uR"]);
+  var uPl = U(plasmaProg, ["uRes","uPhase","uPtr","uPull","uEnergy","uTint","uR","uScale","uHomeP"]);
   var uBl = U(blitProg, ["bg","uRes"]);
-  var uMe = U(meshProg, ["M","V","P","bg","uRes","uGaze","uPhase","uGain","uThick"]);
+  var uMe = U(meshProg, ["M","V","P","bg","uRes","uGaze","uPhase","uGain","uThick","uHome"]);
   var aPl = gl.getAttribLocation(plasmaProg, "q"), aBl = gl.getAttribLocation(blitProg, "q");
   var aP = gl.getAttribLocation(meshProg, "p"), aN = gl.getAttribLocation(meshProg, "n");
   var quad = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, quad); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
@@ -254,6 +256,7 @@
     allocFBO(Math.round(W / 2), Math.round(H / 2));
   }
   size(); window.addEventListener("resize", size);
+  var G = null;
   var tx = 0, ty = 0, gx = 0, gy = 0;
   function ptr(e) { var r = cv.getBoundingClientRect(); tx = Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width - .5) * 2)); ty = Math.max(-1, Math.min(1, ((e.clientY - r.top) / r.height - .5) * 2)); }
   window.addEventListener("pointermove", ptr, { passive: true });
@@ -264,28 +267,32 @@
   function drawQuad(prog, attr) { gl.bindBuffer(gl.ARRAY_BUFFER, quad); gl.enableVertexAttribArray(attr); gl.vertexAttribPointer(attr, 2, gl.FLOAT, false, 0, 0); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); }
   function draw(now, still) {
     var t = (now - t0) / 1000, ph = still ? 3 : t;
-    gx += (tx - gx) * .06; gy += (ty - gy) * .06;
+    G = HOME ? window.__gaze : null;
+    if (HOME && !G) return;
+    if (HOME) { if (Math.abs(cv.clientWidth * dpr - cv.width) > 2) size(); gx = G.gx; gy = G.gy; ph = G.phase; }
+    else { gx += (tx - gx) * .06; gy += (ty - gy) * .06; }
     gl.disable(gl.DEPTH_TEST); gl.disable(gl.BLEND); gl.disable(gl.STENCIL_TEST);
     /* 1. plasma light into the texture */
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo); gl.viewport(0, 0, FW, FH);
     gl.useProgram(plasmaProg);
     var asp = W / H;
-    gl.uniform2f(uPl.uRes, FW, FH); gl.uniform1f(uPl.uPhase, ph); gl.uniform2f(uPl.uPtr, gx * .35 * asp, -gy * .35); gl.uniform1f(uPl.uPull, 0);
-    gl.uniform1f(uPl.uEnergy, 0); gl.uniform1f(uPl.uTint, .42 + .4 * gx); gl.uniform1f(uPl.uR, .42);
+    gl.uniform2f(uPl.uRes, FW, FH); gl.uniform1f(uPl.uPhase, ph); gl.uniform1f(uPl.uHomeP, HOME ? 1 : 0);
+    if (HOME) { gl.uniform2f(uPl.uPtr, G.ptr[0], G.ptr[1]); gl.uniform1f(uPl.uPull, G.pull); gl.uniform1f(uPl.uEnergy, G.energy); gl.uniform1f(uPl.uTint, G.tint); gl.uniform1f(uPl.uR, G.R); gl.uniform1f(uPl.uScale, G.scale); }
+    else { gl.uniform2f(uPl.uPtr, gx * .35 * asp, -gy * .35); gl.uniform1f(uPl.uPull, 0); gl.uniform1f(uPl.uEnergy, 0); gl.uniform1f(uPl.uTint, .42 + .4 * gx); gl.uniform1f(uPl.uR, .42); gl.uniform1f(uPl.uScale, 1); }
     drawQuad(plasmaProg, aPl);
     /* 2. show it as the backdrop */
     gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, W, H);
-    gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
-    gl.useProgram(blitProg); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex); gl.uniform1i(uBl.bg, 0); gl.uniform2f(uBl.uRes, W, H);
-    drawQuad(blitProg, aBl);
+    gl.clearColor(0, 0, 0, HOME ? 0 : 1); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
+    if (!HOME) { gl.useProgram(blitProg); gl.uniform1i(uBl.bg, 0); gl.uniform2f(uBl.uRes, W, H); drawQuad(blitProg, aBl); }
     /* 3. the glass, additive so overlapping layers glow through each other */
     gl.useProgram(meshProg);
-    var dist = asp > 1.7 ? 8.2 : 8.2 * (1.7 / asp) * .9;
+    var dist = (asp > 1.7 ? FIT : FIT * (1.7 / asp) * .9);
     var tiltY = gx * .30, tiltX = gy * .20;
     var V = mul(mul([1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,-dist,1], mul(rotX(tiltX), rotY(tiltY))), [1,0,0,0, 0,1,0,0, 0,0,1,0, -CENTER[0], -CENTER[1], -CENTER[2], 1]);
     gl.uniformMatrix4fv(uMe.V, false, new Float32Array(V));
     gl.uniformMatrix4fv(uMe.P, false, new Float32Array(persp(.55, asp, .5, 60)));
-    gl.uniform1i(uMe.bg, 0); gl.uniform2f(uMe.uRes, W, H); gl.uniform2f(uMe.uGaze, gx, gy); gl.uniform1f(uMe.uPhase, ph);
+    gl.uniform1i(uMe.bg, 0); gl.uniform1f(uMe.uHome, HOME ? 1 : 0); gl.uniform2f(uMe.uRes, W, H); gl.uniform2f(uMe.uGaze, gx, gy); gl.uniform1f(uMe.uPhase, ph);
     gl.enable(gl.DEPTH_TEST); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE); gl.disable(gl.CULL_FACE);
     var spin = train ? train(still ? 0 : t) : {};
     function drawPart(p) {
@@ -318,9 +325,10 @@
     gl.depthMask(true);
     document.documentElement.setAttribute("data-eye3d", "ready");
   }
-  function loop(now) { if (!running) return; draw(now, reduce); if (!reduce) requestAnimationFrame(loop); }
+  if (HOME) window.__eye3dDraw = function (now) { draw(now, reduce); };
+  function loop(now) { if (HOME || !running) return; draw(now, reduce); if (!reduce) requestAnimationFrame(loop); }
   document.addEventListener("visibilitychange", function () { running = !document.hidden; if (running) requestAnimationFrame(loop); });
-  fetch(cv.getAttribute("data-eye3d")).then(function (r) { return r.arrayBuffer(); }).then(function (b) { build(b); requestAnimationFrame(loop); })
+  fetch(cv.getAttribute("data-eye3d")).then(function (r) { return r.arrayBuffer(); }).then(function (b) { build(b); if (HOME) { window.__eye3dActive = true; } else requestAnimationFrame(loop); })
     .catch(function (e) { console.log("eye3d failed", e); cv.dispatchEvent(new Event("eye3d-fail")); });
   window.__eye3d = { draw: function (tm) { draw(t0 + tm * 1000, false); }, gears: function () { return train; } };
 })();
