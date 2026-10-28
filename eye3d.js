@@ -194,8 +194,8 @@
   function setupTrain() {
     var g4 = byName["Cube.004"], g2 = byName["Cube.002"], g7 = byName["Cube.007"], gC = byName.Cube, g3 = byName["Cube.003"];
     if (!(g4 && g2 && g7 && gC && g3)) return;
-    /* spacing: pitch circles exactly tangent. Tiny gear sits where both circles (big wheel, ring) meet; right-hand gear slides to the small one. */
-    var r4 = GEAR["Cube.004"].pr + GEAR["Cube.002"].pr, r7 = GEAR["Cube.007"].pr + GEAR["Cube.002"].pr;
+    /* spacing: the tiny gear sits just clear of both neighbours (their teeth are far deeper than its own, so a true mesh would overlap); right-hand gear slides to the small one. */
+    var r4 = 1.633 + .249 + .014, r7 = .963 + .249 + .014;   /* tip radii plus a hair of clearance: the tiny gear can never touch its neighbours */
     var dx = g7.t[0] - g4.t[0], dy = g7.t[1] - g4.t[1], d = Math.hypot(dx, dy);
     var a = (r4 * r4 - r7 * r7 + d * d) / (2 * d), h = Math.sqrt(Math.max(r4 * r4 - a * a, 0));
     var mx = g4.t[0] + a * dx / d, my = g4.t[1] + a * dy / d;
