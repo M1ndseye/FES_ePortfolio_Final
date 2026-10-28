@@ -1,4 +1,4 @@
-/* M1ndseye home: optional sound. Ambient bed + crystal keys + pointer-driven crystal swell (short licensed samples in assets/audio).
+/* M1ndseye home: optional sound. Crystal Cavern bed + crystal keys + pointer-driven crystal swell (short licensed samples in assets/audio).
    Off until the visitor taps the Sound button (browsers block autoplay anyway).
    Preference remembered in localStorage. */
 (function () {
@@ -50,7 +50,7 @@
         .then(function (ab) { return new Promise(function (ok, no) { ctx.decodeAudioData(ab, ok, no); }); })
         .then(function (b) { buf[n] = b; });
     }
-    loading = Promise.all([get("ambient"), get("keys"), get("swell")]).then(start).catch(function () {});
+    loading = Promise.all([get("keys"), get("swell")]).then(start).catch(function () {});
     return loading;
   }
 
@@ -72,18 +72,20 @@
     send = ctx.createGain();
     send.connect(dly); dly.connect(dlp); dlp.connect(fb); fb.connect(dly); dlp.connect(wet); wet.connect(master);
     master.connect(ctx.destination);
+    /* Crystal Cavern Echoes: streamed and looped (about 2:56), evened out with a gentle compressor */
+    bedEl = new Audio(BASE + "background.mp3");
+    bedEl.loop = true; bedEl.preload = "auto";
+    var bsrc = ctx.createMediaElementSource(bedEl);
+    var comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -26; comp.ratio.value = 3; comp.knee.value = 12; comp.attack.value = .02; comp.release.value = .4;
+    var bg = ctx.createGain(); bg.gain.value = .3;
+    bsrc.connect(comp); comp.connect(bg); bg.connect(master); bg.connect(send);
     load();
   }
-  var send = null;
+  var send = null, bedEl = null;
 
   function start() {
     if (started) return; started = true;
-    /* Enzalla: ethereal bed. One-shot with a long tail, so re-trigger it before the last one dies and let them overlap. */
-    (function bed() {
-      if (!ctx) return;
-      if (on && ctx.state === "running") shot("ambient", .85, 1, master);
-      setTimeout(bed, 5600);
-    })();
     /* Takama: crystal keys phrase, locked to 122 BPM (two bars = 3.93 s), played in about 1 of every 4 slots */
     (function keys() {
       if (!ctx) return;
@@ -132,12 +134,13 @@
     if (v) {
       if (!ctx) build();
       if (ctx.resume) ctx.resume();
+      if (bedEl) { var pr = bedEl.play(); if (pr && pr.catch) pr.catch(function () {}); }
       master.gain.cancelScheduledValues(ctx.currentTime);
       master.gain.setTargetAtTime(.9, ctx.currentTime, .8);   /* slow fade-in */
     } else if (ctx) {
       master.gain.cancelScheduledValues(ctx.currentTime);
       master.gain.setTargetAtTime(0, ctx.currentTime, .25);
-      setTimeout(function () { if (!on && ctx && ctx.suspend) ctx.suspend(); }, 1500);
+      setTimeout(function () { if (!on && ctx) { if (bedEl) bedEl.pause(); if (ctx.suspend) ctx.suspend(); } }, 1500);
     }
     if (remember) { try { localStorage.setItem(KEY, v ? "1" : "0"); } catch (e) {} }
     label();
@@ -145,7 +148,7 @@
   btn.addEventListener("click", function () { set(!on, true); });
   document.addEventListener("visibilitychange", function () {
     if (!ctx || !on) return;
-    if (document.hidden) ctx.suspend(); else ctx.resume();
+    if (document.hidden) { ctx.suspend(); if (bedEl) bedEl.pause(); } else { ctx.resume(); if (bedEl) bedEl.play().catch(function () {}); }
   });
 
   /* returning visitors who chose sound: start on their first tap/key (autoplay rules need a gesture) */
