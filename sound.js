@@ -84,9 +84,9 @@
 
     /* saber hum: two close saws beat against each other; speed opens the filter and lifts pitch */
     var h1 = ctx.createOscillator(), h2 = ctx.createOscillator(), hs = ctx.createOscillator();
-    h1.type = h2.type = "sawtooth"; h1.frequency.value = 98; h2.frequency.value = 99.6;
-    hs.type = "square"; hs.frequency.value = 49;
-    var hf = ctx.createBiquadFilter(); hf.type = "lowpass"; hf.frequency.value = 260; hf.Q.value = 5;
+    h1.type = h2.type = "sawtooth"; h1.frequency.value = 62; h2.frequency.value = 63;
+    hs.type = "square"; hs.frequency.value = 31;
+    var hf = ctx.createBiquadFilter(); hf.type = "lowpass"; hf.frequency.value = 170; hf.Q.value = 4;
     var hg = ctx.createGain(); hg.gain.value = .0;
     var tr = ctx.createOscillator(), trg = ctx.createGain();   /* slow shimmer */
     tr.frequency.value = 7.5; trg.gain.value = 6; tr.connect(trg); trg.connect(h1.detune); trg.connect(h2.detune); tr.start();
@@ -102,11 +102,11 @@
     var now = performance.now();
     speed *= Math.pow(.5, (now - (tick.t || now)) / 260); tick.t = now; /* ~260 ms half-life */
     var s = Math.min(1, speed / 2.2), t = ctx.currentTime;
-    hum.hg.gain.setTargetAtTime(.012 + .30 * s * s * (3 - 2 * s) , t, .06);
-    hum.hf.frequency.setTargetAtTime(240 + 1700 * s, t, .08);
-    var f = 98 * (1 + .22 * s);
+    hum.hg.gain.setTargetAtTime(.006 + .15 * s * s * (3 - 2 * s) , t, .06);
+    hum.hf.frequency.setTargetAtTime(160 + 1300 * s, t, .08);
+    var f = 62 * (1 + .22 * s);
     hum.h1.frequency.setTargetAtTime(f, t, .09);
-    hum.h2.frequency.setTargetAtTime(f * 1.016, t, .09);
+    hum.h2.frequency.setTargetAtTime(f * 1.012, t, .09);
     hum.hs.frequency.setTargetAtTime(f / 2, t, .09);
     requestAnimationFrame(tick);
   }
