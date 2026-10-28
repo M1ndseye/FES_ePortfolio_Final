@@ -263,7 +263,7 @@
   window.addEventListener("pointermove", ptr, { passive: true });
   window.addEventListener("pointerdown", ptr, { passive: true });
 
-  var CENTER = [0, 0, .9];
+  var CENTER = [0, 0, .9], lookX = 0, lookY = 0;
   var t0 = performance.now(), running = true;
   function drawQuad(prog, attr) { gl.bindBuffer(gl.ARRAY_BUFFER, quad); gl.enableVertexAttribArray(attr); gl.vertexAttribPointer(attr, 2, gl.FLOAT, false, 0, 0); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); }
   function draw(now, still) {
@@ -296,8 +296,14 @@
     gl.uniform1i(uMe.bg, 0); gl.uniform1f(uMe.uHome, HOME ? 1 : 0); gl.uniform2f(uMe.uRes, W, H); gl.uniform2f(uMe.uGaze, gx, gy); gl.uniform1f(uMe.uPhase, ph);
     gl.enable(gl.DEPTH_TEST); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE); gl.disable(gl.CULL_FACE);
     var spin = train ? train(still ? 0 : t) : {};
+    lookX += (gx - lookX) * .2; lookY += (gy - lookY) * .2;
     function drawPart(p) {
       var local = trs(p.t, p.q, p.s);
+      if (p.name === "pupil") {
+        /* the pupil pivots about its origin (the centre of the eye) and looks toward the pointer */
+        var Rg = mul(rotY(lookX * .9), rotX(lookY * .7));
+        local = mul(trs(p.t, [0, 0, 0, 1], [1, 1, 1]), mul(Rg, trs([0, 0, 0], p.q, p.s)));
+      }
       if (spin[p.name] !== undefined) local = mul(local, rotZ(spin[p.name]));
       else if (p.irisSpeed) local = mul(local, rotY((still ? 0 : t) * p.irisSpeed * 6.2832));
       gl.uniformMatrix4fv(uMe.M, false, new Float32Array(local));
