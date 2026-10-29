@@ -97,7 +97,7 @@
     if (speed > .35 && now - lastSwell > 900 && on && ctx.state === "running") {
       lastSwell = now;
       var s = Math.min(1, speed / 2);
-      var src = shot("swell", .176 + .44 * s, .94 + .14 * s, master);
+      var src = shot("swell", .141 + .352 * s, .94 + .14 * s, master);
       var g = ctx.createGain(); g.gain.value = .4; src.connect(g); g.connect(send);
     }
   }
