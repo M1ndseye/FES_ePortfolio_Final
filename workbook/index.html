@@ -155,15 +155,23 @@
       .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
       /* Inside the book */
-      .inside { background: linear-gradient(to top right, #023e49 0%, #1b223f 50%, #360638 100%); color: #f2f5f6; }
-      .inside .eyebrow { color: #8ca8ad; }
+      .inside { background: #1f0526; color: #f2f5f6; padding-bottom: 0; }
+      .inside .eyebrow { color: #d9c3dd; }
       .inside h2 { color: #d4ab3a; }
       .inside h3 { color: #f2f5f6; }
-      .inside-row { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; margin-bottom: 48px; }
-      .inside-row:last-child { margin-bottom: 0; }
-      .inside-row:nth-child(even) .inside-media { order: 2; }
-      .inside-media { border-radius: var(--radius); overflow: hidden; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); }
-      .inside-row p { color: #bfced1; }
+      /* full-width scenes with a plum fade under the copy, like the hero */
+      .inside-scene { position: relative; isolation: isolate; display: grid; align-items: center; min-height: clamp(420px, 52vw, 640px); padding: 64px 0; overflow: hidden; }
+      .inside-scene { background: #1f0526; }
+      .inside-scene > img { position: absolute; top: 0; bottom: 0; right: 0; left: auto; z-index: -2; width: 64%; height: 100%; object-fit: cover;
+        -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, .5) 18%, #000 46%); mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, .5) 18%, #000 46%); }
+      .inside-scene:nth-of-type(odd) > img { right: auto; left: 0;
+        -webkit-mask-image: linear-gradient(270deg, transparent 0%, rgba(0, 0, 0, .5) 18%, #000 46%); mask-image: linear-gradient(270deg, transparent 0%, rgba(0, 0, 0, .5) 18%, #000 46%); }
+      .inside-scene::before, .inside-scene:nth-of-type(odd)::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+        background: linear-gradient(180deg, rgba(31, 5, 38, .6) 0%, rgba(31, 5, 38, 0) 22%, rgba(31, 5, 38, 0) 78%, rgba(31, 5, 38, .6) 100%); }
+      .inside-copy { max-width: 440px; }
+      .inside-scene:nth-of-type(odd) .inside-copy { margin-left: auto; }
+      .inside-copy h3 { text-shadow: 0 2px 26px rgba(31, 5, 38, .6); }
+      .inside-copy p { color: #efe6f0; text-shadow: 0 1px 16px rgba(31, 5, 38, .7); }
 
       /* Story */
       .story { background: var(--bg); }
@@ -266,8 +274,13 @@
       footer a { color: var(--muted); }
 
       @media (max-width: 900px) {
-        .hero .wrap, .inside-row, .story-card { grid-template-columns: 1fr; }
-        .inside-row:nth-child(even) .inside-media { order: 0; }
+        .hero .wrap, .story-card { grid-template-columns: 1fr; }
+        /* phones: picture on top, fading into plum under the copy */
+        .inside-scene { display: block; min-height: 0; padding: 0 0 36px; background: #1f0526; }
+        .inside-scene > img, .inside-scene:nth-of-type(odd) > img { position: relative; inset: auto; z-index: 0; width: 100%; height: auto; aspect-ratio: 16 / 10; display: block;
+          -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%); }
+        .inside-scene::before, .inside-scene:nth-of-type(odd)::before { display: none; }
+        .inside-copy, .inside-scene:nth-of-type(odd) .inside-copy { max-width: none; margin: -28px 0 0; position: relative; }
         .benefits { grid-template-columns: 1fr 1fr; }
         .facts ul { grid-template-columns: 1fr 1fr; }
         section { padding: 56px 0; }
@@ -405,18 +418,18 @@
             <span class="eyebrow">Inside the book</span>
             <h2>A Peek at the Pages.</h2>
           </div>
-          <div class="inside-row">
-            <div class="inside-media"><img src="../assets/ME_Social_Sesame_Mazes_.jpg" alt="Vowel maze pages from the workbook" loading="lazy" width="1920" height="1080" /></div>
-            <div><h3>Vowel Mazes Where Every Path Is the Right Path</h3><p>No dead ends and no wrong answers. Kids follow the line, meet the vowels, and finish feeling capable.</p></div>
-          </div>
-          <div class="inside-row">
-            <div class="inside-media"><img src="../assets/ME_Social_Sesame_Word_Search_.jpg" alt="Word search pages from the workbook" loading="lazy" width="1920" height="1080" /></div>
-            <div><h3>Word Searches That Grow with Them</h3><p>Puzzles start short and simple, then stretch as your child's confidence with letters and words grows.</p></div>
-          </div>
-          <div class="inside-row">
-            <div class="inside-media"><img src="../assets/ME_Social_Sesame_Sloping_Difficulty_Curve_.jpg" alt="Diagram of the six series with a gradual difficulty curve" loading="lazy" width="1920" height="1080" /></div>
-            <div><h3>A Gentle Difficulty Curve</h3><p>Six full series move from tracing to writing at a steady pace, so practice builds muscle memory instead of frustration.</p></div>
-          </div>
+        </div>
+        <div class="inside-scene">
+          <img src="../assets/ME_Social_Sesame_Mazes_.jpg" alt="Vowel maze pages from the workbook" loading="lazy" width="1920" height="1080" />
+          <div class="wrap"><div class="inside-copy"><h3>Vowel Mazes Where Every Path Is the Right Path</h3><p>No dead ends and no wrong answers. Kids follow the line, meet the vowels, and finish feeling capable.</p></div></div>
+        </div>
+        <div class="inside-scene">
+          <img src="../assets/ME_Social_Sesame_Word_Search_.jpg" alt="Word search pages from the workbook" loading="lazy" width="1920" height="1080" />
+          <div class="wrap"><div class="inside-copy"><h3>Word Searches That Grow with Them</h3><p>Puzzles start short and simple, then stretch as your child's confidence with letters and words grows.</p></div></div>
+        </div>
+        <div class="inside-scene">
+          <img src="../assets/ME_Social_Sesame_Sloping_Difficulty_Curve_.jpg" alt="Diagram of the six series with a gradual difficulty curve" loading="lazy" width="1920" height="1080" />
+          <div class="wrap"><div class="inside-copy"><h3>A Gentle Difficulty Curve</h3><p>Six full series move from tracing to writing at a steady pace, so practice builds muscle memory instead of frustration.</p></div></div>
         </div>
       </section>
 
