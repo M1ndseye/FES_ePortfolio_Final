@@ -1974,3 +1974,12 @@ footer.project-footer .project-footer-nav {
 .histotripsy-social__copy .case-heading + .case-body {
   margin-top: clamp(18px, 2vw, 28px);
 }
+
+/* Bridge card: TrialSupport case study to the courtroom animation page */
+.ts-page .ts-bridge { display: flex; align-items: center; gap: 16px; margin-top: 22px; padding: 10px; max-width: 460px; border: 1px solid rgba(255,255,255,.18); border-radius: 10px; color: #fff; text-decoration: none; background: rgba(255,255,255,.04); transition: border-color .2s, background .2s; }
+.ts-page .ts-bridge:hover, .ts-page .ts-bridge:focus-visible { border-color: rgba(255,255,255,.55); background: rgba(255,255,255,.08); }
+.ts-page .ts-bridge img { width: 112px; height: 63px; object-fit: cover; border-radius: 6px; flex: none; }
+.ts-page .ts-bridge__text { display: flex; flex-direction: column; gap: 3px; font-size: .92rem; line-height: 1.35; }
+.ts-page .ts-bridge__text strong { font-size: 1rem; }
+.ts-page .ts-bridge__text strong::after { content: " \2192"; }
+@media (max-width: 560px) { .ts-page .ts-bridge img { width: 88px; height: 50px; } }
