@@ -345,9 +345,21 @@
     document.documentElement.setAttribute("data-eye3d", "ready");
   }
   if (HOME) window.__eye3dDraw = function (now) { draw(now, reduce); };
-  function loop(now) { if (HOME || !running) return; draw(now, reduce); if (!reduce) requestAnimationFrame(loop); }
-  document.addEventListener("visibilitychange", function () { running = !document.hidden; if (running) requestAnimationFrame(loop); });
-  fetch(cv.getAttribute("data-eye3d")).then(function (r) { return r.arrayBuffer(); }).then(function (b) { build(b); if (HOME) { window.__eye3dActive = true; } else requestAnimationFrame(loop); })
-    .catch(function (e) { console.log("eye3d failed", e); cv.dispatchEvent(new Event("eye3d-fail")); });
+  /* standalone canvases (not the home eye): load only near the viewport, and draw only while visible */
+  var onScreen = !cv.hasAttribute("data-lazy"), looping = false, loaded = false;
+  function kick() { if (!HOME && running && onScreen && loaded && !looping) { looping = true; requestAnimationFrame(loop); } }
+  function loop(now) { if (HOME || !running || !onScreen) { looping = false; return; } draw(now, reduce); if (!reduce) requestAnimationFrame(loop); else looping = false; }
+  document.addEventListener("visibilitychange", function () { running = !document.hidden; kick(); });
+  function load() {
+    fetch(cv.getAttribute("data-eye3d")).then(function (r) { return r.arrayBuffer(); }).then(function (b) { build(b); loaded = true; if (HOME) { window.__eye3dActive = true; } else kick(); })
+      .catch(function (e) { console.log("eye3d failed", e); cv.dispatchEvent(new Event("eye3d-fail")); });
+  }
+  if (!HOME && cv.hasAttribute("data-lazy") && "IntersectionObserver" in window) {
+    var started = false;
+    new IntersectionObserver(function (en) {
+      onScreen = en[0].isIntersecting;
+      if (onScreen && !started) { started = true; load(); } else kick();
+    }, { rootMargin: "300px 0px" }).observe(cv);
+  } else { onScreen = true; load(); }
   window.__eye3d = { look: function () { return [lookA, gx, gy]; }, draw: function (tm) { draw(t0 + tm * 1000, false); }, gears: function () { return train; } };
 })();

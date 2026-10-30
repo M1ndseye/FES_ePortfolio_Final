@@ -333,8 +333,12 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .ds-card::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; z-index: 1; pointer-events: none;
   background: linear-gradient(135deg, rgba(111,155,255,.8), rgba(111,155,255,0) 38%, rgba(255,157,66,0) 62%, rgba(255,157,66,.75));
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.ds-eye { position: absolute; top: 0; bottom: 0; right: 0; width: 66%; height: 100%; z-index: -1; display: block; pointer-events: none; opacity: .92;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.5) 16%, #000 42%); mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.5) 16%, #000 42%); }
+.ds-card > div { position: relative; z-index: 2; }
+.ds-card__copy { grid-column: 1; grid-row: 1; } .ds-card__find { grid-column: 1; grid-row: 2; align-self: start; justify-content: flex-start; margin-top: -8px; }
 .ds-word { white-space: nowrap; } .ds-word b { color: var(--oi); font-weight: 700; }
-.ds-card__find { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; align-content: center; }
+.ds-card__find { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-start; align-content: center; }
 .ds-pill { padding: 12px 20px; border-radius: 999px; font-weight: 600; background: rgba(244,242,251,.06); border: 1px solid rgba(244,242,251,.16); color: var(--text); }
 .ds-pill:nth-child(odd) { border-color: rgba(111,155,255,.5); } .ds-pill:nth-child(even) { border-color: rgba(255,157,66,.5); }
-@media (max-width: 860px) { .ds-card { grid-template-columns: 1fr; } .ds-card__find { justify-content: flex-start; } }
+@media (max-width: 860px) { .ds-card { grid-template-columns: 1fr; } .ds-card__find { margin-top: 0; gap: 8px; } .ds-pill { padding: 8px 14px; font-size: .88rem; } .ds-eye { top: auto; bottom: 0; width: 100%; height: 62%; opacity: .4; -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 45%); mask-image: linear-gradient(180deg, transparent 0%, #000 45%); } }
