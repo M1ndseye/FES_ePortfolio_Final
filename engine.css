@@ -141,6 +141,7 @@ body.engine {
 .scene::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(6,9,18,.92) 0%, rgba(6,9,18,.7) 46%, rgba(6,9,18,.35) 100%); }
 .scene--right::before { background: linear-gradient(270deg, rgba(6,9,18,.92) 0%, rgba(6,9,18,.7) 46%, rgba(6,9,18,.35) 100%); }
 .scene--right .scene__inner { margin-left: auto; }
+.scene--dim::before { background: linear-gradient(90deg, rgba(6,9,18,.95) 0%, rgba(6,9,18,.9) 45%, rgba(6,9,18,.62) 100%); }
 .scene__inner { width: 100%; max-width: var(--max); margin: 0 auto; }
 .scene__copy { max-width: 620px; }
 .scene__copy .eng-lede { margin-top: 20px; }
