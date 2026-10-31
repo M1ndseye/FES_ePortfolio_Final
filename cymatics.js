@@ -141,6 +141,32 @@
     parts.push(core);
     return parts;
   }
+  function starOutline(n, ro, ri, rot) {    /* concave star outline: tips on ro, inner corners on ri */
+    var s = [], v = [];
+    for (var i = 0; i < n * 2; i++) v.push(pt(i % 2 ? ri : ro, rot + i * TAU / (n * 2)));
+    for (i = 0; i < v.length; i++) { var a = v[i], b = v[(i + 1) % v.length]; s.push(a[0], a[1], b[0], b[1]); }
+    return s;
+  }
+  function dashed(segs, n) {                 /* turn each segment into n dashes */
+    var d = [];
+    for (var i = 0; i < segs.length; i += 4) for (var k = 0; k < n; k++) {
+      var t0 = k / n, t1 = t0 + 0.55 / n;
+      d.push(segs[i] + (segs[i + 2] - segs[i]) * t0, segs[i + 1] + (segs[i + 3] - segs[i + 1]) * t0, segs[i] + (segs[i + 2] - segs[i]) * t1, segs[i + 1] + (segs[i + 3] - segs[i + 1]) * t1);
+    }
+    return d;
+  }
+  function pentaStar() {                     /* circle, pentagon, beveled double pentagram, dashed decagram, node dots */
+    var up = -TAU / 4, parts = [], i;
+    var outer = starOutline(5, .9, .36, up), inner = starOutline(5, .52, .21, up), bevel = [];
+    for (i = 0; i < 10; i++) { var a = pt(i % 2 ? .36 : .9, up + i * TAU / 10), b = pt(i % 2 ? .21 : .52, up + i * TAU / 10); bevel.push(a[0], a[1], b[0], b[1]); }
+    parts.push(outer);
+    parts.push(inner.concat(bevel));
+    parts.push(star(5, 1, .9, up));
+    parts.push(dashed(star(5, 1, .62, up + TAU / 10), 6));   /* dashed inner pentagon through the nodes */
+    var dots = []; for (i = 0; i < 5; i++) { var q = pt(.62, up + TAU / 10 + i * TAU / 5); dots = dots.concat(circ(q[0], q[1], .025, 6)); }
+    parts.push(dots);
+    return parts.concat(splitRing(function (a, b) { return arc(.97, a, b, 12); }, 5, up + TAU / 10));
+  }
   function splitRing(fn, parts, off) {     /* break a ring-like feature into separate drifting arcs */
     var out = [], gap = 0.06;
     for (var i = 0; i < parts; i++) out.push(fn(off + i * TAU / parts + gap, off + (i + 1) * TAU / parts - gap));
@@ -149,7 +175,7 @@
 
   /* ---------- rune recipes, simplest to busiest; each gets the next note up a D major pentatonic ---------- */
   var RECIPES = [
-    function (R) { return [star(3, 1, .62, -TAU / 4), star(3, 1, .62, TAU / 4)].concat(splitRing(function (a, b) { return arc(.86, a, b, 10); }, 3, R() * TAU)); },
+    function (R) { return pentaStar(); },   /* beveled pentagram construction */
     function (R) { return [star(4, 1, .6, 0), star(4, 1, .6, TAU / 8)].concat(seedOfLife(.15, -TAU / 4), splitRing(function (a, b) { return arc(.88, a, b, 8); }, 4, TAU / 8)); },   /* squares around the Seed of Life */
     function (R) { return cubeFlower(); },   /* hexagon flower of cubes */
     function (R) { return [lattice(.62, 0), star(6, 2, .3, TAU / 12), star(6, 1, .72, TAU / 12)].concat(splitRing(function (a, b) { return arc(.84, a, b, 10); }, 3, TAU / 12), [spokes(6, .72, .84, 0)]); },
@@ -339,11 +365,29 @@
     var eyeImg = new Image(); eyeImg.src = "assets/eye/prismatic.webp";
     var fontsReady = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('300 52px "Roboto Condensed"'), document.fonts.load('400 14px "Roboto Condensed"')]).catch(function () {}) : Promise.resolve();
     var imgReady = new Promise(function (ok) { eyeImg.onload = ok; eyeImg.onerror = ok; });
-    Promise.all([fontsReady, imgReady]).then(function () {
-      var bg = x.createRadialGradient(cw / 2, 330, 20, cw / 2, 330, 420);
-      bg.addColorStop(0, "#14295a"); bg.addColorStop(1, "#060912");
-      x.fillStyle = bg; x.fillRect(0, 0, cw, ch);
-      var cx = cw / 2, cy = 345, Rr = 168, rr = 27;
+    var swirlReady = new Promise(function (ok) {          /* one frame of the site's swirling plasma background */
+      window.__cauSnap = function (src) { var t = document.createElement("canvas"); t.width = src.width; t.height = src.height; t.getContext("2d").drawImage(src, 0, 0); ok(t); };
+      setTimeout(function () { window.__cauSnap = null; ok(null); }, 1500);
+    });
+    Promise.all([fontsReady, imgReady, swirlReady]).then(function (res) {
+      var swirl = res[2], cx = cw / 2, cy = 345, Rr = 168, rr = 27;
+      x.fillStyle = "#060912"; x.fillRect(0, 0, cw, ch);
+      if (swirl && swirl.width) {     /* cover the card, centred on the eye like the page */
+        var eb = eyeBox(), sx = eb.x / W * swirl.width, sy = eb.y / H * swirl.height;
+        var s = Math.max(cw / swirl.width, ch / swirl.height) * 1.15;
+        x.drawImage(swirl, cx - sx * s, cy - sy * s, swirl.width * s, swirl.height * s);
+        var vg = x.createRadialGradient(cx, cy, 120, cx, cy, 460);     /* keep the edges dark for the text */
+        vg.addColorStop(0, "rgba(6,9,18,0)"); vg.addColorStop(1, "rgba(6,9,18,.82)");
+        x.fillStyle = vg; x.fillRect(0, 0, cw, ch);
+        var lg = x.createLinearGradient(0, 0, 0, ch);                    /* soft dark fades behind the text */
+        lg.addColorStop(0, "rgba(6,9,18,.75)"); lg.addColorStop(.26, "rgba(6,9,18,0)");
+        lg.addColorStop(.78, "rgba(6,9,18,0)"); lg.addColorStop(1, "rgba(6,9,18,.8)");
+        x.fillStyle = lg; x.fillRect(0, 0, cw, ch);
+      } else {
+        var bg = x.createRadialGradient(cx, 330, 20, cx, 330, 420);
+        bg.addColorStop(0, "#14295a"); bg.addColorStop(1, "#060912");
+        x.fillStyle = bg; x.fillRect(0, 0, cw, ch);
+      }
       if (eyeImg.naturalWidth) { var ew = 250, eh = ew * eyeImg.naturalHeight / eyeImg.naturalWidth; x.globalAlpha = 0.95; x.drawImage(eyeImg, cx - ew / 2, cy - eh / 2, ew, eh); x.globalAlpha = 1; }
       x.globalCompositeOperation = "lighter"; x.lineCap = "round"; x.lineJoin = "round";
       neon(x, mandalaPath(x, cx, cy, Rr, 0), "255,170,70", "255,236,200", 0.5, 0.6);
@@ -364,12 +408,12 @@
       x.shadowBlur = 0;
       x.font = '400 15px "Roboto Condensed", system-ui, sans-serif'; x.fillStyle = "rgba(190,225,255,.8)";
       if ("letterSpacing" in x) x.letterSpacing = "3px";
-      x.fillText("100 HARMONICS", cx, 590);
+      x.fillText("100 HARMONICS", cx, 588);
       if ("letterSpacing" in x) x.letterSpacing = "0px";
-      x.font = 'italic 300 14px "Roboto Condensed", system-ui, sans-serif'; x.fillStyle = "rgba(190,225,255,.6)";
-      x.fillText("The harmonic convergence of AI and OI", cx, 614);
+      x.font = '300 15px "Roboto Condensed", system-ui, sans-serif'; x.fillStyle = "rgba(190,225,255,.75)";
+      x.fillText("Free to play at", cx, 620);
       x.font = '500 15px "Roboto Condensed", system-ui, sans-serif'; x.fillStyle = "#ffb764";
-      x.fillText("m1ndseye.com/eye", cx, 648);
+      x.fillText("m1ndseye.com/eye", cx, 645);
       cvs.toBlob(function (b) { cardBlob = b; }, "image/png");
     });
   }

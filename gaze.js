@@ -225,7 +225,7 @@
     gl.uniform1f(U.uR, boxW * .5 / H);
     gl.uniform2f(U.uPtr, ((ptrX - sr.left) - sr.width / 2) / H - ecx, -((ptrY - sr.top) - sr.height / 2) / H - ecy);
     gl.uniform1f(U.uPull, pull); gl.uniform1f(U.uEnergy, energy); gl.uniform1f(U.uTint, .5 + gx * .45);
-    gl.uniform2f(U.uGaze, gx, gy); gl.uniform1f(U.uEyeOn, (eyeReady && !window.__eye3dActive) ? 1 : 0);
+    gl.uniform2f(U.uGaze, gx, gy); gl.uniform1f(U.uEyeOn, (eyeReady && !window.__eye3dActive && !window.__cauSnap) ? 1 : 0);   /* snapshots: swirl only */
     if (window.__eye3dActive && fallbackImg) fallbackImg.style.visibility = "hidden";
     /* share state with the 3D glass mechanism (eye3d.js) so its light matches this plasma exactly */
     window.__gaze = { gx: gx, gy: gy, phase: phase, pull: pull, energy: energy, tint: .5 + gx * .45, R: boxW * .5 / H,
@@ -248,6 +248,8 @@
     if (!touching) { rawX = cx + gx * R; rawY = cy + gy * R * .7; }
     var qk = reduce ? 1 : 1 - Math.pow(.0005, dt); ptrX += (rawX - ptrX) * qk; ptrY += (rawY - ptrY) * qk;
     setDoors(); drawGL(); if (window.__eye3dDraw) window.__eye3dDraw(now);
+    /* hand a copy of this frame to whoever asked (the rune game's share card), while the buffer is still valid */
+    if (window.__cauSnap && cv) { var snap = window.__cauSnap; window.__cauSnap = null; try { snap(cv); } catch (e) {} }
   }
   function loop(now) { if (running) frame(now); requestAnimationFrame(loop); }
   frame(performance.now(), 0);
