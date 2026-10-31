@@ -240,13 +240,17 @@
   }
 
   function radius() { return Math.max(36, Math.min(85, Math.min(W, H) * (0.095 + Math.random() * 0.03))); }   /* half size */
-  var ANGLES_AT = 25, lastDir = null;
+  var ANGLES_AT = 25, RUSH_AT = 50, lastDir = null;
+  function edgeDist(a, m) {          /* distance from the screen centre to just past the edge, along angle a */
+    var ca = Math.abs(Math.cos(a)) || 1e-6, sa = Math.abs(Math.sin(a)) || 1e-6;
+    return Math.min((W / 2 + m) / ca, (H / 2 + m) / sa);
+  }
   function spawnOne() {
     var R = radius(), p = make(Math.floor(Math.random() * RECIPES.length), R * 1.3 + Math.random() * (W - 2.6 * R), -R * 1.6, R, {});
     if (count >= ANGLES_AT) {        /* hits 25-75: runes come in from any side and cross the screen */
       var a; do { a = Math.random() * TAU; } while (lastDir !== null && Math.abs(Math.atan2(Math.sin(a - lastDir), Math.cos(a - lastDir))) < 0.9);
       lastDir = a;
-      var Rs = Math.hypot(W, H) / 2 + R * 1.6, cx0 = W / 2, cy0 = H / 2;
+      var Rs = edgeDist(a, R * 1.3), cx0 = W / 2, cy0 = H / 2;
       p.x = p.sx = cx0 + Math.cos(a) * Rs; p.y = cy0 + Math.sin(a) * Rs; p.cx = p.x; p.cy = p.y;
       var tx = cx0 + (Math.random() - 0.5) * W * 0.5, ty = cy0 + (Math.random() - 0.5) * H * 0.4, d = Math.hypot(tx - p.x, ty - p.y) || 1;
       var sp = Math.hypot(W, H) * (0.06 + Math.random() * 0.025);
@@ -268,7 +272,8 @@
     var order = [0], half = Math.floor(n / 2); order.push(half); for (i = 1; i < n; i++) if (i !== half) order.push(i);
     function launch(p, slot) {
       var a = base + slot * TAU / n + (Math.random() - 0.5) * (TAU / n) * 0.5;
-      p.x = p.sx = cx0 + Math.cos(a) * Rs; p.y = cy0 + Math.sin(a) * Rs; p.cx = p.x; p.cy = p.y;
+      var Re = edgeDist(a, R * 1.3);
+      p.x = p.sx = cx0 + Math.cos(a) * Re; p.y = cy0 + Math.sin(a) * Re; p.cx = p.x; p.cy = p.y;
       var tx = cx0 + (Math.random() - 0.5) * W * 0.5, ty = cy0 + (Math.random() - 0.5) * H * 0.4, d = Math.hypot(tx - p.x, ty - p.y) || 1;
       p.vx = (tx - p.x) / d * speed; p.vy = (ty - p.y) / d * speed; p.travel = true;
       pats.push(p);
@@ -511,8 +516,13 @@
 
     updateConv(dt);
     if (!conv) spawnIn -= dt;
+    if (level === 1 && count >= RUSH_AT && !conv && spawnIn > 0.3) {   /* 50-75: never an empty screen */
+      var onScreen = 0;
+      for (var z0 = 0; z0 < pats.length; z0++) { var q0 = pats[z0]; if (q0.state === 0 && ((q0.cx > -q0.R && q0.cx < W + q0.R && q0.cy > -q0.R && q0.cy < H + q0.R) || (q0.travel && !q0.entered))) onScreen++; }
+      if (onScreen === 0) spawnIn = 0.3;
+    }
     if (spawnIn <= 0 && !conv) {
-      if (level === 1) { spawnOne(); spawnIn = 5 + Math.random() * 3; }
+      if (level === 1) { spawnOne(); spawnIn = count >= RUSH_AT ? 2 + Math.random() * 1.5 : 5 + Math.random() * 3; }   /* 50-75: overlapping */
       else {
         var live = 0; for (var z = 0; z < pats.length; z++) if (pats[z].half && (pats[z].state === 0 || pats[z].state === 5 || pats[z].state === 6)) live++;
         if (live === 0) { spawnWave(); spawnIn = 1.5; } else spawnIn = 0.4;   /* one wave at a time, so there's always exactly one match */
