@@ -522,7 +522,7 @@
       if (onScreen === 0) spawnIn = 0.3;
     }
     if (spawnIn <= 0 && !conv) {
-      if (level === 1) { spawnOne(); spawnIn = count >= RUSH_AT ? 2 + Math.random() * 1.5 : 5 + Math.random() * 3; }   /* 50-75: overlapping */
+      if (level === 1) { spawnOne(); spawnIn = count >= RUSH_AT ? 2 + Math.random() * 1.5 : 3 + Math.random() * 1.5; }   /* 1-49: every 3-4.5 s, 50-75: 2-3.5 s */
       else {
         var live = 0; for (var z = 0; z < pats.length; z++) if (pats[z].half && (pats[z].state === 0 || pats[z].state === 5 || pats[z].state === 6)) live++;
         if (live === 0) { spawnWave(); spawnIn = 1.5; } else spawnIn = 0.4;   /* one wave at a time, so there's always exactly one match */

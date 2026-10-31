@@ -68,7 +68,7 @@
       '<h2 class="setm__h" id="setm-h">Settings</h2>' +
       '<button type="button" class="setm__x" aria-label="Close">&times;</button>' +
       '<button type="button" class="setm__row" id="setm-snd" role="switch" aria-checked="false"><span>Sound<small>Ambient crystal score</small></span><span class="sw" aria-hidden="true"></span></button>' +
-      '<a class="setm__row" href="eye.html?from=home"><span>Eye screensaver<small>Full-screen mechanical eye</small></span><span class="setm__go" aria-hidden="true">&rarr;</span></a>' +
+      '<a class="setm__row" href="eye.html?from=home"><span>Mini game<small>Tap the runes to make them whole</small></span><span class="setm__go" aria-hidden="true">&rarr;</span></a>' +
     '</div>';
   document.body.appendChild(modal);
   var sw = modal.querySelector("#setm-snd");
