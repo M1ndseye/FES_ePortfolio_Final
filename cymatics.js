@@ -244,7 +244,7 @@
   function gapFor(n) {               /* seconds until the next rune: more overlap as the count climbs */
     var g = 2.3 + Math.random() * 1.15;           /* 1-24: baseline */
     if (n >= 25) g /= 1.3;                        /* 25-49: 30% more frequent */
-    if (n >= RUSH_AT) g /= 1.3;                   /* 50-75: 30% more again (and 25% faster travel) */
+    if (n >= RUSH_AT) g /= 1.3;                   /* 50-75: 30% more again */
     return g;
   }
   function edgeDist(a, m) {          /* distance from the screen centre to just past the edge, along angle a */
@@ -274,7 +274,7 @@
       var Rs = edgeDist(a, R * 1.3), cx0 = W / 2, cy0 = H / 2;
       p.x = p.sx = cx0 + Math.cos(a) * Rs; p.y = cy0 + Math.sin(a) * Rs; p.cx = p.x; p.cy = p.y;
       var tx = cx0 + (Math.random() - 0.5) * W * 0.5, ty = cy0 + (Math.random() - 0.5) * H * 0.4, d = Math.hypot(tx - p.x, ty - p.y) || 1;
-      var sp = Math.hypot(W, H) * (0.06 + Math.random() * 0.025) * (count >= RUSH_AT ? 1.25 : 1);   /* 50-75: 25% faster */
+      var sp = Math.hypot(W, H) * (0.06 + Math.random() * 0.025) * (count >= RUSH_AT ? 1.5625 : count >= 25 ? 1.25 : 1);   /* 25-49: +25%, 50-75: +25% again */
       p.vx = (tx - p.x) / d * sp; p.vy = (ty - p.y) / d * sp; p.travel = true;
     }
     pats.push(p);
