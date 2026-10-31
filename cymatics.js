@@ -329,16 +329,18 @@
   function drawRune(p, time) {
     var R = p.R, st = p.state, t = p.t, sub = p.sub, cx = p.cx, cy = p.cy;
     var bright = st === 7 ? 0.75 * Math.max(0, 1 - t / 1.1) : st === 0 || st === 6 ? 0.75 : st === 5 ? 0.95 : st === 1 ? 0.75 + 0.25 * Math.min(1, t / 0.5)
-      : st === 2 || st === 4 ? 1 : Math.max(0, 1 - t / 1.6);
+      : st === 2 || st === 4 ? 1 : Math.pow(Math.max(0, 1 - t / 1.6), 1.5);
     if (p.half && (st === 0 || st === 5)) bright *= 0.82 + 0.18 * Math.sin(time * 2.2 + p.phase);   /* pairs pulse in sync */
-    var grow = st === 3 ? 1 + t * 0.18 : 1;
+    /* once whole, the rune expands with the light rings while it fades (same slowing curve), so its detail opens up */
+    var grow = 1;
+    if (st === 2 || st === 3) { var u = Math.min(1, ((st === 2 ? 0 : 1.8) + t) / 3.4); grow = 1 + 1.8 * (1 - Math.pow(1 - u, 2.2)); }
     var c = Math.cos(p.rot), sn = Math.sin(p.rot);
     var col = st === 5 ? "255,170,80" : p.pal[0], core = st === 5 ? "255,240,220" : p.pal[1];
     if (st === 2 || st === 4 || (st === 1 && t > 0.35)) {      /* inner light once it's whole */
       var ga = (st === 1 ? (t - 0.35) / 0.4 : 1) * 0.3 * bright;
-      var gr = g.createRadialGradient(cx, cy, 0, cx, cy, R * 0.8);
+      var gr = g.createRadialGradient(cx, cy, 0, cx, cy, R * 0.8 * grow);
       gr.addColorStop(0, "rgba(" + core + "," + ga.toFixed(3) + ")"); gr.addColorStop(1, "rgba(" + col + ",0)");
-      g.fillStyle = gr; g.beginPath(); g.arc(cx, cy, R * 0.8, 0, TAU); g.fill();
+      g.fillStyle = gr; g.beginPath(); g.arc(cx, cy, R * 0.8 * grow, 0, TAU); g.fill();
     }
     for (var i = 0; i < p.N; i++) {
       if (sub && !sub[i]) continue;
