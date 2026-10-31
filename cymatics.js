@@ -216,7 +216,7 @@
     var parts = rune(idx), N = parts.length;
     var p = {
       idx: idx, parts: parts, N: N, R: R, x: x, y: y, cx: x, cy: y,
-      vy: H * (opts.slow ? 0.032 : 0.04 + Math.random() * 0.02), sway: Math.random() * 6.28,
+      vy: H * (opts.slow ? 0.0368 : 0.046 + Math.random() * 0.023), sway: Math.random() * 6.28,
       rot: opts.rot != null ? opts.rot : Math.random() * 6.28, vr: opts.vr != null ? opts.vr : (Math.random() - 0.5) * 0.1,
       state: 0, t: 0, half: !!opts.half, pair: opts.pair || 0, wave: opts.wave || 0, sub: null,
       pal: PALETTES[opts.pal != null ? opts.pal : (Math.random() < 0.6 ? 0 : 1)],
