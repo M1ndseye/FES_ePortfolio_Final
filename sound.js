@@ -250,18 +250,36 @@
   if (sw) sw.addEventListener("click", function () { set(!on, true); });
 
   /* cymatics game: a crystal-bowl tone per pattern (fundamental + bowl partials, long decay), through the master volume */
-  var armed = false, pend = null;
+  var armed = false, pend = null, verb = null;
+  function reverb() {     /* synthetic hall: ~5 s of decaying, darkening stereo noise as the impulse response */
+    if (verb) return verb;
+    var len = Math.round(ctx.sampleRate * 5), ir = ctx.createBuffer(2, len, ctx.sampleRate);
+    for (var ch = 0; ch < 2; ch++) {
+      var d = ir.getChannelData(ch), lp = 0;
+      for (var i = 0; i < len; i++) {
+        var k = i / len, cut = .55 - .45 * k;
+        lp += (Math.random() * 2 - 1 - lp) * cut;
+        d[i] = lp * Math.pow(1 - k, 2.4) * (i < 300 ? i / 300 : 1);
+      }
+    }
+    verb = ctx.createConvolver(); verb.buffer = ir;
+    var vo = ctx.createGain(); vo.gain.value = .55; verb.connect(vo); vo.connect(master);
+    return verb;
+  }
   window.M1Sound = {
     tone: function (f, pan, gain) {
       if (!on || !ctx || !master) { if (armed) pend = [f, pan, performance.now(), gain]; return; }
       var t = ctx.currentTime, out = ctx.createGain(), p = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
       out.gain.value = gain == null ? 1 : gain;
       if (p) { p.pan.value = Math.max(-1, Math.min(1, pan || 0)); out.connect(p); p.connect(master); } else out.connect(master);
-      var sg = ctx.createGain(); sg.gain.value = .5; out.connect(sg); sg.connect(send);
-      [[1, .16, 3.6], [1.004, .07, 3.2], [2.0, .035, 1.8], [2.76, .03, 1.2], [5.4, .012, .6]].forEach(function (h) {
+      var sg = ctx.createGain(); sg.gain.value = .35; out.connect(sg); sg.connect(send);
+      var vg = ctx.createGain(); vg.gain.value = .9; out.connect(vg); vg.connect(reverb());
+      /* struck crystal: glass-bowl partials; the slightly detuned pair beats slowly, so the tone pulses
+         and fades out like ripples spreading on a pond */
+      [[1, .15, 6.5], [1.0026, .09, 6.0], [2.32, .04, 3.4], [4.25, .022, 1.9], [6.63, .011, 1.0], [9.38, .006, .5]].forEach(function (h) {
         var o = ctx.createOscillator(), a = ctx.createGain();
         o.type = "sine"; o.frequency.value = f * h[0];
-        a.gain.setValueAtTime(0, t); a.gain.linearRampToValueAtTime(h[1], t + .012);
+        a.gain.setValueAtTime(0, t); a.gain.linearRampToValueAtTime(h[1], t + .006);
         a.gain.exponentialRampToValueAtTime(.0001, t + h[2]);
         o.connect(a); a.connect(out); o.start(t); o.stop(t + h[2] + .05);
       });
