@@ -359,7 +359,7 @@
     /* once whole, the rune expands with the light rings while it fades (same slowing curve), so its detail opens up */
     /* from the tap: a springy bounce outward while the parts combine, then a steady expansion with the rings */
     var grow = 1;
-    if (p.T != null) grow = 1 + 0.5 * p.T + 0.24 * Math.sin(p.T * 13) * Math.exp(-p.T * 3.2);
+    if (p.T != null) grow = 1 + 0.55 * p.T + 0.24 * Math.sin(p.T * 13) * Math.exp(-p.T * 3.2);
     var c = Math.cos(p.rot), sn = Math.sin(p.rot);
     var col = st === 5 ? "255,170,80" : p.pal[0], core = st === 5 ? "255,240,220" : p.pal[1];
     if (st === 2 || st === 4 || (st === 1 && t > 0.35)) {      /* inner light once it's whole */
@@ -417,7 +417,7 @@
     for (var k = 0; k < 6; k++) {
       var tk = q.t - k * 0.26; if (tk <= 0) continue;
       var life = tk / 2.4; if (life >= 1) continue;
-      var rad = q.R * (1 + 2.1 * tk);                     /* constant speed: a visible sound wave */
+      var rad = q.R * (1 + 2.31 * tk);                     /* constant speed: a visible sound wave */
       var a = Math.pow(1 - life, 1.5) * (1 - k * 0.12);
       var col = k % 2 ? "255,170,90" : q.pal[0];
       g.beginPath(); g.arc(q.x, q.y, rad, 0, TAU);
