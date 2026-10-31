@@ -249,6 +249,25 @@
   }
   if (sw) sw.addEventListener("click", function () { set(!on, true); });
 
+  /* cymatics game: a crystal-bowl tone per pattern (fundamental + bowl partials, long decay), through the master volume */
+  var armed = false, pend = null;
+  window.M1Sound = {
+    tone: function (f, pan, gain) {
+      if (!on || !ctx || !master) { if (armed) pend = [f, pan, performance.now(), gain]; return; }
+      var t = ctx.currentTime, out = ctx.createGain(), p = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
+      out.gain.value = gain == null ? 1 : gain;
+      if (p) { p.pan.value = Math.max(-1, Math.min(1, pan || 0)); out.connect(p); p.connect(master); } else out.connect(master);
+      var sg = ctx.createGain(); sg.gain.value = .5; out.connect(sg); sg.connect(send);
+      [[1, .16, 3.6], [1.004, .07, 3.2], [2.0, .035, 1.8], [2.76, .03, 1.2], [5.4, .012, .6]].forEach(function (h) {
+        var o = ctx.createOscillator(), a = ctx.createGain();
+        o.type = "sine"; o.frequency.value = f * h[0];
+        a.gain.setValueAtTime(0, t); a.gain.linearRampToValueAtTime(h[1], t + .012);
+        a.gain.exponentialRampToValueAtTime(.0001, t + h[2]);
+        o.connect(a); a.connect(out); o.start(t); o.stop(t + h[2] + .05);
+      });
+    }
+  };
+
   /* Mobile browsers only unlock audio inside a finished gesture (touchend / click / key), not during a
      slider drag or on pointerdown. So on every such gesture, if sound is meant to be on, (re)start it. */
   var unlocked = false;
@@ -269,12 +288,14 @@
 
   /* returning visitors who chose sound: start on their first tap/key (autoplay rules need a gesture) */
   var saved = null; try { saved = localStorage.getItem(KEY); } catch (e) {}
-  if (saved === "1") {
+  if (saved === "1" || (saver && saved === null)) {
     var arm = function (e) {
       if (ui.contains(e.target)) { cleanup(); return; }
       cleanup(); if (!on) set(true, false); kick();
+      if (pend && performance.now() - pend[2] < 800) { var q = pend; pend = null; setTimeout(function () { M1Sound.tone(q[0], q[1], q[3]); }, 30); }
     };
-    var cleanup = function () { ["touchend", "pointerup", "keydown"].forEach(function (n) { document.removeEventListener(n, arm, true); }); };
+    armed = true;
+    var cleanup = function () { armed = false; ["touchend", "pointerup", "keydown"].forEach(function (n) { document.removeEventListener(n, arm, true); }); };
     ["touchend", "pointerup", "keydown"].forEach(function (n) { document.addEventListener(n, arm, true); });
   }
 })();
