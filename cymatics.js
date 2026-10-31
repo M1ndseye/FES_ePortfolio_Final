@@ -2,7 +2,7 @@
    Level 1: a geometric rune drifts down (one every 5-8 s) with its parts (stars, nested squares, triangles,
    hexagon lattices, frame arcs) floating apart. Tap it and the parts snap together; a struck
    crystal tone rings out with a long reverb, and rings of light ripple outward like a pond.
-   Level 2 (after 25 hits): waves of half-runes fall. Exactly two halves in each wave complete the same rune
+   Level 2 (hits 76-100): waves of half-runes fall. Exactly two halves in each wave complete the same rune
    (they also pulse in sync, a quiet hint). Tap both and they lock together with a chord.
    Every rune is built from straight lines, generated from simple sacred-geometry primitives with a seeded
    random generator, so each rune (and its note) is always the same.
@@ -164,7 +164,7 @@
   ];
   var NOTES = [220, 246.94, 293.66, 329.63, 369.99, 440, 493.88, 587.33, 659.26, 739.99, 880, 987.77];
   var PALETTES = [["90,170,255", "215,235,255"], ["255,170,70", "255,236,200"]];   /* AI sapphire, OI amber */
-  var LEVEL2_AT = 25, cache = {};
+  var LEVEL2_AT = 75, CONVERGE_AT = 100, cache = {};
 
   function rune(idx) {
     if (cache[idx]) return cache[idx];
@@ -182,8 +182,9 @@
   if (level === 2) count = LEVEL2_AT;
   var scoreEl = document.querySelector(".cym-score b"), bannerEl = document.querySelector(".cym-banner");
   function setScore() { if (scoreEl) { scoreEl.textContent = count; scoreEl.parentNode.classList.add("on"); } }
-  if (level === 2) setScore();
-  if (/debug/.test(location.search)) window.__cym = { pats: function () { return pats; }, make: function (a, b, c, d, e) { return make(a, b, c, d, e); } };
+  var nArg = /[?&]n=(\d+)/.exec(location.search); if (nArg) count = +nArg[1];   /* test hook: start at a given count */
+  if (level === 2 || nArg) setScore();
+  if (/debug/.test(location.search)) window.__cym = { converge: null, pats: function () { return pats; }, make: function (a, b, c, d, e) { return make(a, b, c, d, e); } };
 
   function make(idx, x, y, R, opts) {
     var parts = rune(idx), N = parts.length;
@@ -242,6 +243,158 @@
     bannerEl.classList.add("on");
     setTimeout(function () { bannerEl.classList.remove("on"); }, 4200);
   }
+  /* ---------- Convergence (100 harmonics): the eye wakes, all twelve runes ring it as one mandala ---------- */
+  var converged = false, conv = null, convEl = document.querySelector(".cym-conv"), cardBlob = null;
+  function eyeBox() {
+    var el = document.querySelector(".eye-stage"), r = el ? el.getBoundingClientRect() : { left: W / 2, top: H / 2, width: 0, height: 0 };
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2, hw: r.width / 2 };
+  }
+  function ringGeom() {
+    var eb = eyeBox(), lim = Math.min(W, H) / 2 - 10;
+    var Rr = Math.min(lim * 0.86, Math.max(eb.hw * 1.12, Math.min(W, H) * 0.38)), rr = Math.min(Rr * 0.17, lim - Rr);
+    return { x: eb.x, y: eb.y, Rr: Rr, r: Math.max(18, rr) };
+  }
+  function converge() {
+    if (converged) return;
+    converged = true;
+    for (var i = 0; i < pats.length; i++) if (pats[i].state === 0 || pats[i].state === 5 || pats[i].state === 6) { pats[i].state = 7; pats[i].t = 0; }
+    sel = null;
+    var G0 = ringGeom();
+    conv = { t: 0, rot: 0, lines: 0, chord: false, G: G0, runes: [] };
+    for (i = 0; i < 12; i++) {
+      var a = -TAU / 4 + i * TAU / 12, far = Math.hypot(W, H) * 0.7;
+      var p = make(i, G0.x + Math.cos(a) * far, G0.y + Math.sin(a) * far, G0.r, { rot: a + TAU / 4, vr: 0.05, pal: i % 2 });
+      p.conv = true; p.ang = a; p.state = 8; p.t = -0.15 * i; p.sx0 = p.x; p.sy0 = p.y;
+      conv.runes.push(p); pats.push(p);
+    }
+    document.body.classList.add("converging");
+    makeCard();
+  }
+  function endConvergence() {
+    if (!conv) return;
+    conv.runes.forEach(function (p) { p.state = 3; p.t = 0; p.T = 0.3; p.conv = false; p.fixed = true; p.x = p.cx; p.y = p.cy; p.vy = 0; });
+    conv.ending = 0;
+    if (convEl) convEl.classList.remove("on");
+    document.body.classList.remove("converging");
+    spawnIn = 2.5;
+  }
+  function updateConv(dt) {
+    if (!conv) return;
+    conv.t += dt;
+    var G0 = conv.G;
+    if (conv.ending != null) {
+      conv.ending += dt; conv.lines = Math.max(0, conv.lines - dt * 1.2);
+      window.__eyeBoost = Math.max(0, (window.__eyeBoost || 0) - dt * 3); window.__eyeGlow = Math.max(0, (window.__eyeGlow || 0) - dt * 0.4);
+      if (conv.ending > 2) { conv = null; window.__eyeBoost = 0; window.__eyeGlow = 0; }
+      return;
+    }
+    /* the eye spins up hard, then settles to a quick hum; it glows brighter */
+    var ct = conv.t;
+    window.__eyeBoost = ct < 2.2 ? 9 * Math.min(1, ct / 1.2) : 2 + 7 * Math.exp(-(ct - 2.2) * 1.2);
+    window.__eyeGlow = Math.min(0.45, ct * 0.25);
+    conv.rot += dt * 0.06;
+    var arrived = 0;
+    conv.runes.forEach(function (p) {
+      var tx = G0.x + Math.cos(p.ang + conv.rot) * G0.Rr, ty = G0.y + Math.sin(p.ang + conv.rot) * G0.Rr;
+      if (p.state === 8) {
+        var e = Math.max(0, Math.min(1, p.t / 1.7)), k = 1 - Math.pow(1 - e, 3);
+        p.cx = p.sx0 + (tx - p.sx0) * k; p.cy = p.sy0 + (ty - p.sy0) * k; p.prog = e;
+        if (e >= 1) { p.state = 9; p.t = 0; tone(p.idx, p.cx, 0.25); }
+      } else { p.cx = tx; p.cy = ty; arrived++; }
+      p.rot += p.vr * dt;
+    });
+    if (arrived === 12 && !conv.chord) {           /* all twelve home: the chord, the burst, the banner */
+      conv.chord = true; conv.chordAt = ct;
+      for (var i = 0; i < 12; i++) (function (k) { setTimeout(function () { tone(k, G0.x + Math.cos(conv && conv.runes[k] ? conv.runes[k].ang : 0) * 40, 0.32); }, k * 55); })(i);
+      bursts.push({ x: G0.x, y: G0.y, t: 0, R: G0.Rr * 0.55, pal: PALETTES[0] });
+      setTimeout(function () { bursts.push({ x: G0.x, y: G0.y, t: 0, R: G0.Rr * 0.75, pal: PALETTES[1] }); }, 350);
+      if (convEl) convEl.classList.add("on");
+    }
+    if (conv.chord) conv.lines = Math.min(1, (ct - conv.chordAt) / 1.2);
+  }
+  function mandalaPath(ctx, x, y, Rr, rot) {      /* 12-gon through the rune centres, a {12/5} star, two rings */
+    var path = new Path2D(), i, a;
+    function P(k, r) { a = -TAU / 4 + k * TAU / 12 + rot; return [x + Math.cos(a) * r, y + Math.sin(a) * r]; }
+    for (i = 0; i < 12; i++) { var p0 = P(i, Rr), p1 = P(i + 1, Rr), s1 = P(i + 5, Rr); path.moveTo(p0[0], p0[1]); path.lineTo(p1[0], p1[1]); path.moveTo(p0[0], p0[1]); path.lineTo(s1[0], s1[1]); }
+    for (i = 0; i <= 72; i++) { a = i * TAU / 72; var q = [x + Math.cos(a) * Rr * 1.22, y + Math.sin(a) * Rr * 1.22]; if (i) path.lineTo(q[0], q[1]); else path.moveTo(q[0], q[1]); }
+    return path;
+  }
+  function neon(ctx, path, col, core, a, w) {
+    ctx.strokeStyle = "rgba(" + col + "," + (0.07 * a).toFixed(3) + ")"; ctx.lineWidth = w * 2 + 10; ctx.stroke(path);
+    ctx.strokeStyle = "rgba(" + col + "," + (0.16 * a).toFixed(3) + ")"; ctx.lineWidth = w * 2 + 4.5; ctx.stroke(path);
+    ctx.strokeStyle = "rgba(" + col + "," + (0.95 * a).toFixed(3) + ")"; ctx.lineWidth = w + 0.6; ctx.stroke(path);
+    ctx.strokeStyle = "rgba(" + core + "," + (0.9 * a).toFixed(3) + ")"; ctx.lineWidth = Math.max(0.2, w * 0.4); ctx.stroke(path);
+  }
+  function drawMandala() {
+    if (!conv || conv.lines <= 0) return;
+    var G0 = conv.G, a = conv.lines * 0.55;
+    neon(g, mandalaPath(g, G0.x, G0.y, G0.Rr, conv.rot), "255,170,70", "255,236,200", a, 0.6);
+  }
+
+  /* ---------- share card: "I've reached Convergence" (1080 x 1350, portrait for social) ---------- */
+  function makeCard() {
+    cardBlob = null;
+    var cw = 540, ch = 675, cvs = document.createElement("canvas"); cvs.width = cw * 2; cvs.height = ch * 2;
+    var x = cvs.getContext("2d"); x.scale(2, 2);
+    var eyeImg = new Image(); eyeImg.src = "assets/eye/prismatic.webp";
+    var fontsReady = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('300 52px "Roboto Condensed"'), document.fonts.load('400 14px "Roboto Condensed"')]).catch(function () {}) : Promise.resolve();
+    var imgReady = new Promise(function (ok) { eyeImg.onload = ok; eyeImg.onerror = ok; });
+    Promise.all([fontsReady, imgReady]).then(function () {
+      var bg = x.createRadialGradient(cw / 2, 330, 20, cw / 2, 330, 420);
+      bg.addColorStop(0, "#14295a"); bg.addColorStop(1, "#060912");
+      x.fillStyle = bg; x.fillRect(0, 0, cw, ch);
+      var cx = cw / 2, cy = 345, Rr = 168, rr = 27;
+      if (eyeImg.naturalWidth) { var ew = 250, eh = ew * eyeImg.naturalHeight / eyeImg.naturalWidth; x.globalAlpha = 0.95; x.drawImage(eyeImg, cx - ew / 2, cy - eh / 2, ew, eh); x.globalAlpha = 1; }
+      x.globalCompositeOperation = "lighter"; x.lineCap = "round"; x.lineJoin = "round";
+      neon(x, mandalaPath(x, cx, cy, Rr, 0), "255,170,70", "255,236,200", 0.5, 0.6);
+      var keep = g; g = x;                         /* reuse the rune renderer on the card */
+      for (var i = 0; i < 12; i++) {
+        var a = -TAU / 4 + i * TAU / 12, p = make(i, cx + Math.cos(a) * Rr, cy + Math.sin(a) * Rr, rr, { rot: a + TAU / 4, pal: i % 2 });
+        p.state = 9; p.t = 1; drawRune(p, 0);
+      }
+      g = keep;
+      x.globalCompositeOperation = "source-over"; x.textAlign = "center"; x.fillStyle = "#e6f6ff";
+      x.shadowColor = "rgba(110,215,255,.6)"; x.shadowBlur = 18;
+      x.font = '400 15px "Roboto Condensed", system-ui, sans-serif'; x.fillStyle = "rgba(190,225,255,.85)";
+      if ("letterSpacing" in x) x.letterSpacing = "5px";
+      x.fillText("I'VE REACHED", cx, 70);
+      if ("letterSpacing" in x) x.letterSpacing = "1px";
+      x.font = '300 52px "Roboto Condensed", system-ui, sans-serif'; x.fillStyle = "#f2fbff";
+      x.fillText("Convergence", cx, 122);
+      x.shadowBlur = 0;
+      x.font = '400 15px "Roboto Condensed", system-ui, sans-serif'; x.fillStyle = "rgba(190,225,255,.8)";
+      if ("letterSpacing" in x) x.letterSpacing = "3px";
+      x.fillText("100 HARMONICS", cx, 590);
+      if ("letterSpacing" in x) x.letterSpacing = "0px";
+      x.font = 'italic 300 14px "Roboto Condensed", system-ui, sans-serif'; x.fillStyle = "rgba(190,225,255,.6)";
+      x.fillText("The harmonic convergence of AI and OI", cx, 614);
+      x.font = '500 15px "Roboto Condensed", system-ui, sans-serif'; x.fillStyle = "#ffb764";
+      x.fillText("m1ndseye.com/eye", cx, 648);
+      cvs.toBlob(function (b) { cardBlob = b; }, "image/png");
+    });
+  }
+  var SHARE_URL = "https://m1ndseye.com/eye.html", SHARE_TEXT = "I've reached Convergence: 100 harmonics in the M1ndseye rune game.";
+  function shareCard() {
+    if (!cardBlob) return;
+    var file = null;
+    try { file = new File([cardBlob], "m1ndseye-convergence.png", { type: "image/png" }); } catch (e) {}
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file], title: "I've reached Convergence", text: SHARE_TEXT + " " + SHARE_URL }).catch(function () {});
+      return;
+    }
+    var url = URL.createObjectURL(cardBlob), aEl = document.createElement("a");    /* desktop: save the image */
+    aEl.href = url; aEl.download = "m1ndseye-convergence.png"; document.body.appendChild(aEl); aEl.click(); aEl.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+    if (navigator.clipboard) navigator.clipboard.writeText(SHARE_TEXT + " " + SHARE_URL).catch(function () {});
+    var msg = convEl && convEl.querySelector(".cym-conv__note"); if (msg) msg.textContent = "Image saved. Caption and link copied.";
+  }
+  if (convEl) {
+    convEl.querySelector(".cym-conv__share").addEventListener("click", function (e) { e.stopPropagation(); shareCard(); });
+    convEl.querySelector(".cym-conv__go").addEventListener("click", function (e) { e.stopPropagation(); endConvergence(); });
+  }
+  if (/debug/.test(location.search)) window.__cym.converge = converge;
+  if (count >= CONVERGE_AT) setTimeout(converge, 800);
+
   function tone(idx, x, gain) { if (window.M1Sound) M1Sound.tone(NOTES[idx], (x / W) * 1.6 - 0.8, gain); }
 
   /* ---------- tap ---------- */
@@ -262,6 +415,7 @@
       var bi = best.idx, bx = best.cx;
       setTimeout(function () { tone(bi, bx, 1); }, 380);                            /* ring the crystal at the snap */
       if (count === LEVEL2_AT && level === 1) { level = 2; spawnIn = 4.5; showBanner(); }
+      if (count >= CONVERGE_AT && !converged) setTimeout(converge, 1200);
       return;
     }
     if (best.state === 5) { best.state = 0; sel = null; return; }   /* tap again to let go */
@@ -280,6 +434,7 @@
       var q = a.idx;
       setTimeout(function () { tone(q, mx, 1); }, 450);
       setTimeout(function () { if (window.M1Sound) M1Sound.tone(NOTES[q] * 1.5, (mx / W) * 1.6 - 0.8, 0.55); }, 540);
+      if (count >= CONVERGE_AT && !converged) setTimeout(converge, 1400);
     } else {
       tone(b.idx, b.cx, 0.3);
       [a, b].forEach(function (h) { h.state = 6; h.t = 0; });
@@ -293,8 +448,9 @@
     var time = now / 1000;
     g.clearRect(0, 0, W, H);
 
-    spawnIn -= dt;
-    if (spawnIn <= 0) {
+    updateConv(dt);
+    if (!conv) spawnIn -= dt;
+    if (spawnIn <= 0 && !conv) {
       if (level === 1) { spawnOne(); spawnIn = 5 + Math.random() * 3; }
       else {
         var live = 0; for (var z = 0; z < pats.length; z++) if (pats[z].half && pats[z].state !== 3) live++;
@@ -306,9 +462,11 @@
     g.globalCompositeOperation = "lighter";
     g.lineCap = "round"; g.lineJoin = "round";
     for (r = 0; r < bursts.length; r++) drawBurst(bursts[r]);
+    drawMandala();
     for (var i = pats.length - 1; i >= 0; i--) {
       var p = pats[i];
       p.t += dt; if (p.T != null) p.T += dt;
+      if (p.conv) { if (p.state === 9 || p.t > 0) drawRune(p, time); continue; }
       if (p.state === 4) {                          /* halves flying together */
         var e = Math.min(1, p.t / 0.6), k = 1 - Math.pow(1 - e, 3);
         p.cx = p.fx + (p.tx - p.fx) * k; p.cy = p.fy + (p.ty - p.fy) * k;
@@ -343,6 +501,8 @@
   /* how far each part is from its place: 1 = drifted apart, 0 = locked into the rune */
   function apart(p, i) {
     var st = p.state, t = p.t;
+    if (st === 8) return Math.pow(1 - (p.prog || 0), 2);
+    if (st === 9) return 0;
     if (st === 0 || st === 5 || st === 6 || st === 7) return p.half ? 0.12 : 1;
     if (st === 1) { var e = Math.max(0, Math.min(1, (t - p.dl[i]) / 0.42)); return Math.pow(1 - e, 4) - 0.06 * Math.sin(e * Math.PI) ; } /* snap with a tiny overshoot */
     if (st === 4) return 0.12 * Math.pow(1 - Math.min(1, t / 0.5), 3);
@@ -353,7 +513,7 @@
 
   function drawRune(p, time) {
     var R = p.R, st = p.state, t = p.t, sub = p.sub, cx = p.cx, cy = p.cy;
-    var bright = st === 7 ? 0.75 * Math.max(0, 1 - t / 1.1) : st === 0 || st === 6 ? 0.75 : st === 5 ? 0.95 : st === 1 ? 0.75 + 0.25 * Math.min(1, t / 0.5)
+    var bright = st === 8 ? 0.6 + 0.4 * (p.prog || 0) : st === 9 ? 1 : st === 7 ? 0.75 * Math.max(0, 1 - t / 1.1) : st === 0 || st === 6 ? 0.75 : st === 5 ? 0.95 : st === 1 ? 0.75 + 0.25 * Math.min(1, t / 0.5)
       : st === 2 || st === 4 ? 1 : Math.pow(Math.max(0, 1 - t / 1.6), 1.5);
     if (p.half && (st === 0 || st === 5)) bright *= 0.82 + 0.18 * Math.sin(time * 2.2 + p.phase);   /* pairs pulse in sync */
     /* once whole, the rune expands with the light rings while it fades (same slowing curve), so its detail opens up */
@@ -362,7 +522,7 @@
     if (p.T != null) grow = 1 + 0.55 * p.T + 0.24 * Math.sin(p.T * 13) * Math.exp(-p.T * 3.2);
     var c = Math.cos(p.rot), sn = Math.sin(p.rot);
     var col = st === 5 ? "255,170,80" : p.pal[0], core = st === 5 ? "255,240,220" : p.pal[1];
-    if (st === 2 || st === 4 || (st === 1 && t > 0.35)) {      /* inner light once it's whole */
+    if (st === 2 || st === 4 || st === 9 || (st === 1 && t > 0.35)) {      /* inner light once it's whole */
       var ga = (st === 1 ? (t - 0.35) / 0.4 : 1) * 0.3 * bright;
       var gr = g.createRadialGradient(cx, cy, 0, cx, cy, R * 0.8 * grow);
       gr.addColorStop(0, "rgba(" + core + "," + ga.toFixed(3) + ")"); gr.addColorStop(1, "rgba(" + col + ",0)");
@@ -371,7 +531,7 @@
     for (var i = 0; i < p.N; i++) {
       if (sub && !sub[i]) continue;
       var pc = p.parts[i], k = apart(p, i), s = pc.s, kk = Math.max(0, Math.min(1, k));
-      var moving = (st === 0 || st === 5 || st === 6 || st === 7) && !reduce;
+      var moving = (st === 0 || st === 5 || st === 6 || st === 7 || st === 8) && !reduce;
       var spin = moving ? p.sp[i] * time : 0;
       var la = (p.orr[i] + spin) * k, lc = Math.cos(la), ls = Math.sin(la);
       /* tumble: flip about a tilted axis, with perspective; flattens back to face-on as the rune snaps together */

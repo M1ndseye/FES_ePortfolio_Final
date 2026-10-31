@@ -9,6 +9,13 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="M1ndseye Eye" />
 <meta name="robots" content="noindex" />
+<meta name="description" content="A rune game inside the M1ndseye mechanical eye: tap the broken sacred geometry to make it whole. Reach 100 harmonics for Convergence." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="I've reached Convergence | M1ndseye" />
+<meta property="og:description" content="Tap the broken sacred geometry to make it whole. Can you reach 100 harmonics?" />
+<meta property="og:url" content="https://m1ndseye.com/eye.html" />
+<meta property="og:image" content="https://m1ndseye.com/assets/og-eye.jpg?v=2" />
+<meta name="twitter:card" content="summary_large_image" />
 <title>M1ndseye Eye</title>
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -26,6 +33,17 @@
   .cym-banner { position: fixed; z-index: 4; left: 50%; top: 22%; transform: translate(-50%, 8px); width: max-content; max-width: 86vw; margin: 0; text-align: center; font: 300 1.5rem/1.25 "Roboto Condensed", system-ui, sans-serif; letter-spacing: .04em; color: #e6f6ff; text-shadow: 0 0 18px rgba(110,215,255,.6); opacity: 0; transition: opacity .8s, transform .8s; pointer-events: none; }
   .cym-banner small { display: block; margin-top: 6px; font-size: .9rem; letter-spacing: .08em; color: rgba(190,225,255,.75); }
   .cym-banner.on { opacity: 1; transform: translate(-50%, 0); }
+  .eye-stage { transition: transform 2.4s cubic-bezier(.2,.8,.2,1), filter 2.4s; }
+  body.converging .eye-stage { transform: scale(1.1); filter: brightness(1.25) saturate(1.2); }
+  .cym-conv { position: fixed; inset: 0; z-index: 6; pointer-events: none; opacity: 0; transition: opacity 1.2s; font-family: "Roboto Condensed", system-ui, sans-serif; text-align: center; color: #e6f6ff; }
+  .cym-conv.on { opacity: 1; }
+  .cym-conv__h { position: absolute; left: 0; right: 0; top: max(9vh, calc(env(safe-area-inset-top) + 56px)); margin: 0; font-weight: 300; font-size: clamp(2rem, 7vw, 3.2rem); letter-spacing: .04em; text-shadow: 0 0 22px rgba(110,215,255,.7); }
+  .cym-conv__h small { display: block; font-size: .9rem; letter-spacing: .3em; text-transform: uppercase; color: rgba(190,225,255,.8); margin-bottom: 4px; }
+  .cym-conv__row { position: absolute; left: 0; right: 0; bottom: max(14vh, calc(env(safe-area-inset-bottom) + 90px)); display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 0 20px; }
+  .cym-conv.on .cym-conv__row button { pointer-events: auto; }
+  .cym-conv__row button { font: 500 1rem "Roboto Condensed", system-ui, sans-serif; letter-spacing: .06em; padding: 12px 22px; border-radius: 999px; cursor: pointer; color: #f4f2fb; background: rgba(13,19,34,.6); border: 1px solid rgba(244,242,251,.25); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .cym-conv__row .cym-conv__share { background: linear-gradient(90deg, rgba(111,155,255,.85), rgba(255,157,66,.85)); border-color: transparent; color: #060912; font-weight: 600; }
+  .cym-conv__note { position: absolute; left: 0; right: 0; bottom: max(9vh, calc(env(safe-area-inset-bottom) + 58px)); margin: 0; font-size: .85rem; color: rgba(190,225,255,.7); }
   .cym-score b { display: block; font-size: 1.6rem; font-weight: 300; letter-spacing: .02em; color: rgba(225,245,255,.85); }
   .eye-stage img, .eye-stage .eye3d { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
   @media (min-aspect-ratio: 1/1) { .eye-stage { width: min(40vw, 100vh * .75, 620px); } }
@@ -42,10 +60,15 @@
 </main>
 <p class="cym-score" aria-live="polite">Harmonics<b>0</b></p>
 <p class="cym-banner" aria-live="polite">Harmony round<small>Tap the two halves that make one pattern</small></p>
+<div class="cym-conv" aria-live="polite">
+  <h2 class="cym-conv__h"><small>100 harmonics</small>Harmonic Convergence</h2>
+  <div class="cym-conv__row"><button type="button" class="cym-conv__share">Share: I've reached Convergence</button><button type="button" class="cym-conv__go">Keep playing</button></div>
+  <p class="cym-conv__note"></p>
+</div>
 <script src="gaze.js?v=6" defer></script>
-<script src="eye3d.js?v=10" defer></script>
+<script src="eye3d.js?v=11" defer></script>
 <script src="sound.js?v=19" defer></script>
-<script src="cymatics.js?v=10" defer></script>
+<script src="cymatics.js?v=11" defer></script>
 <a class="exit" href="./" aria-label="Exit screensaver">&times;</a>
 <script>
 (function () {

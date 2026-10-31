@@ -266,8 +266,12 @@
   var CENTER = [0, 0, .9], lookA = 2.28, PUPIL_REST = 2.28;   /* PUPIL_REST: where the pupil's circle sits around the centre in the model (about 131 degrees) */
   var t0 = performance.now(), running = true;
   function drawQuad(prog, attr) { gl.bindBuffer(gl.ARRAY_BUFFER, quad); gl.enableVertexAttribArray(attr); gl.vertexAttribPointer(attr, 2, gl.FLOAT, false, 0, 0); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); }
+  var tw = 0, lastRaw = null;
   function draw(now, still) {
-    var t = (now - t0) / 1000, ph = still ? 3 : t;
+    /* warped clock: window.__eyeBoost (set by the rune game's Convergence) spins the gear train up */
+    var raw = (now - t0) / 1000; if (lastRaw === null || raw < lastRaw) lastRaw = raw;
+    tw += (raw - lastRaw) * (1 + (window.__eyeBoost || 0)); lastRaw = raw;
+    var t = tw, ph = still ? 3 : t;
     G = HOME ? window.__gaze : null;
     if (HOME && !G) return;
     if (HOME) { if (Math.abs(cv.clientWidth * dpr - cv.width) > 2) size(); gx = G.gx; gy = G.gy; ph = G.phase; }
@@ -314,7 +318,7 @@
       if (spin[p.name] !== undefined) local = mul(local, rotZ(spin[p.name]));
       else if (p.irisSpeed) local = mul(local, rotY((still ? 0 : t) * p.irisSpeed * 6.2832));
       gl.uniformMatrix4fv(uMe.M, false, new Float32Array(local));
-      gl.uniform1f(uMe.uGain, p.pane ? .9 : 1); gl.uniform1f(uMe.uThick, p.pane ? 3.0 : 1.15);
+      gl.uniform1f(uMe.uGain, (p.pane ? .9 : 1) * (1 + (window.__eyeGlow || 0))); gl.uniform1f(uMe.uThick, p.pane ? 3.0 : 1.15);
       gl.uniform1f(uMe.uIsMetal, p.metal ? 1 : 0); if (p.metal) gl.uniform3f(uMe.uMetal, p.metal[0], p.metal[1], p.metal[2]);
       gl.bindBuffer(gl.ARRAY_BUFFER, p.vb); gl.enableVertexAttribArray(aP); gl.vertexAttribPointer(aP, 3, gl.FLOAT, false, 0, 0);
       gl.bindBuffer(gl.ARRAY_BUFFER, p.nb); gl.enableVertexAttribArray(aN); gl.vertexAttribPointer(aN, 3, gl.FLOAT, false, 0, 0);
