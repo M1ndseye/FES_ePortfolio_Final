@@ -241,6 +241,12 @@
 
   function radius() { return Math.max(36, Math.min(85, Math.min(W, H) * (0.095 + Math.random() * 0.03))); }   /* half size */
   var ANGLES_AT = 0, RUSH_AT = 50, lastDir = null;   /* every rune comes in from the sides from the start */
+  function gapFor(n) {               /* seconds until the next rune: more overlap as the count climbs */
+    var g = 2.3 + Math.random() * 1.15;           /* 1-24: baseline */
+    if (n >= 25) g /= 1.3;                        /* 25-49: 30% more frequent */
+    if (n >= RUSH_AT) g /= 1.3;                   /* 50-75: 30% more again (and 25% faster travel) */
+    return g;
+  }
   function edgeDist(a, m) {          /* distance from the screen centre to just past the edge, along angle a */
     var ca = Math.abs(Math.cos(a)) || 1e-6, sa = Math.abs(Math.sin(a)) || 1e-6;
     return Math.min((W / 2 + m) / ca, (H / 2 + m) / sa);
@@ -268,7 +274,7 @@
       var Rs = edgeDist(a, R * 1.3), cx0 = W / 2, cy0 = H / 2;
       p.x = p.sx = cx0 + Math.cos(a) * Rs; p.y = cy0 + Math.sin(a) * Rs; p.cx = p.x; p.cy = p.y;
       var tx = cx0 + (Math.random() - 0.5) * W * 0.5, ty = cy0 + (Math.random() - 0.5) * H * 0.4, d = Math.hypot(tx - p.x, ty - p.y) || 1;
-      var sp = Math.hypot(W, H) * (0.06 + Math.random() * 0.025) * 1.25;   /* 25% faster */
+      var sp = Math.hypot(W, H) * (0.06 + Math.random() * 0.025) * (count >= RUSH_AT ? 1.25 : 1);   /* 50-75: 25% faster */
       p.vx = (tx - p.x) / d * sp; p.vy = (ty - p.y) / d * sp; p.travel = true;
     }
     pats.push(p);
@@ -537,7 +543,7 @@
       if (onScreen === 0) spawnIn = 0.3;
     }
     if (spawnIn <= 0 && !conv) {
-      if (level === 1) { spawnOne(); spawnIn = count >= RUSH_AT ? 2 + Math.random() * 1.5 : 2.3 + Math.random() * 1.15; }   /* 1-49: every 2.3-3.45 s, 50-75: 2-3.5 s */
+      if (level === 1) { spawnOne(); spawnIn = gapFor(count); }
       else {
         var live = 0; for (var z = 0; z < pats.length; z++) if (pats[z].half && (pats[z].state === 0 || pats[z].state === 5 || pats[z].state === 6)) live++;
         if (live === 0) { spawnWave(); spawnIn = 1.5; } else spawnIn = 0.4;   /* one wave at a time, so there's always exactly one match */
