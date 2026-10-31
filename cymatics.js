@@ -251,16 +251,23 @@
     var m = Math.floor(Math.random() * RECIPES.length), id = ++pairId, i;
     var rot = Math.random() * 6.28, vr = (Math.random() - 0.5) * 0.08, pal = Math.random() < 0.5 ? 0 : 1, ph = Math.random() * 6.28;
     var pool = []; for (i = 0; i < RECIPES.length; i++) if (i !== m) pool.push(i);
-    var slots = []; for (i = 0; i < n; i++) slots.push(i);
-    slots.sort(function () { return Math.random() - 0.5; });
-    var lane = W / n;
-    function at(s) { return lane * (s + 0.5) + (Math.random() - 0.5) * lane * 0.2; }
-    function y0(k) { return -R * (1.3 + Math.random() * 0.6); }   /* the whole wave enters together */
-    pats.push(make(m, at(slots[0]), y0(0), R, { half: 1, side: 0, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph }));
-    pats.push(make(m, at(slots[1]), y0(1), R, { half: 1, side: 1, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph }));
+    /* every half enters from a different direction around the screen and crosses through the middle;
+       the matching pair comes from (roughly) opposite sides, so they meet from different angles */
+    var base = Math.random() * TAU, cx0 = W / 2, cy0 = H / 2, Rs = Math.hypot(W, H) / 2 + R * 1.6;
+    var speed = Math.hypot(W, H) * 0.068;
+    var order = [0], half = Math.floor(n / 2); order.push(half); for (i = 1; i < n; i++) if (i !== half) order.push(i);
+    function launch(p, slot) {
+      var a = base + slot * TAU / n + (Math.random() - 0.5) * (TAU / n) * 0.5;
+      p.x = p.sx = cx0 + Math.cos(a) * Rs; p.y = cy0 + Math.sin(a) * Rs; p.cx = p.x; p.cy = p.y;
+      var tx = cx0 + (Math.random() - 0.5) * W * 0.5, ty = cy0 + (Math.random() - 0.5) * H * 0.4, d = Math.hypot(tx - p.x, ty - p.y) || 1;
+      p.vx = (tx - p.x) / d * speed; p.vy = (ty - p.y) / d * speed; p.travel = true;
+      pats.push(p);
+    }
+    launch(make(m, 0, 0, R, { half: 1, side: 0, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph }), order[0]);
+    launch(make(m, 0, 0, R, { half: 1, side: 1, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph }), order[1]);
     for (i = 2; i < n; i++) {
       var o = pool.splice(Math.floor(Math.random() * pool.length), 1)[0];
-      pats.push(make(o, at(slots[i]), y0(i), R, { half: 1, side: Math.random() < 0.5 ? 0 : 1, vr: vr, pair: -1, wave: id, slow: 1, pal: pal }));
+      launch(make(o, 0, 0, R, { half: 1, side: Math.random() < 0.5 ? 0 : 1, vr: vr, pair: -1, wave: id, slow: 1, pal: pal }), order[i]);
     }
   }
 
@@ -525,14 +532,18 @@
           pats.splice(i, 1); continue;
         }
       } else {
-        p.y += p.vy * dt * (p.state >= 2 ? 0.3 : 1);
+        var slow = p.state >= 2 ? 0.3 : 1;
+        p.y += p.vy * dt * slow; if (p.vx) p.x += p.vx * dt * slow;
         p.sway += dt * 0.5; p.rot += p.vr * dt;
         p.cx = p.fixed ? p.x : p.x + Math.sin(p.sway) * p.R * 0.1; p.cy = p.y;
         if (p.state === 6) p.cx += Math.sin(p.t * 60) * 4 * Math.max(0, 1 - p.t / 0.5);
         if (p.state === 6 && p.t > 0.5) { p.state = 0; p.t = 0; }
         if (p.state === 1 && p.t > 0.75) { p.state = 2; p.t = 0; }
         if (p.state === 2 && p.t > 1.8) { p.state = 3; p.t = 0; }
-        if ((p.state === 3 && p.t > 1.6) || (p.state === 7 && p.t > 1.1) || p.cy - p.R * 1.8 > H) {
+        var m2 = p.R * 1.8, outside = p.cx < -m2 || p.cx > W + m2 || p.cy < -m2 || p.cy > H + m2;
+        if (!outside && p.cx > 0 && p.cx < W && p.cy > 0 && p.cy < H) p.entered = true;
+        var gone = p.travel ? (p.entered && outside) : p.cy - p.R * 1.8 > H;
+        if ((p.state === 3 && p.t > 1.6) || (p.state === 7 && p.t > 1.1) || gone) {
           if (p.half && p.pair > 0 && (p.state === 0 || p.state === 5 || p.state === 6)) {   /* the match was missed: clear its wave */
             for (var w = 0; w < pats.length; w++) { var o = pats[w]; if (o !== p && o.half && o.wave === p.wave && (o.state === 0 || o.state === 5 || o.state === 6)) { o.state = 7; o.t = 0; } }
           }
