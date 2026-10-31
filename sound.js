@@ -2,14 +2,20 @@
    Off until the visitor turns it on in the gear (settings) modal (browsers block autoplay anyway).
    Preference remembered in localStorage. */
 (function () {
-  var host = document.querySelector(".gaze-foot");
+  /* home page: gear + settings modal in the footer. eye screensaver (body[data-saver]): volume slider along the bottom */
+  var saver = document.body.hasAttribute("data-saver");
+  var host = saver ? document.body : document.querySelector(".gaze-foot");
   var AC = window.AudioContext || window.webkitAudioContext;
   if (!host || !AC) return;
 
   var KEY = "m1ndseye-sound";
   var ctx = null, on = false, speed = 0, lastX = null, lastY = null, lastT = 0;
   var master = null;
+  var VKEY = "m1ndseye-volume", vol = 1;
+  try { var sv = parseFloat(localStorage.getItem(VKEY)); if (sv >= 0 && sv <= 1) vol = sv; } catch (e) {}
+  var label, ui, sw = null;
 
+  if (!saver) {
   /* ---------- settings: gear button + modal (sound switch, eye screensaver) ---------- */
   var st = document.createElement("style");
   st.textContent =
@@ -90,9 +96,56 @@
     }
   });
 
-  function label() {
+  label = function () {
     sw.setAttribute("aria-checked", on ? "true" : "false");
     btn.classList.toggle("is-on", on);
+  };
+  ui = { contains: function (t) { return btn.contains(t) || modal.contains(t); } };
+
+  } else {
+  /* ---------- screensaver: horizontal volume slider, fades in/out with the exit button ---------- */
+  var st2 = document.createElement("style");
+  st2.textContent =
+    ".vol{position:fixed;z-index:5;left:max(24px,env(safe-area-inset-left));right:max(24px,env(safe-area-inset-right));bottom:max(22px,env(safe-area-inset-bottom));" +
+    "margin:0 auto;max-width:560px;display:flex;align-items:center;gap:14px;padding:10px 18px 10px 10px;border-radius:999px;" +
+    "background:rgba(13,19,34,.55);border:1px solid rgba(244,242,251,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);" +
+    "color:#f4f2fb;opacity:0;pointer-events:none;transition:opacity .4s;touch-action:none}" +
+    ".vol.show{opacity:.9;pointer-events:auto}" +
+    ".vol__m{flex:none;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;border:0;padding:0;background:transparent;color:inherit;cursor:pointer}" +
+    ".vol__m svg{width:20px;height:20px}.vol__m .w{transition:opacity .2s}.vol[data-muted=true] .vol__m .w{opacity:0}.vol__m .x{opacity:0}.vol[data-muted=true] .vol__m .x{opacity:1}" +
+    ".vol__r{flex:1;min-width:0;height:34px;margin:0;background:transparent;-webkit-appearance:none;appearance:none;cursor:pointer;--p:100%}" +
+    ".vol__r::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(90deg,#6f9bff,#ff9d42) 0/var(--p) 100% no-repeat,rgba(244,242,251,.18)}" +
+    ".vol__r::-moz-range-track{height:4px;border-radius:2px;background:rgba(244,242,251,.18)}" +
+    ".vol__r::-moz-range-progress{height:4px;border-radius:2px;background:linear-gradient(90deg,#6f9bff,#ff9d42)}" +
+    ".vol__r::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;margin-top:-8px;border-radius:50%;background:#f4f2fb;border:0;box-shadow:0 0 10px rgba(111,155,255,.6)}" +
+    ".vol__r::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#f4f2fb;border:0;box-shadow:0 0 10px rgba(111,155,255,.6)}" +
+    ".vol__r:focus-visible{outline:2px solid #ff9d42;outline-offset:4px;border-radius:4px}";
+  document.head.appendChild(st2);
+  var bar = document.createElement("div");
+  bar.className = "vol";
+  bar.innerHTML = '<button type="button" class="vol__m" aria-label="Mute"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    '<path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" stroke="none"/><path class="w" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="x" d="m16 9 6 6m0-6-6 6"/></svg></button>' +
+    '<input class="vol__r" type="range" min="0" max="100" step="1" aria-label="Volume" />';
+  document.body.appendChild(bar);
+  var rng = bar.querySelector(".vol__r"), mb = bar.querySelector(".vol__m");
+  function paint() {
+    var p = on ? Math.round(vol * 100) : 0;
+    rng.value = p; rng.style.setProperty("--p", p + "%");
+    rng.setAttribute("aria-valuetext", on ? p + "%" : "Muted");
+    bar.setAttribute("data-muted", on && vol > 0 ? "false" : "true");
+    mb.setAttribute("aria-label", on ? "Mute" : "Unmute");
+  }
+  rng.addEventListener("input", function () {
+    var v = rng.value / 100;
+    if (v > 0) { vol = v; try { localStorage.setItem(VKEY, String(v)); } catch (e) {} }
+    if (v > 0 && !on) set(true, true);
+    else if (v === 0 && on) set(false, true);
+    else if (on && master) { master.gain.cancelScheduledValues(ctx.currentTime); master.gain.setTargetAtTime(.9 * vol, ctx.currentTime, .05); }
+    paint();
+  });
+  mb.addEventListener("click", function () { if (!on && vol < .05) vol = .5; set(!on, true); });
+  label = paint;
+  ui = bar;
   }
 
   /* ---------- audio graph ---------- */
@@ -183,7 +236,7 @@
       if (ctx.resume) ctx.resume();
       if (bedEl) { var pr = bedEl.play(); if (pr && pr.catch) pr.catch(function () {}); }
       master.gain.cancelScheduledValues(ctx.currentTime);
-      master.gain.setTargetAtTime(.9, ctx.currentTime, .8);   /* slow fade-in */
+      master.gain.setTargetAtTime(.9 * vol, ctx.currentTime, .8);   /* slow fade-in */
     } else if (ctx) {
       master.gain.cancelScheduledValues(ctx.currentTime);
       master.gain.setTargetAtTime(0, ctx.currentTime, .25);
@@ -192,7 +245,8 @@
     if (remember) { try { localStorage.setItem(KEY, v ? "1" : "0"); } catch (e) {} }
     label();
   }
-  sw.addEventListener("click", function () { set(!on, true); });
+  if (sw) sw.addEventListener("click", function () { set(!on, true); });
+  label();
   document.addEventListener("visibilitychange", function () {
     if (!ctx || !on) return;
     if (document.hidden) { ctx.suspend(); if (bedEl) bedEl.pause(); } else { ctx.resume(); if (bedEl) bedEl.play().catch(function () {}); }
@@ -202,7 +256,7 @@
   var saved = null; try { saved = localStorage.getItem(KEY); } catch (e) {}
   if (saved === "1") {
     var arm = function (e) {
-      if (btn.contains(e.target) || modal.contains(e.target)) { cleanup(); return; }
+      if (ui.contains(e.target)) { cleanup(); return; }
       cleanup(); if (!on) set(true, false);
     };
     var cleanup = function () { ["pointerdown", "keydown"].forEach(function (n) { document.removeEventListener(n, arm, true); }); };
