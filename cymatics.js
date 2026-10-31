@@ -274,7 +274,7 @@
       var Rs = edgeDist(a, R * 1.3), cx0 = W / 2, cy0 = H / 2;
       p.x = p.sx = cx0 + Math.cos(a) * Rs; p.y = cy0 + Math.sin(a) * Rs; p.cx = p.x; p.cy = p.y;
       var tx = cx0 + (Math.random() - 0.5) * W * 0.5, ty = cy0 + (Math.random() - 0.5) * H * 0.4, d = Math.hypot(tx - p.x, ty - p.y) || 1;
-      var sp = Math.hypot(W, H) * (0.06 + Math.random() * 0.025) * (count >= RUSH_AT ? 1.5625 : count >= 25 ? 1.25 : 1);   /* 25-49: +25%, 50-75: +25% again */
+      var sp = Math.hypot(W, H) * (0.06 + Math.random() * 0.025) * Math.pow(1.25, Math.min(count, 75) / 25);   /* progressive: +25% every 25 hits, rising a little each hit */
       p.vx = (tx - p.x) / d * sp; p.vy = (ty - p.y) / d * sp; p.travel = true;
     }
     pats.push(p);
