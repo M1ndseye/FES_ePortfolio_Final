@@ -1,6 +1,6 @@
 /* M1ndseye eye screensaver: rune game.
    Level 1: a geometric rune drifts down (one every 5-8 s) with its parts (stars, nested squares, triangles,
-   hexagon lattices, glyph bands, frame arcs) floating apart. Tap it and the parts snap together; a struck
+   hexagon lattices, frame arcs) floating apart. Tap it and the parts snap together; a struck
    crystal tone rings out with a long reverb, and rings of light ripple outward like a pond.
    Level 2 (after 25 hits): waves of half-runes fall. Exactly two halves in each wave complete the same rune
    (they also pulse in sync, a quiet hint). Tap both and they lock together with a chord.
@@ -44,19 +44,6 @@
     var s = []; for (var i = 0; i < steps; i++) { var p = pt(r, a0 + (a1 - a0) * i / steps), q = pt(r, a0 + (a1 - a0) * (i + 1) / steps); s.push(p[0], p[1], q[0], q[1]); }
     return s;
   }
-  function glyphs(r0, r1, a0, a1, count, R) {  /* a band of little runic marks between two radii */
-    var s = [], h = (r1 - r0), span = (a1 - a0) / count;
-    for (var i = 0; i < count; i++) {
-      var ac = a0 + span * (i + 0.5), wa = span * 0.32, strokes = 2 + Math.floor(R() * 3);
-      for (var k = 0; k < strokes; k++) {      /* strokes join nodes of a 3x3 grid */
-        var u0 = Math.floor(R() * 3) - 1, v0 = Math.floor(R() * 3) - 1, u1 = Math.floor(R() * 3) - 1, v1 = Math.floor(R() * 3) - 1;
-        if (u0 === u1 && v0 === v1) v1 = -v0 || 1;
-        var p = pt(r0 + h * (0.5 + v0 * 0.4), ac + u0 * wa), q = pt(r0 + h * (0.5 + v1 * 0.4), ac + u1 * wa);
-        s.push(p[0], p[1], q[0], q[1]);
-      }
-    }
-    return s;
-  }
   function splitRing(fn, parts, off) {     /* break a ring-like feature into separate drifting arcs */
     var out = [], gap = 0.06;
     for (var i = 0; i < parts; i++) out.push(fn(off + i * TAU / parts + gap, off + (i + 1) * TAU / parts - gap));
@@ -68,15 +55,15 @@
     function (R) { return [star(3, 1, .62, -TAU / 4), star(3, 1, .62, TAU / 4)].concat(splitRing(function (a, b) { return arc(.86, a, b, 10); }, 3, R() * TAU)); },
     function (R) { return [star(4, 1, .6, 0), star(4, 1, .6, TAU / 8), star(8, 1, .32, TAU / 16)].concat(splitRing(function (a, b) { return arc(.88, a, b, 8); }, 4, TAU / 8)); },
     function (R) { return [star(5, 2, .66, -TAU / 4), star(5, 1, .66, -TAU / 4), star(5, 1, .25, TAU / 4), spokes(5, .7, .9, -TAU / 4)].concat(splitRing(function (a, b) { return arc(.9, a, b, 8); }, 5, -TAU / 4)); },
-    function (R) { return [lattice(.62, 0), star(6, 2, .3, TAU / 12), star(6, 1, .72, TAU / 12)].concat(splitRing(function (a, b) { return glyphs(.78, .9, a, b, 6, R); }, 3, R() * TAU)); },
+    function (R) { return [lattice(.62, 0), star(6, 2, .3, TAU / 12), star(6, 1, .72, TAU / 12)].concat(splitRing(function (a, b) { return arc(.84, a, b, 10); }, 3, TAU / 12), [spokes(6, .72, .84, 0)]); },
     function (R) { return [star(8, 3, .7, 0), star(4, 1, .4, TAU / 8), star(4, 1, .4, 0)].concat(splitRing(function (a, b) { return arc(.86, a, b, 6); }, 4, 0)); },
     function (R) { return [star(7, 3, .68, -TAU / 4), star(7, 1, .68, -TAU / 4), star(7, 2, .34, TAU / 4)].concat(splitRing(function (a, b) { return arc(.88, a, b, 7); }, 7, -TAU / 4)); },
-    function (R) { return [star(4, 1, .7, 0), star(4, 1, .52, TAU / 24), star(4, 1, .38, TAU / 12), star(4, 1, .26, TAU / 8)].concat(splitRing(function (a, b) { return glyphs(.8, .92, a, b, 7, R); }, 4, R() * TAU)); },
+    function (R) { return [star(4, 1, .7, 0), star(4, 1, .52, TAU / 24), star(4, 1, .38, TAU / 12), star(4, 1, .26, TAU / 8)].concat(splitRing(function (a, b) { return arc(.88, a, b, 8); }, 4, TAU / 8), [spokes(4, .7, .88, 0)]); },
     function (R) { return [star(3, 1, .7, -TAU / 4), star(3, 1, .34, TAU / 4), star(3, 1, .34, -TAU / 4), spokes(3, .35, .7, TAU / 4), spokes(6, .76, .92, 0)]; },
     function (R) { return [star(4, 1, .74, TAU / 8), star(4, 1, .52, 0), spokes(4, 0, .52, TAU / 8), spokes(4, .56, .74, 0), star(8, 1, .2, 0)].concat(splitRing(function (a, b) { return arc(.88, a, b, 6); }, 4, TAU / 8)); },
-    function (R) { return [star(12, 5, .7, 0), star(12, 1, .7, 0), star(6, 1, .28, 0)].concat(splitRing(function (a, b) { return glyphs(.78, .9, a, b, 5, R); }, 4, R() * TAU)); },
-    function (R) { return [star(4, 1, .6, 0), star(4, 1, .6, TAU / 8), star(8, 3, .36, 0), lattice(.18, 0)].concat(splitRing(function (a, b) { return glyphs(.72, .82, a, b, 6, R); }, 4, 0), splitRing(function (a, b) { return arc(.9, a, b, 8); }, 2, TAU / 8)); },
-    function (R) { return [lattice(.66, TAU / 12), star(3, 1, .4, -TAU / 4), star(3, 1, .4, TAU / 4), star(6, 1, .2, 0)].concat(splitRing(function (a, b) { return glyphs(.76, .88, a, b, 6, R); }, 3, 0), splitRing(function (a, b) { return arc(.94, a, b, 8); }, 3, TAU / 6)); }
+    function (R) { return [star(12, 5, .7, 0), star(12, 1, .7, 0), star(6, 1, .28, 0)].concat(splitRing(function (a, b) { return arc(.86, a, b, 9); }, 4, TAU / 24), [spokes(12, .74, .86, 0)]); },
+    function (R) { return [star(4, 1, .6, 0), star(4, 1, .6, TAU / 8), star(8, 3, .36, 0), lattice(.18, 0)].concat([star(16, 1, .8, 0)], splitRing(function (a, b) { return arc(.9, a, b, 8); }, 2, TAU / 8)); },
+    function (R) { return [lattice(.66, TAU / 12), star(3, 1, .4, -TAU / 4), star(3, 1, .4, TAU / 4), star(6, 1, .2, 0)].concat([star(12, 1, .8, 0), spokes(6, .66, .8, TAU / 12)], splitRing(function (a, b) { return arc(.94, a, b, 8); }, 3, TAU / 6)); }
   ];
   var NOTES = [220, 246.94, 293.66, 329.63, 369.99, 440, 493.88, 587.33, 659.26, 739.99, 880, 987.77];
   var PALETTES = [["90,170,255", "215,235,255"], ["255,170,70", "255,236,200"]];   /* AI sapphire, OI amber */
@@ -110,21 +97,25 @@
       state: 0, t: 0, half: !!opts.half, pair: opts.pair || 0, sub: null,
       pal: PALETTES[opts.pal != null ? opts.pal : (Math.random() < 0.6 ? 0 : 1)],
       phase: opts.phase != null ? opts.phase : Math.random() * 6.28,
-      ox: new Float32Array(N), oy: new Float32Array(N), orr: new Float32Array(N), sp: new Float32Array(N), dl: new Float32Array(N)
+      ox: new Float32Array(N), oy: new Float32Array(N), orr: new Float32Array(N), sp: new Float32Array(N), dl: new Float32Array(N),
+      tax: new Float32Array(N), tsp: new Float32Array(N), t0: new Float32Array(N), fph: new Float32Array(N)
     };
     if (opts.half) { p.sub = new Uint8Array(N); for (var q = 0; q < N; q++) p.sub[q] = (q + opts.side) % 2 === 0 ? 1 : 0; }
     for (var i = 0; i < N; i++) {   /* drift apart: each part pushed outward from where it belongs, turned, spinning slowly */
       var pc = parts[i], d = Math.hypot(pc.cx, pc.cy), a = d > 0.05 ? Math.atan2(pc.cy, pc.cx) : Math.random() * TAU;
       a += (Math.random() - 0.5) * 1.2;
-      var push = 0.25 + Math.random() * 0.45;
+      var push = 0.35 + Math.random() * 0.6;
       p.ox[i] = Math.cos(a) * push; p.oy[i] = Math.sin(a) * push;
       p.orr[i] = (Math.random() - 0.5) * 1.6; p.sp[i] = (Math.random() - 0.5) * 0.5;
       p.dl[i] = Math.random() * 0.22;
+      /* 3D tumble: each shard flips about its own axis at its own rate, like broken glass falling */
+      p.tax[i] = Math.random() * TAU; p.tsp[i] = (0.6 + Math.random() * 1.2) * (Math.random() < 0.5 ? -1 : 1);
+      p.t0[i] = Math.random() * TAU; p.fph[i] = Math.random() * TAU;
     }
     return p;
   }
 
-  function radius() { return Math.max(70, Math.min(170, Math.min(W, H) * (0.19 + Math.random() * 0.06))); }
+  function radius() { return Math.max(36, Math.min(85, Math.min(W, H) * (0.095 + Math.random() * 0.03))); }   /* half size */
   function spawnOne() {
     var R = radius();
     pats.push(make(Math.floor(Math.random() * RECIPES.length), R * 1.3 + Math.random() * (W - 2.6 * R), -R * 1.6, R, {}));
@@ -132,7 +123,7 @@
 
   var pairId = 0;
   function spawnWave() {
-    var n = W > 700 ? 5 : 4, R = Math.max(56, Math.min(130, W / n * 0.46, H * 0.13));
+    var n = W > 700 ? 5 : 4, R = Math.max(32, Math.min(65, W / n * 0.25, H * 0.07));
     var m = Math.floor(Math.random() * RECIPES.length), id = ++pairId, i;
     var rot = Math.random() * 6.28, vr = (Math.random() - 0.5) * 0.08, pal = Math.random() < 0.5 ? 0 : 1, ph = Math.random() * 6.28;
     var pool = []; for (i = 0; i < RECIPES.length; i++) if (i !== m) pool.push(i);
@@ -162,7 +153,7 @@
     for (var i = 0; i < pats.length; i++) {
       var p = pats[i]; if (p.state !== 0 && p.state !== 5) continue;
       var d = Math.hypot(e.clientX - p.cx, e.clientY - p.cy);
-      if (d < p.R * (p.half ? 0.95 : 1.15) && d < bd) { bd = d; best = p; }
+      if (d < Math.max(44, p.R * (p.half ? 1.1 : 1.4)) && d < bd) { bd = d; best = p; }
     }
     if (!best) return;
     e.cymHit = true;                 /* tapping a rune doesn't pop up the exit/volume controls */
@@ -256,39 +247,52 @@
     return 0;
   }
 
+  function wrap(a) { a = (a + Math.PI) % TAU; if (a < 0) a += TAU; return a - Math.PI; }
+
   function drawRune(p, time) {
     var R = p.R, st = p.state, t = p.t, sub = p.sub, cx = p.cx, cy = p.cy;
-    var bright = st === 0 || st === 6 ? 0.6 : st === 5 ? 0.9 : st === 1 ? 0.6 + 0.4 * Math.min(1, t / 0.5)
+    var bright = st === 0 || st === 6 ? 0.75 : st === 5 ? 0.95 : st === 1 ? 0.75 + 0.25 * Math.min(1, t / 0.5)
       : st === 2 || st === 4 ? 1 : Math.max(0, 1 - t / 1.6);
     if (p.half && (st === 0 || st === 5)) bright *= 0.82 + 0.18 * Math.sin(time * 2.2 + p.phase);   /* pairs pulse in sync */
     var grow = st === 3 ? 1 + t * 0.18 : 1;
-    var path = new Path2D();
+    var c = Math.cos(p.rot), sn = Math.sin(p.rot);
+    var col = st === 5 ? "255,170,80" : p.pal[0], core = st === 5 ? "255,240,220" : p.pal[1];
+    if (st === 2 || st === 4 || (st === 1 && t > 0.35)) {      /* inner light once it's whole */
+      var ga = (st === 1 ? (t - 0.35) / 0.4 : 1) * 0.3 * bright;
+      var gr = g.createRadialGradient(cx, cy, 0, cx, cy, R * 0.8);
+      gr.addColorStop(0, "rgba(" + core + "," + ga.toFixed(3) + ")"); gr.addColorStop(1, "rgba(" + col + ",0)");
+      g.fillStyle = gr; g.beginPath(); g.arc(cx, cy, R * 0.8, 0, TAU); g.fill();
+    }
     for (var i = 0; i < p.N; i++) {
       if (sub && !sub[i]) continue;
-      var pc = p.parts[i], k = apart(p, i), s = pc.s;
-      var spin = st === 0 && !reduce ? p.sp[i] * time : 0;
-      var c = Math.cos(p.rot), sn = Math.sin(p.rot), la = (p.orr[i] + spin) * k, lc = Math.cos(la), ls = Math.sin(la);
-      var bob = st === 0 && !reduce ? 0.03 * Math.sin(time * 0.8 + i * 1.7) : 0;
-      var offx = (p.ox[i] + bob) * k, offy = (p.oy[i] - bob) * k;
-      for (var j = 0; j < s.length; j += 4) {
-        /* each part turns about its own center, then sits at its (offset) place */
-        var ax = s[j] - pc.cx, ay = s[j + 1] - pc.cy, bx = s[j + 2] - pc.cx, by = s[j + 3] - pc.cy;
-        var x1 = (ax * lc - ay * ls + pc.cx + offx) * grow, y1 = (ax * ls + ay * lc + pc.cy + offy) * grow;
-        var x2 = (bx * lc - by * ls + pc.cx + offx) * grow, y2 = (bx * ls + by * lc + pc.cy + offy) * grow;
-        path.moveTo(cx + (x1 * c - y1 * sn) * R, cy + (x1 * sn + y1 * c) * R);
-        path.lineTo(cx + (x2 * c - y2 * sn) * R, cy + (x2 * sn + y2 * c) * R);
+      var pc = p.parts[i], k = apart(p, i), s = pc.s, kk = Math.max(0, Math.min(1, k));
+      var moving = (st === 0 || st === 5 || st === 6) && !reduce;
+      var spin = moving ? p.sp[i] * time : 0;
+      var la = (p.orr[i] + spin) * k, lc = Math.cos(la), ls = Math.sin(la);
+      /* tumble: flip about a tilted axis, with perspective; flattens back to face-on as the rune snaps together */
+      var th = wrap(p.t0[i] + (moving ? p.tsp[i] * time : 0)) * kk, ct = Math.cos(th), st3 = Math.sin(th);
+      var ac = Math.cos(p.tax[i]), as = Math.sin(p.tax[i]);
+      var bob = moving ? 0.06 * Math.sin(time * 0.7 + p.fph[i]) : 0;
+      var offx = p.ox[i] * k, offy = (p.oy[i] + bob) * k;
+      var path = new Path2D();
+      for (var j = 0; j < s.length; j += 2) {
+        var lx = s[j] - pc.cx, ly = s[j + 1] - pc.cy;
+        var u = lx * ac + ly * as, v = -lx * as + ly * ac;               /* into the tilt axis frame */
+        var z = u * st3, pers = 1 / (1 + z * 0.9);                         /* depth -> perspective */
+        u = u * ct * pers; v = v * pers;
+        lx = u * ac - v * as; ly = u * as + v * ac;
+        var rx = lx * lc - ly * ls, ry = lx * ls + ly * lc;
+        var x = (rx + pc.cx + offx) * grow, y = (ry + pc.cy + offy) * grow;
+        var X = cx + (x * c - y * sn) * R, Y = cy + (x * sn + y * c) * R;
+        if (j % 4 === 0) path.moveTo(X, Y); else path.lineTo(X, Y);
       }
+      /* neon tube: wide soft glow, intense colored edges, pale hot center. 0.25 when broken -> 1.5 when whole */
+      var w = 0.25 + 1.25 * (1 - kk);
+      g.strokeStyle = "rgba(" + col + "," + (0.07 * bright).toFixed(3) + ")"; g.lineWidth = w * 2 + 10; g.stroke(path);
+      g.strokeStyle = "rgba(" + col + "," + (0.16 * bright).toFixed(3) + ")"; g.lineWidth = w * 2 + 4.5; g.stroke(path);
+      g.strokeStyle = "rgba(" + col + "," + (0.95 * bright).toFixed(3) + ")"; g.lineWidth = w + 0.6; g.stroke(path);
+      g.strokeStyle = "rgba(" + core + "," + (0.9 * bright).toFixed(3) + ")"; g.lineWidth = Math.max(0.2, w * 0.4); g.stroke(path);
     }
-    var col = st === 5 ? "255,190,120" : p.pal[0], core = st === 5 ? "255,236,210" : p.pal[1];
-    if (st === 2 || st === 4 || (st === 1 && t > 0.35)) {      /* inner light once it's whole */
-      var ga = (st === 1 ? (t - 0.35) / 0.4 : 1) * 0.28 * bright;
-      var gr = g.createRadialGradient(cx, cy, 0, cx, cy, R * 0.7);
-      gr.addColorStop(0, "rgba(" + core + "," + ga.toFixed(3) + ")"); gr.addColorStop(1, "rgba(" + col + ",0)");
-      g.fillStyle = gr; g.beginPath(); g.arc(cx, cy, R * 0.7, 0, TAU); g.fill();
-    }
-    g.strokeStyle = "rgba(" + col + "," + (0.12 * bright).toFixed(3) + ")"; g.lineWidth = 6; g.stroke(path);    /* outer glow */
-    g.strokeStyle = "rgba(" + col + "," + (0.38 * bright).toFixed(3) + ")"; g.lineWidth = 2.4; g.stroke(path);  /* inner glow */
-    g.strokeStyle = "rgba(" + core + "," + (0.9 * bright).toFixed(3) + ")"; g.lineWidth = 0.9; g.stroke(path);   /* bright core */
   }
 
   function halo(p, time) {           /* soft amber ring around a selected half */
