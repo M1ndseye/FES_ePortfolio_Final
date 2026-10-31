@@ -246,10 +246,25 @@
     return Math.min((W / 2 + m) / ca, (H / 2 + m) / sa);
   }
   function spawnOne() {
-    var R = radius(), p = make(Math.floor(Math.random() * RECIPES.length), R * 1.3 + Math.random() * (W - 2.6 * R), -R * 1.6, R, {});
-    if (count >= ANGLES_AT) {        /* hits 25-75: runes come in from any side and cross the screen */
-      var a; do { a = Math.random() * TAU; } while (lastDir !== null && Math.abs(Math.atan2(Math.sin(a - lastDir), Math.cos(a - lastDir))) < 0.9);
-      lastDir = a;
+    var R = radius(), p = make(Math.floor(Math.random() * RECIPES.length), 0, -R * 1.6, R, {}), i, k, best, bestScore;
+    var live = pats.filter(function (q) { return q.state === 0 && !q.half; });
+    if (count < ANGLES_AT) {         /* falling: pick a column well clear of runes still near the top */
+      best = null; bestScore = -1;
+      for (k = 0; k < 14; k++) {
+        var x = R * 1.3 + Math.random() * (W - 2.6 * R), near = 1e9;
+        for (i = 0; i < live.length; i++) if (live[i].cy < H * 0.45) near = Math.min(near, Math.abs(live[i].x - x));
+        if (near > bestScore) { bestScore = near; best = x; }
+      }
+      p.x = p.sx = p.cx = best;
+    } else {                         /* hits 25-75: enter from a side that no live rune came from */
+      best = 0; bestScore = -1;
+      for (k = 0; k < 16; k++) {
+        var a = Math.random() * TAU, gap = 9;
+        for (i = 0; i < live.length; i++) if (live[i].dir != null) gap = Math.min(gap, Math.abs(Math.atan2(Math.sin(a - live[i].dir), Math.cos(a - live[i].dir))));
+        if (lastDir !== null) gap = Math.min(gap, Math.abs(Math.atan2(Math.sin(a - lastDir), Math.cos(a - lastDir))));
+        if (gap > bestScore) { bestScore = gap; best = a; }
+      }
+      a = best; lastDir = a; p.dir = a;
       var Rs = edgeDist(a, R * 1.3), cx0 = W / 2, cy0 = H / 2;
       p.x = p.sx = cx0 + Math.cos(a) * Rs; p.y = cy0 + Math.sin(a) * Rs; p.cx = p.x; p.cy = p.y;
       var tx = cx0 + (Math.random() - 0.5) * W * 0.5, ty = cy0 + (Math.random() - 0.5) * H * 0.4, d = Math.hypot(tx - p.x, ty - p.y) || 1;
@@ -522,7 +537,7 @@
       if (onScreen === 0) spawnIn = 0.3;
     }
     if (spawnIn <= 0 && !conv) {
-      if (level === 1) { spawnOne(); spawnIn = count >= RUSH_AT ? 2 + Math.random() * 1.5 : 3 + Math.random() * 1.5; }   /* 1-49: every 3-4.5 s, 50-75: 2-3.5 s */
+      if (level === 1) { spawnOne(); spawnIn = count >= RUSH_AT ? 2 + Math.random() * 1.5 : 2.3 + Math.random() * 1.15; }   /* 1-49: every 2.3-3.45 s, 50-75: 2-3.5 s */
       else {
         var live = 0; for (var z = 0; z < pats.length; z++) if (pats[z].half && (pats[z].state === 0 || pats[z].state === 5 || pats[z].state === 6)) live++;
         if (live === 0) { spawnWave(); spawnIn = 1.5; } else spawnIn = 0.4;   /* one wave at a time, so there's always exactly one match */
