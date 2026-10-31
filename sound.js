@@ -171,6 +171,8 @@
   }
 
   function build() {
+    /* iOS 17+: treat this as media playback so the ring/silent switch doesn't mute it */
+    try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}
     ctx = new AC();
     master = ctx.createGain(); master.gain.value = 0;
     /* short, soft echo for glue */
@@ -246,6 +248,19 @@
     label();
   }
   if (sw) sw.addEventListener("click", function () { set(!on, true); });
+
+  /* Mobile browsers only unlock audio inside a finished gesture (touchend / click / key), not during a
+     slider drag or on pointerdown. So on every such gesture, if sound is meant to be on, (re)start it. */
+  var unlocked = false;
+  function kick() {
+    if (!on || !ctx) return;
+    if (!unlocked) {   /* a silent one-sample blip inside the gesture unlocks Web Audio on older iOS */
+      try { var s0 = ctx.createBufferSource(); s0.buffer = ctx.createBuffer(1, 1, 22050); s0.connect(ctx.destination); s0.start(0); unlocked = true; } catch (e) {}
+    }
+    if (ctx.state !== "running" && ctx.resume) ctx.resume();
+    if (bedEl && bedEl.paused) { var pr = bedEl.play(); if (pr && pr.catch) pr.catch(function () {}); }
+  }
+  ["touchend", "pointerup", "click", "keydown", "change"].forEach(function (n) { document.addEventListener(n, kick, true); });
   label();
   document.addEventListener("visibilitychange", function () {
     if (!ctx || !on) return;
@@ -257,9 +272,9 @@
   if (saved === "1") {
     var arm = function (e) {
       if (ui.contains(e.target)) { cleanup(); return; }
-      cleanup(); if (!on) set(true, false);
+      cleanup(); if (!on) set(true, false); kick();
     };
-    var cleanup = function () { ["pointerdown", "keydown"].forEach(function (n) { document.removeEventListener(n, arm, true); }); };
-    ["pointerdown", "keydown"].forEach(function (n) { document.addEventListener(n, arm, true); });
+    var cleanup = function () { ["touchend", "pointerup", "keydown"].forEach(function (n) { document.removeEventListener(n, arm, true); }); };
+    ["touchend", "pointerup", "keydown"].forEach(function (n) { document.addEventListener(n, arm, true); });
   }
 })();
