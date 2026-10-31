@@ -67,6 +67,56 @@
     parts.push(spokes(8, .04, .09, up + step / 2));
     return parts;
   }
+  function circ(x, y, r, steps) {          /* a circle as a smooth polyline */
+    var s = [], n = steps || 28;
+    for (var i = 0; i < n; i++) { var a0 = i * TAU / n, a1 = (i + 1) * TAU / n; s.push(x + Math.cos(a0) * r, y + Math.sin(a0) * r, x + Math.cos(a1) * r, y + Math.sin(a1) * r); }
+    return s;
+  }
+  function seedOfLife(r, rot) {              /* 7 overlapping circles in a bounding ring; returns 4 shards */
+    var a = circ(0, 0, r), b = [], c = [], i;
+    for (i = 0; i < 6; i++) { var p = pt(r, rot + i * TAU / 6); (i % 2 ? b : c).push.apply(i % 2 ? b : c, circ(p[0], p[1], r)); }
+    return [a, b, c, circ(0, 0, r * 2, 40)];
+  }
+  function hexLattice(Rt, div) {             /* hexagram (two triangles) filled with a triangular grid; returns shards */
+    var up = star(3, 1, Rt, -TAU / 4), dn = star(3, 1, Rt, TAU / 4);
+    var L = Rt * Math.sqrt(3), h = L / div * Math.sqrt(3) / 2, inr = Rt / 2;   /* inradius of each triangle */
+    var V = []; for (var i = 0; i < 6; i++) V.push(pt(Rt, -TAU / 4 + i * TAU / 6));
+    function inTri(x, y, flip) { /* inside an equilateral triangle centred at 0 with inradius inr */
+      for (var k = 0; k < 3; k++) { var a = (flip ? TAU / 4 : -TAU / 4) + TAU / 2 + k * TAU / 3; if (x * Math.cos(a) + y * Math.sin(a) > inr + 1e-6) return false; }
+      return true;
+    }
+    function inside(x, y) { return inTri(x, y, false) || inTri(x, y, true); }
+    var groups = [[], [], []];
+    for (var d = 0; d < 3; d++) {            /* grid lines in three directions, clipped to the star */
+      var ang = d * TAU / 6, ux = Math.cos(ang), uy = Math.sin(ang), nx = -uy, ny = ux;
+      for (var k = -div; k <= div; k++) {
+        var off = k * h, run = null, steps = 120;
+        for (var j = 0; j <= steps; j++) {
+          var tt = -Rt + 2 * Rt * j / steps, x = nx * off + ux * tt, y = ny * off + uy * tt, inn = inside(x * 0.999, y * 0.999);
+          if (inn && !run) run = [x, y];
+          if ((!inn || j === steps) && run) { var ex = inn ? x : nx * off + ux * (tt - 2 * Rt / steps), ey = inn ? y : ny * off + uy * (tt - 2 * Rt / steps);
+            if (Math.hypot(ex - run[0], ey - run[1]) > 0.02) groups[d].push(run[0], run[1], ex, ey); run = null; }
+        }
+      }
+    }
+    return [up, dn].concat(groups);
+  }
+  function metatron(d) {                     /* Metatron's Cube: 13 circles joined by hexagon + star lines */
+    var C = [[0, 0]], i, j, s;
+    for (i = 0; i < 6; i++) C.push(pt(d, -TAU / 4 + i * TAU / 6));
+    for (i = 0; i < 6; i++) C.push(pt(2 * d, -TAU / 4 + i * TAU / 6));
+    var circles1 = [], circles2 = [];
+    for (i = 0; i < 13; i++) (i < 7 ? circles1 : circles2).push.apply(i < 7 ? circles1 : circles2, circ(C[i][0], C[i][1], d / 2, 20));
+    var hexes = [], stars = [], spokesS = [];
+    for (i = 0; i < 6; i++) {
+      var o = C[7 + i], o2 = C[7 + (i + 1) % 6], o3 = C[7 + (i + 2) % 6], n1 = C[1 + i], n2 = C[1 + (i + 1) % 6], n3 = C[1 + (i + 2) % 6];
+      hexes.push(o[0], o[1], o2[0], o2[1], n1[0], n1[1], n2[0], n2[1]);          /* outer + inner hexagons */
+      stars.push(o[0], o[1], o3[0], o3[1], n1[0], n1[1], n3[0], n3[1]);          /* big + small hexagrams */
+      spokesS.push(o[0], o[1], 0, 0);                                            /* the cube's axes */
+      spokesS.push(o[0], o[1], n2[0], n2[1]); spokesS.push(o[0], o[1], C[1 + (i + 5) % 6][0], C[1 + (i + 5) % 6][1]);
+    }
+    return [circles1, circles2, hexes, stars, spokesS];
+  }
   function splitRing(fn, parts, off) {     /* break a ring-like feature into separate drifting arcs */
     var out = [], gap = 0.06;
     for (var i = 0; i < parts; i++) out.push(fn(off + i * TAU / parts + gap, off + (i + 1) * TAU / parts - gap));
@@ -76,16 +126,16 @@
   /* ---------- rune recipes, simplest to busiest; each gets the next note up a D major pentatonic ---------- */
   var RECIPES = [
     function (R) { return [star(3, 1, .62, -TAU / 4), star(3, 1, .62, TAU / 4)].concat(splitRing(function (a, b) { return arc(.86, a, b, 10); }, 3, R() * TAU)); },
-    function (R) { return [star(4, 1, .6, 0), star(4, 1, .6, TAU / 8), star(8, 1, .32, TAU / 16)].concat(splitRing(function (a, b) { return arc(.88, a, b, 8); }, 4, TAU / 8)); },
+    function (R) { return [star(4, 1, .6, 0), star(4, 1, .6, TAU / 8)].concat(seedOfLife(.15, -TAU / 4), splitRing(function (a, b) { return arc(.88, a, b, 8); }, 4, TAU / 8)); },   /* squares around the Seed of Life */
     function (R) { return [star(5, 2, .66, -TAU / 4), star(5, 1, .66, -TAU / 4), star(5, 1, .25, TAU / 4), spokes(5, .7, .9, -TAU / 4)].concat(splitRing(function (a, b) { return arc(.9, a, b, 8); }, 5, -TAU / 4)); },
     function (R) { return [lattice(.62, 0), star(6, 2, .3, TAU / 12), star(6, 1, .72, TAU / 12)].concat(splitRing(function (a, b) { return arc(.84, a, b, 10); }, 3, TAU / 12), [spokes(6, .72, .84, 0)]); },
     function (R) { return [star(8, 3, .7, 0), star(4, 1, .4, TAU / 8), star(4, 1, .4, 0)].concat(splitRing(function (a, b) { return arc(.86, a, b, 6); }, 4, 0)); },
     function (R) { return [star(7, 3, .68, -TAU / 4), star(7, 1, .68, -TAU / 4), star(7, 2, .34, TAU / 4)].concat(splitRing(function (a, b) { return arc(.88, a, b, 7); }, 7, -TAU / 4)); },
     function (R) { return lotus(); },   /* geometric lotus blossom */
-    function (R) { return [star(3, 1, .7, -TAU / 4), star(3, 1, .34, TAU / 4), star(3, 1, .34, -TAU / 4), spokes(3, .35, .7, TAU / 4), spokes(6, .76, .92, 0)]; },
+    function (R) { return hexLattice(.88, 3).concat(hexLattice(.44, 3)); },   /* hexagram grid with a smaller gridded hexagram inside */
     function (R) { return [star(4, 1, .74, TAU / 8), star(4, 1, .52, 0), spokes(4, 0, .52, TAU / 8), spokes(4, .56, .74, 0), star(8, 1, .2, 0)].concat(splitRing(function (a, b) { return arc(.88, a, b, 6); }, 4, TAU / 8)); },
     function (R) { return [star(12, 5, .7, 0), star(12, 1, .7, 0), star(6, 1, .28, 0)].concat(splitRing(function (a, b) { return arc(.86, a, b, 9); }, 4, TAU / 24), [spokes(12, .74, .86, 0)]); },
-    function (R) { return [star(4, 1, .6, 0), star(4, 1, .6, TAU / 8), star(8, 3, .36, 0), lattice(.18, 0)].concat([star(16, 1, .8, 0)], splitRing(function (a, b) { return arc(.9, a, b, 8); }, 2, TAU / 8)); },
+    function (R) { return metatron(.3).concat(splitRing(function (a, b) { return arc(.86, a, b, 8); }, 3, TAU / 12)); },   /* Metatron's Cube */
     function (R) { return [lattice(.66, TAU / 12), star(3, 1, .4, -TAU / 4), star(3, 1, .4, TAU / 4), star(6, 1, .2, 0)].concat([star(12, 1, .8, 0), spokes(6, .66, .8, TAU / 12)], splitRing(function (a, b) { return arc(.94, a, b, 8); }, 3, TAU / 6)); }
   ];
   var NOTES = [220, 246.94, 293.66, 329.63, 369.99, 440, 493.88, 587.33, 659.26, 739.99, 880, 987.77];
