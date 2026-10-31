@@ -117,6 +117,30 @@
     }
     return [circles1, circles2, hexes, stars, spokesS];
   }
+  function hexAt(x, y, r, rot) {
+    var s = []; for (var i = 0; i < 6; i++) { var a = rot + i * TAU / 6, b = rot + (i + 1) * TAU / 6; s.push(x + Math.cos(a) * r, y + Math.sin(a) * r, x + Math.cos(b) * r, y + Math.sin(b) * r); }
+    return s;
+  }
+  function cubeFlower() {                    /* six cube cells around nested hexagons, a dashed star and a seed point */
+    var up = -TAU / 4, parts = [], i, k;
+    for (i = 0; i < 6; i++) {                /* each cell: hexagon, smaller hexagon, isometric cube lines */
+      var c = pt(.6, up + i * TAU / 6), s = hexAt(c[0], c[1], .27, up).concat(hexAt(c[0], c[1], .15, up));
+      for (k = 0; k < 3; k++) { var v = pt(.15, up + k * TAU / 3); s.push(c[0], c[1], c[0] + v[0], c[1] + v[1]); }
+      parts.push(s);
+    }
+    parts.push(hexAt(0, 0, .46, up).concat(hexAt(0, 0, .38, up)));
+    var d = [], st = star(6, 2, .33, up);       /* dashed hexagram + dashed spokes */
+    for (i = 0; i < st.length; i += 4) for (k = 0; k < 6; k++) {
+      var t0 = k / 6, t1 = t0 + 0.5 / 6;
+      d.push(st[i] + (st[i + 2] - st[i]) * t0, st[i + 1] + (st[i + 3] - st[i + 1]) * t0, st[i] + (st[i + 2] - st[i]) * t1, st[i + 1] + (st[i + 3] - st[i + 1]) * t1);
+    }
+    for (i = 0; i < 6; i++) for (k = 0; k < 4; k++) { var a0 = pt(.1 + k * .07, up + TAU / 12 + i * TAU / 6), a1 = pt(.13 + k * .07, up + TAU / 12 + i * TAU / 6); d.push(a0[0], a0[1], a1[0], a1[1]); }
+    parts.push(d);
+    var core = circ(0, 0, .085, 20).concat(circ(0, 0, .012, 6));
+    for (i = 0; i < 6; i++) { var q = pt(.38, up + i * TAU / 6); core = core.concat(circ(q[0], q[1], .015, 6)); }
+    parts.push(core);
+    return parts;
+  }
   function splitRing(fn, parts, off) {     /* break a ring-like feature into separate drifting arcs */
     var out = [], gap = 0.06;
     for (var i = 0; i < parts; i++) out.push(fn(off + i * TAU / parts + gap, off + (i + 1) * TAU / parts - gap));
@@ -127,7 +151,7 @@
   var RECIPES = [
     function (R) { return [star(3, 1, .62, -TAU / 4), star(3, 1, .62, TAU / 4)].concat(splitRing(function (a, b) { return arc(.86, a, b, 10); }, 3, R() * TAU)); },
     function (R) { return [star(4, 1, .6, 0), star(4, 1, .6, TAU / 8)].concat(seedOfLife(.15, -TAU / 4), splitRing(function (a, b) { return arc(.88, a, b, 8); }, 4, TAU / 8)); },   /* squares around the Seed of Life */
-    function (R) { return [star(5, 2, .66, -TAU / 4), star(5, 1, .66, -TAU / 4), star(5, 1, .25, TAU / 4), spokes(5, .7, .9, -TAU / 4)].concat(splitRing(function (a, b) { return arc(.9, a, b, 8); }, 5, -TAU / 4)); },
+    function (R) { return cubeFlower(); },   /* hexagon flower of cubes */
     function (R) { return [lattice(.62, 0), star(6, 2, .3, TAU / 12), star(6, 1, .72, TAU / 12)].concat(splitRing(function (a, b) { return arc(.84, a, b, 10); }, 3, TAU / 12), [spokes(6, .72, .84, 0)]); },
     function (R) { return [star(8, 3, .7, 0), star(4, 1, .4, TAU / 8), star(4, 1, .4, 0)].concat(splitRing(function (a, b) { return arc(.86, a, b, 6); }, 4, 0)); },
     function (R) { return [star(7, 3, .68, -TAU / 4), star(7, 1, .68, -TAU / 4), star(7, 2, .34, TAU / 4)].concat(splitRing(function (a, b) { return arc(.88, a, b, 7); }, 7, -TAU / 4)); },
@@ -233,8 +257,8 @@
     if (navigator.vibrate) try { navigator.vibrate(8); } catch (er) {}
 
     if (!best.half) {
-      best.state = 1; best.t = 0; count++; setScore();
-      bursts.push({ x: best.cx, y: best.cy, t: -0.5, R: best.R, pal: best.pal });   /* light rings release as it locks */
+      best.state = 1; best.t = 0; best.T = 0; count++; setScore();
+      bursts.push({ x: best.cx, y: best.cy, t: 0, R: best.R, pal: best.pal, p: best });   /* light rings ride with the rune */
       var bi = best.idx, bx = best.cx;
       setTimeout(function () { tone(bi, bx, 1); }, 380);                            /* ring the crystal at the snap */
       if (count === LEVEL2_AT && level === 1) { level = 2; spawnIn = 4.5; showBanner(); }
@@ -252,7 +276,7 @@
         var o = pats[f];
         if (o !== a && o !== b && o.half && o.wave === a.wave && (o.state === 0 || o.state === 5 || o.state === 6)) { o.state = 7; o.t = 0; if (sel === o) sel = null; }
       }
-      bursts.push({ x: mx, y: my, t: -0.55, R: a.R * 1.2, pal: a.pal });
+      b.burst = { x: mx, y: my, t: 0, R: a.R, pal: a.pal, p: null }; bursts.push(b.burst);
       var q = a.idx;
       setTimeout(function () { tone(q, mx, 1); }, 450);
       setTimeout(function () { if (window.M1Sound) M1Sound.tone(NOTES[q] * 1.5, (mx / W) * 1.6 - 0.8, 0.55); }, 540);
@@ -277,14 +301,14 @@
         if (live < 2) { spawnWave(); spawnIn = 8; } else spawnIn = 0.5;
       }
     }
-    for (var r = bursts.length - 1; r >= 0; r--) { bursts[r].t += dt; if (bursts[r].t > 3.2) bursts.splice(r, 1); }
+    for (var r = bursts.length - 1; r >= 0; r--) { bursts[r].t += dt; if (bursts[r].t > 3.8) bursts.splice(r, 1); }
 
     g.globalCompositeOperation = "lighter";
     g.lineCap = "round"; g.lineJoin = "round";
     for (r = 0; r < bursts.length; r++) drawBurst(bursts[r]);
     for (var i = pats.length - 1; i >= 0; i--) {
       var p = pats[i];
-      p.t += dt;
+      p.t += dt; if (p.T != null) p.T += dt;
       if (p.state === 4) {                          /* halves flying together */
         var e = Math.min(1, p.t / 0.6), k = 1 - Math.pow(1 - e, 3);
         p.cx = p.fx + (p.tx - p.fx) * k; p.cy = p.fy + (p.ty - p.fy) * k;
@@ -292,7 +316,8 @@
         if (e >= 1) {
           if (p.lead) {
             var full = make(p.idx, p.cx, p.cy, p.R, { rot: p.rot, vr: p.vr, slow: 1, pal: PALETTES.indexOf(p.pal) });
-            full.state = 2; full.t = 0; full.fixed = true; full.x = p.cx; full.y = p.cy;
+            full.state = 2; full.t = 0; full.T = 0.6; full.fixed = true; full.x = p.cx; full.y = p.cy;
+            if (p.burst) p.burst.p = full;
             pats.push(full);
           }
           pats.splice(i, 1); continue;
@@ -332,8 +357,9 @@
       : st === 2 || st === 4 ? 1 : Math.pow(Math.max(0, 1 - t / 1.6), 1.5);
     if (p.half && (st === 0 || st === 5)) bright *= 0.82 + 0.18 * Math.sin(time * 2.2 + p.phase);   /* pairs pulse in sync */
     /* once whole, the rune expands with the light rings while it fades (same slowing curve), so its detail opens up */
+    /* from the tap: a springy bounce outward while the parts combine, then a steady expansion with the rings */
     var grow = 1;
-    if (st === 2 || st === 3) { var u = Math.min(1, ((st === 2 ? 0 : 1.8) + t) / 3.4); grow = 1 + 1.8 * (1 - Math.pow(1 - u, 2.2)); }
+    if (p.T != null) grow = 1 + 0.5 * p.T + 0.24 * Math.sin(p.T * 13) * Math.exp(-p.T * 3.2);
     var c = Math.cos(p.rot), sn = Math.sin(p.rot);
     var col = st === 5 ? "255,170,80" : p.pal[0], core = st === 5 ? "255,240,220" : p.pal[1];
     if (st === 2 || st === 4 || (st === 1 && t > 0.35)) {      /* inner light once it's whole */
@@ -382,17 +408,17 @@
 
   /* pond ripples of light: rings leave one after another, fast at first then slowing as they spread and fade */
   function drawBurst(q) {
-    if (q.t <= 0) return;
-    if (q.t < 0.35) {                /* flash as the parts lock */
-      var fl = 1 - q.t / 0.35, gr = g.createRadialGradient(q.x, q.y, 0, q.x, q.y, q.R);
+    if (q.p) { q.x = q.p.cx; q.y = q.p.cy; }            /* stay centred on the rune as it drifts */
+    if (q.t < 0.3) {                                      /* flash at the moment of contact */
+      var fl = 1 - q.t / 0.3, gr = g.createRadialGradient(q.x, q.y, 0, q.x, q.y, q.R * 1.2);
       gr.addColorStop(0, "rgba(" + q.pal[1] + "," + (0.4 * fl).toFixed(3) + ")"); gr.addColorStop(1, "rgba(" + q.pal[0] + ",0)");
-      g.fillStyle = gr; g.beginPath(); g.arc(q.x, q.y, q.R, 0, TAU); g.fill();
+      g.fillStyle = gr; g.beginPath(); g.arc(q.x, q.y, q.R * 1.2, 0, TAU); g.fill();
     }
     for (var k = 0; k < 6; k++) {
-      var tk = q.t - k * 0.32; if (tk <= 0) continue;
-      var life = tk / 2.6; if (life >= 1) continue;
-      var rad = q.R * (0.9 + 3.2 * (1 - Math.pow(1 - life, 2.2)));   /* decelerating, like a pond */
-      var a = Math.pow(1 - life, 1.8) * (1 - k * 0.12);
+      var tk = q.t - k * 0.26; if (tk <= 0) continue;
+      var life = tk / 2.4; if (life >= 1) continue;
+      var rad = q.R * (1 + 2.1 * tk);                     /* constant speed: a visible sound wave */
+      var a = Math.pow(1 - life, 1.5) * (1 - k * 0.12);
       var col = k % 2 ? "255,170,90" : q.pal[0];
       g.beginPath(); g.arc(q.x, q.y, rad, 0, TAU);
       g.strokeStyle = "rgba(" + col + "," + (0.12 * a).toFixed(3) + ")"; g.lineWidth = 10; g.stroke();
