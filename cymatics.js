@@ -44,6 +44,29 @@
     var s = []; for (var i = 0; i < steps; i++) { var p = pt(r, a0 + (a1 - a0) * i / steps), q = pt(r, a0 + (a1 - a0) * (i + 1) / steps); s.push(p[0], p[1], q[0], q[1]); }
     return s;
   }
+  function petal(rb, rt, wmax, a, vein) {  /* faceted almond petal: straight facets, full belly, pointed tip */
+    var L = [], Rr = [], ca = Math.cos(a), sa = Math.sin(a), steps = 5, s = [], i;
+    for (i = 0; i <= steps; i++) {
+      var u = i / steps, r = rb + (rt - rb) * u, d = wmax * Math.pow(Math.sin(Math.PI * Math.pow(u, 0.8)), 0.85);
+      L.push([ca * r - sa * d, sa * r + ca * d]); Rr.push([ca * r + sa * d, sa * r - ca * d]);
+    }
+    for (i = 0; i < steps; i++) s.push(L[i][0], L[i][1], L[i + 1][0], L[i + 1][1], Rr[i][0], Rr[i][1], Rr[i + 1][0], Rr[i + 1][1]);
+    if (vein) { var v0 = pt(rb + (rt - rb) * 0.15, a), v1 = pt(rb + (rt - rb) * 0.7, a); s.push(v0[0], v0[1], v1[0], v1[1]); }
+    return s;
+  }
+  function lotus() {   /* top view: 8 broad outer petals, 8 petals between them, 8 small inner petals, seed-pod center */
+    var parts = [], i, k, s, up = -TAU / 4, step = TAU / 8;
+    for (k = 0; k < 4; k++) {                /* outer petals, broken into four shards of two */
+      s = []; for (i = 0; i < 2; i++) s = s.concat(petal(.22, .96, .2, up + (k * 2 + i) * step, true)); parts.push(s);
+    }
+    for (k = 0; k < 2; k++) {                /* second layer, offset half a step */
+      s = []; for (i = 0; i < 4; i++) s = s.concat(petal(.2, .74, .17, up + step / 2 + (k * 4 + i) * step, false)); parts.push(s);
+    }
+    s = []; for (i = 0; i < 8; i++) s = s.concat(petal(.14, .44, .09, up + i * step, false)); parts.push(s);
+    parts.push(star(8, 1, .13, up + step / 2));
+    parts.push(spokes(8, .04, .09, up + step / 2));
+    return parts;
+  }
   function splitRing(fn, parts, off) {     /* break a ring-like feature into separate drifting arcs */
     var out = [], gap = 0.06;
     for (var i = 0; i < parts; i++) out.push(fn(off + i * TAU / parts + gap, off + (i + 1) * TAU / parts - gap));
@@ -58,7 +81,7 @@
     function (R) { return [lattice(.62, 0), star(6, 2, .3, TAU / 12), star(6, 1, .72, TAU / 12)].concat(splitRing(function (a, b) { return arc(.84, a, b, 10); }, 3, TAU / 12), [spokes(6, .72, .84, 0)]); },
     function (R) { return [star(8, 3, .7, 0), star(4, 1, .4, TAU / 8), star(4, 1, .4, 0)].concat(splitRing(function (a, b) { return arc(.86, a, b, 6); }, 4, 0)); },
     function (R) { return [star(7, 3, .68, -TAU / 4), star(7, 1, .68, -TAU / 4), star(7, 2, .34, TAU / 4)].concat(splitRing(function (a, b) { return arc(.88, a, b, 7); }, 7, -TAU / 4)); },
-    function (R) { return [star(4, 1, .7, 0), star(4, 1, .52, TAU / 24), star(4, 1, .38, TAU / 12), star(4, 1, .26, TAU / 8)].concat(splitRing(function (a, b) { return arc(.88, a, b, 8); }, 4, TAU / 8), [spokes(4, .7, .88, 0)]); },
+    function (R) { return lotus(); },   /* geometric lotus blossom */
     function (R) { return [star(3, 1, .7, -TAU / 4), star(3, 1, .34, TAU / 4), star(3, 1, .34, -TAU / 4), spokes(3, .35, .7, TAU / 4), spokes(6, .76, .92, 0)]; },
     function (R) { return [star(4, 1, .74, TAU / 8), star(4, 1, .52, 0), spokes(4, 0, .52, TAU / 8), spokes(4, .56, .74, 0), star(8, 1, .2, 0)].concat(splitRing(function (a, b) { return arc(.88, a, b, 6); }, 4, TAU / 8)); },
     function (R) { return [star(12, 5, .7, 0), star(12, 1, .7, 0), star(6, 1, .28, 0)].concat(splitRing(function (a, b) { return arc(.86, a, b, 9); }, 4, TAU / 24), [spokes(12, .74, .86, 0)]); },
@@ -94,7 +117,7 @@
       idx: idx, parts: parts, N: N, R: R, x: x, y: y, cx: x, cy: y,
       vy: H * (opts.slow ? 0.032 : 0.04 + Math.random() * 0.02), sway: Math.random() * 6.28,
       rot: opts.rot != null ? opts.rot : Math.random() * 6.28, vr: opts.vr != null ? opts.vr : (Math.random() - 0.5) * 0.1,
-      state: 0, t: 0, half: !!opts.half, pair: opts.pair || 0, sub: null,
+      state: 0, t: 0, half: !!opts.half, pair: opts.pair || 0, wave: opts.wave || 0, sub: null,
       pal: PALETTES[opts.pal != null ? opts.pal : (Math.random() < 0.6 ? 0 : 1)],
       phase: opts.phase != null ? opts.phase : Math.random() * 6.28,
       ox: new Float32Array(N), oy: new Float32Array(N), orr: new Float32Array(N), sp: new Float32Array(N), dl: new Float32Array(N),
@@ -132,11 +155,11 @@
     var lane = W / n;
     function at(s) { return lane * (s + 0.5) + (Math.random() - 0.5) * lane * 0.2; }
     function y0(k) { return -R * (1.2 + k * 0.9 + Math.random() * 0.5); }
-    pats.push(make(m, at(slots[0]), y0(0), R, { half: 1, side: 0, rot: rot, vr: vr, pair: id, slow: 1, pal: pal, phase: ph }));
-    pats.push(make(m, at(slots[1]), y0(1), R, { half: 1, side: 1, rot: rot, vr: vr, pair: id, slow: 1, pal: pal, phase: ph }));
+    pats.push(make(m, at(slots[0]), y0(0), R, { half: 1, side: 0, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph }));
+    pats.push(make(m, at(slots[1]), y0(1), R, { half: 1, side: 1, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph }));
     for (i = 2; i < n; i++) {
       var o = pool.splice(Math.floor(Math.random() * pool.length), 1)[0];
-      pats.push(make(o, at(slots[i]), y0(i), R, { half: 1, side: Math.random() < 0.5 ? 0 : 1, vr: vr, pair: -1, slow: 1, pal: pal }));
+      pats.push(make(o, at(slots[i]), y0(i), R, { half: 1, side: Math.random() < 0.5 ? 0 : 1, vr: vr, pair: -1, wave: id, slow: 1, pal: pal }));
     }
   }
 
@@ -175,6 +198,10 @@
       [a, b].forEach(function (h) { h.state = 4; h.t = 0; h.fx = h.cx; h.fy = h.cy; h.tx = mx; h.ty = my; h.fr = h.rot; });
       a.mate = b; b.mate = a; b.lead = true;
       count++; setScore();
+      for (var f = 0; f < pats.length; f++) {      /* harmony found: the other pieces of this wave fade away */
+        var o = pats[f];
+        if (o !== a && o !== b && o.half && o.wave === a.wave && (o.state === 0 || o.state === 5 || o.state === 6)) { o.state = 7; o.t = 0; if (sel === o) sel = null; }
+      }
       bursts.push({ x: mx, y: my, t: -0.55, R: a.R * 1.2, pal: a.pal });
       var q = a.idx;
       setTimeout(function () { tone(q, mx, 1); }, 450);
@@ -228,7 +255,7 @@
         if (p.state === 6 && p.t > 0.5) { p.state = 0; p.t = 0; }
         if (p.state === 1 && p.t > 0.75) { p.state = 2; p.t = 0; }
         if (p.state === 2 && p.t > 1.8) { p.state = 3; p.t = 0; }
-        if ((p.state === 3 && p.t > 1.6) || p.cy - p.R * 1.8 > H) { if (sel === p) sel = null; pats.splice(i, 1); continue; }
+        if ((p.state === 3 && p.t > 1.6) || (p.state === 7 && p.t > 1.1) || p.cy - p.R * 1.8 > H) { if (sel === p) sel = null; pats.splice(i, 1); continue; }
       }
       drawRune(p, time);
     }
@@ -241,7 +268,7 @@
   /* how far each part is from its place: 1 = drifted apart, 0 = locked into the rune */
   function apart(p, i) {
     var st = p.state, t = p.t;
-    if (st === 0 || st === 5 || st === 6) return p.half ? 0.12 : 1;
+    if (st === 0 || st === 5 || st === 6 || st === 7) return p.half ? 0.12 : 1;
     if (st === 1) { var e = Math.max(0, Math.min(1, (t - p.dl[i]) / 0.42)); return Math.pow(1 - e, 4) - 0.06 * Math.sin(e * Math.PI) ; } /* snap with a tiny overshoot */
     if (st === 4) return 0.12 * Math.pow(1 - Math.min(1, t / 0.5), 3);
     return 0;
@@ -251,7 +278,7 @@
 
   function drawRune(p, time) {
     var R = p.R, st = p.state, t = p.t, sub = p.sub, cx = p.cx, cy = p.cy;
-    var bright = st === 0 || st === 6 ? 0.75 : st === 5 ? 0.95 : st === 1 ? 0.75 + 0.25 * Math.min(1, t / 0.5)
+    var bright = st === 7 ? 0.75 * Math.max(0, 1 - t / 1.1) : st === 0 || st === 6 ? 0.75 : st === 5 ? 0.95 : st === 1 ? 0.75 + 0.25 * Math.min(1, t / 0.5)
       : st === 2 || st === 4 ? 1 : Math.max(0, 1 - t / 1.6);
     if (p.half && (st === 0 || st === 5)) bright *= 0.82 + 0.18 * Math.sin(time * 2.2 + p.phase);   /* pairs pulse in sync */
     var grow = st === 3 ? 1 + t * 0.18 : 1;
@@ -266,7 +293,7 @@
     for (var i = 0; i < p.N; i++) {
       if (sub && !sub[i]) continue;
       var pc = p.parts[i], k = apart(p, i), s = pc.s, kk = Math.max(0, Math.min(1, k));
-      var moving = (st === 0 || st === 5 || st === 6) && !reduce;
+      var moving = (st === 0 || st === 5 || st === 6 || st === 7) && !reduce;
       var spin = moving ? p.sp[i] * time : 0;
       var la = (p.orr[i] + spin) * k, lc = Math.cos(la), ls = Math.sin(la);
       /* tumble: flip about a tilted axis, with perspective; flattens back to face-on as the rune snaps together */
