@@ -255,7 +255,7 @@
     slots.sort(function () { return Math.random() - 0.5; });
     var lane = W / n;
     function at(s) { return lane * (s + 0.5) + (Math.random() - 0.5) * lane * 0.2; }
-    function y0(k) { return -R * (1.2 + k * 0.9 + Math.random() * 0.5); }
+    function y0(k) { return -R * (1.3 + Math.random() * 0.6); }   /* the whole wave enters together */
     pats.push(make(m, at(slots[0]), y0(0), R, { half: 1, side: 0, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph }));
     pats.push(make(m, at(slots[1]), y0(1), R, { half: 1, side: 1, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph }));
     for (i = 2; i < n; i++) {
@@ -497,8 +497,8 @@
     if (spawnIn <= 0 && !conv) {
       if (level === 1) { spawnOne(); spawnIn = 5 + Math.random() * 3; }
       else {
-        var live = 0; for (var z = 0; z < pats.length; z++) if (pats[z].half && pats[z].state !== 3) live++;
-        if (live < 2) { spawnWave(); spawnIn = 8; } else spawnIn = 0.5;
+        var live = 0; for (var z = 0; z < pats.length; z++) if (pats[z].half && (pats[z].state === 0 || pats[z].state === 5 || pats[z].state === 6)) live++;
+        if (live === 0) { spawnWave(); spawnIn = 1.5; } else spawnIn = 0.4;   /* one wave at a time, so there's always exactly one match */
       }
     }
     for (var r = bursts.length - 1; r >= 0; r--) { bursts[r].t += dt; if (bursts[r].t > 3.8) bursts.splice(r, 1); }
@@ -532,7 +532,13 @@
         if (p.state === 6 && p.t > 0.5) { p.state = 0; p.t = 0; }
         if (p.state === 1 && p.t > 0.75) { p.state = 2; p.t = 0; }
         if (p.state === 2 && p.t > 1.8) { p.state = 3; p.t = 0; }
-        if ((p.state === 3 && p.t > 1.6) || (p.state === 7 && p.t > 1.1) || p.cy - p.R * 1.8 > H) { if (sel === p) sel = null; pats.splice(i, 1); continue; }
+        if ((p.state === 3 && p.t > 1.6) || (p.state === 7 && p.t > 1.1) || p.cy - p.R * 1.8 > H) {
+          if (p.half && p.pair > 0 && (p.state === 0 || p.state === 5 || p.state === 6)) {   /* the match was missed: clear its wave */
+            for (var w = 0; w < pats.length; w++) { var o = pats[w]; if (o !== p && o.half && o.wave === p.wave && (o.state === 0 || o.state === 5 || o.state === 6)) { o.state = 7; o.t = 0; } }
+          }
+          if (sel === p || (sel && sel.state === 7)) sel = null;
+          pats.splice(i, 1); continue;
+        }
       }
       drawRune(p, time);
     }
