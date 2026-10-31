@@ -1,5 +1,5 @@
 /* M1ndseye eye screensaver: rune game.
-   Level 1: a geometric rune drifts down (one every 5-8 s) with its parts (stars, nested squares, triangles,
+   Level 1: a geometric rune drifts down (one every 5-8 s; from hit 25 they come in from every side) with its parts (stars, nested squares, triangles,
    hexagon lattices, frame arcs) floating apart. Tap it and the parts snap together; a struck
    crystal tone rings out with a long reverb, and rings of light ripple outward like a pond.
    Level 2 (hits 76-100): waves of half-runes fall. Exactly two halves in each wave complete the same rune
@@ -240,9 +240,19 @@
   }
 
   function radius() { return Math.max(36, Math.min(85, Math.min(W, H) * (0.095 + Math.random() * 0.03))); }   /* half size */
+  var ANGLES_AT = 25, lastDir = null;
   function spawnOne() {
-    var R = radius();
-    pats.push(make(Math.floor(Math.random() * RECIPES.length), R * 1.3 + Math.random() * (W - 2.6 * R), -R * 1.6, R, {}));
+    var R = radius(), p = make(Math.floor(Math.random() * RECIPES.length), R * 1.3 + Math.random() * (W - 2.6 * R), -R * 1.6, R, {});
+    if (count >= ANGLES_AT) {        /* hits 25-75: runes come in from any side and cross the screen */
+      var a; do { a = Math.random() * TAU; } while (lastDir !== null && Math.abs(Math.atan2(Math.sin(a - lastDir), Math.cos(a - lastDir))) < 0.9);
+      lastDir = a;
+      var Rs = Math.hypot(W, H) / 2 + R * 1.6, cx0 = W / 2, cy0 = H / 2;
+      p.x = p.sx = cx0 + Math.cos(a) * Rs; p.y = cy0 + Math.sin(a) * Rs; p.cx = p.x; p.cy = p.y;
+      var tx = cx0 + (Math.random() - 0.5) * W * 0.5, ty = cy0 + (Math.random() - 0.5) * H * 0.4, d = Math.hypot(tx - p.x, ty - p.y) || 1;
+      var sp = Math.hypot(W, H) * (0.06 + Math.random() * 0.025);
+      p.vx = (tx - p.x) / d * sp; p.vy = (ty - p.y) / d * sp; p.travel = true;
+    }
+    pats.push(p);
   }
 
   var pairId = 0;
