@@ -167,6 +167,13 @@
     parts.push(dots);
     return parts.concat(splitRing(function (a, b) { return arc(.97, a, b, 12); }, 5, up + TAU / 10));
   }
+  function shapeMask(idx) {          /* split a rune's whole shapes into two interleaved sets of similar weight */
+    var parts = rune(idx), order = parts.map(function (_, i) { return i; }), w = [0, 0], m = [];
+    order.sort(function () { return Math.random() - 0.5; });
+    order.forEach(function (i) { var s = w[0] <= w[1] ? 0 : 1; m[i] = s; w[s] += parts[i].s.length; });
+    if (w[0] === 0 || w[1] === 0) m[order[0]] = 1 - m[order[0]];
+    return m;
+  }
   function interlock(idx, side, sa) {       /* the rune cut in two along a puzzle seam (a rounded tab); returns [half, seam] */
     var nx = Math.cos(sa), ny = Math.sin(sa), tx = -ny, ty = nx;
     function g(v) { return 0.2 * Math.exp(-(v / 0.13) * (v / 0.13)) - 0.05 * Math.exp(-((Math.abs(v) - 0.3) / 0.09) * ((Math.abs(v) - 0.3) / 0.09)); }
@@ -237,6 +244,14 @@
     if (gateEl) { gateEl.classList.remove("on"); setTimeout(function () { gateEl.hidden = true; }, 400); }
   }
   if (gateEl) gateEl.querySelector("button").addEventListener("click", function (e) { e.stopPropagation(); closeGate(); });
+  var introEl = document.querySelector(".cym-intro"), testHook = /[?&](level|n)=/.test(location.search);
+  if (introEl && !testHook) {         /* the intro holds the game until Begin */
+    gate = true; introEl.hidden = false; requestAnimationFrame(function () { introEl.classList.add("on"); });
+    introEl.querySelector("button").addEventListener("click", function (e) {
+      e.stopPropagation(); gate = false; spawnIn = 0.6;
+      introEl.classList.remove("on"); setTimeout(function () { introEl.hidden = true; }, 500);
+    });
+  }
   if (level === 2) { count = LEVEL2_AT; level = 1; setTimeout(openGate, 300); }
   var scoreEl = document.querySelector(".cym-score b"), bannerEl = document.querySelector(".cym-banner");
   function setScore() { if (scoreEl) { scoreEl.textContent = count; scoreEl.parentNode.classList.add("on"); } }
@@ -245,7 +260,7 @@
   if (/debug/.test(location.search)) window.__cym = { converge: null, pats: function () { return pats; }, make: function (a, b, c, d, e) { return make(a, b, c, d, e); } };
 
   function make(idx, x, y, R, opts) {
-    var parts = opts.half ? interlock(idx, opts.side, opts.seam || 0) : rune(idx), N = parts.length;
+    var parts = rune(idx), N = parts.length;
     var p = {
       idx: idx, parts: parts, N: N, R: R, x: x, y: y, cx: x, cy: y,
       vy: H * (opts.slow ? 0.0368 : 0.046 + Math.random() * 0.023), sway: Math.random() * 6.28,
@@ -256,7 +271,8 @@
       ox: new Float32Array(N), oy: new Float32Array(N), orr: new Float32Array(N), sp: new Float32Array(N), dl: new Float32Array(N),
       tax: new Float32Array(N), tsp: new Float32Array(N), t0: new Float32Array(N), fph: new Float32Array(N)
     };
-    p.lock = !!opts.half;          /* interlocking halves stay whole: no drifting shards */
+    p.lock = !!opts.half;          /* halves stay assembled: no drifting shards */
+    if (opts.half) { var mk = opts.mask || shapeMask(idx); p.sub = new Uint8Array(N); for (var q = 0; q < N; q++) p.sub[q] = mk[q] === opts.side ? 1 : 0; }
     for (var i = 0; i < N; i++) {   /* drift apart: each part pushed outward from where it belongs, turned, spinning slowly */
       var pc = parts[i], d = Math.hypot(pc.cx, pc.cy), a = d > 0.05 ? Math.atan2(pc.cy, pc.cx) : Math.random() * TAU;
       a += (Math.random() - 0.5) * 1.2;
@@ -343,7 +359,7 @@
     /* 4 halves: the pair from opposite corners, a third corner and a side; 5: all four corners plus a side. Slots 0 and 1 (the pair) are opposite corners. */
     var dd = compass(), k0 = Math.floor(Math.random() * 4), k1 = (k0 + (Math.random() < 0.5 ? 1 : 3)) % 4, side = dd[4 + Math.floor(Math.random() * 4)].a;
     var angs = n >= 5 ? [dd[k0].a, dd[(k0 + 2) % 4].a, dd[(k0 + 1) % 4].a, dd[(k0 + 3) % 4].a, side] : [dd[k0].a, dd[(k0 + 2) % 4].a, dd[k1].a, side];
-    var order = [0, 1, 2, 3, 4], seamA = Math.random() * TAU;
+    var order = [0, 1, 2, 3, 4], maskA = shapeMask(m);
     function launch(p, slot) {
       var a = angs[slot] + (Math.random() - 0.5) * 0.2;
       var Re = edgeDist(a, R * 1.3);
@@ -351,11 +367,11 @@
       aimClear(p, speed);
       pats.push(p);
     }
-    launch(make(m, 0, 0, R, { half: 1, side: 0, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph, seam: seamA }), order[0]);
-    launch(make(m, 0, 0, R, { half: 1, side: 1, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph, seam: seamA }), order[1]);
+    launch(make(m, 0, 0, R, { half: 1, side: 0, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph, mask: maskA }), order[0]);
+    launch(make(m, 0, 0, R, { half: 1, side: 1, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph, mask: maskA }), order[1]);
     for (i = 2; i < n; i++) {
       var o = pool.splice(Math.floor(Math.random() * pool.length), 1)[0];
-      launch(make(o, 0, 0, R, { half: 1, side: Math.random() < 0.5 ? 0 : 1, vr: vr, pair: -1, wave: id, slow: 1, pal: pal, seam: Math.random() * TAU }), order[i]);
+      launch(make(o, 0, 0, R, { half: 1, side: Math.random() < 0.5 ? 0 : 1, vr: vr, pair: -1, wave: id, slow: 1, pal: pal }), order[i]);
     }
   }
 
