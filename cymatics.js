@@ -167,6 +167,28 @@
     parts.push(dots);
     return parts.concat(splitRing(function (a, b) { return arc(.97, a, b, 12); }, 5, up + TAU / 10));
   }
+  function interlock(idx, side, sa) {       /* the rune cut in two along a puzzle seam (a rounded tab); returns [half, seam] */
+    var nx = Math.cos(sa), ny = Math.sin(sa), tx = -ny, ty = nx;
+    function g(v) { return 0.2 * Math.exp(-(v / 0.13) * (v / 0.13)) - 0.05 * Math.exp(-((Math.abs(v) - 0.3) / 0.09) * ((Math.abs(v) - 0.3) / 0.09)); }
+    function keep(x, y) { var u = x * nx + y * ny, v = x * tx + y * ty; return side ? u > g(v) : u < g(v); }
+    var out = [], parts = rune(idx);
+    for (var k = 0; k < parts.length; k++) {
+      var s = parts[k].s;
+      for (var j = 0; j < s.length; j += 4) {
+        var x0 = s[j], y0 = s[j + 1], x1 = s[j + 2], y1 = s[j + 3], n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, y1 - y0) / 0.03));
+        for (var q = 0; q < n; q++) {
+          var ax = x0 + (x1 - x0) * q / n, ay = y0 + (y1 - y0) * q / n, bx = x0 + (x1 - x0) * (q + 1) / n, by = y0 + (y1 - y0) * (q + 1) / n;
+          if (keep((ax + bx) / 2, (ay + by) / 2)) out.push(ax, ay, bx, by);
+        }
+      }
+    }
+    var seam = [], prev = null;
+    for (var v = -1; v <= 1.0001; v += 0.02) {
+      var u = g(v), px = nx * u + tx * v, py = ny * u + ty * v;
+      if (Math.hypot(px, py) < 0.97) { if (prev) seam.push(prev[0], prev[1], px, py); prev = [px, py]; } else prev = null;
+    }
+    return [{ s: Float32Array.from(out), cx: 0, cy: 0 }, { s: Float32Array.from(seam), cx: 0, cy: 0 }];
+  }
   function splitRing(fn, parts, off) {     /* break a ring-like feature into separate drifting arcs */
     var out = [], gap = 0.06;
     for (var i = 0; i < parts; i++) out.push(fn(off + i * TAU / parts + gap, off + (i + 1) * TAU / parts - gap));
@@ -204,16 +226,26 @@
 
   /* ---------- state ---------- */
   var pats = [], bursts = [], count = 0, spawnIn = 0.8, sel = null;
-  var level = /level=2/.test(location.search) ? 2 : 1;
-  if (level === 2) count = LEVEL2_AT;
+  var level = /level=2/.test(location.search) ? 2 : 1, gate = false, gateEl = document.querySelector(".cym-gate");
+  function openGate() {               /* pause before the harmony round until the player confirms the directions */
+    gate = true; sel = null; setScore();
+    if (gateEl) { gateEl.hidden = false; requestAnimationFrame(function () { gateEl.classList.add("on"); }); var b0 = gateEl.querySelector("button"); if (b0) setTimeout(function () { b0.focus(); }, 300); }
+    else closeGate();
+  }
+  function closeGate() {
+    gate = false; level = 2; spawnIn = 0.8;
+    if (gateEl) { gateEl.classList.remove("on"); setTimeout(function () { gateEl.hidden = true; }, 400); }
+  }
+  if (gateEl) gateEl.querySelector("button").addEventListener("click", function (e) { e.stopPropagation(); closeGate(); });
+  if (level === 2) { count = LEVEL2_AT; level = 1; setTimeout(openGate, 300); }
   var scoreEl = document.querySelector(".cym-score b"), bannerEl = document.querySelector(".cym-banner");
   function setScore() { if (scoreEl) { scoreEl.textContent = count; scoreEl.parentNode.classList.add("on"); } }
-  var nArg = /[?&]n=(\d+)/.exec(location.search); if (nArg) count = +nArg[1];   /* test hook: start at a given count */
+  var nArg = /[?&]n=(\d+)/.exec(location.search); if (nArg) { count = +nArg[1]; if (count > LEVEL2_AT) level = 2; }   /* test hook: start at a given count */
   if (level === 2 || nArg) setScore();
   if (/debug/.test(location.search)) window.__cym = { converge: null, pats: function () { return pats; }, make: function (a, b, c, d, e) { return make(a, b, c, d, e); } };
 
   function make(idx, x, y, R, opts) {
-    var parts = rune(idx), N = parts.length;
+    var parts = opts.half ? interlock(idx, opts.side, opts.seam || 0) : rune(idx), N = parts.length;
     var p = {
       idx: idx, parts: parts, N: N, R: R, x: x, y: y, cx: x, cy: y,
       vy: H * (opts.slow ? 0.0368 : 0.046 + Math.random() * 0.023), sway: Math.random() * 6.28,
@@ -224,7 +256,7 @@
       ox: new Float32Array(N), oy: new Float32Array(N), orr: new Float32Array(N), sp: new Float32Array(N), dl: new Float32Array(N),
       tax: new Float32Array(N), tsp: new Float32Array(N), t0: new Float32Array(N), fph: new Float32Array(N)
     };
-    if (opts.half) { p.sub = new Uint8Array(N); for (var q = 0; q < N; q++) p.sub[q] = (q + opts.side) % 2 === 0 ? 1 : 0; }
+    p.lock = !!opts.half;          /* interlocking halves stay whole: no drifting shards */
     for (var i = 0; i < N; i++) {   /* drift apart: each part pushed outward from where it belongs, turned, spinning slowly */
       var pc = parts[i], d = Math.hypot(pc.cx, pc.cy), a = d > 0.05 ? Math.atan2(pc.cy, pc.cx) : Math.random() * TAU;
       a += (Math.random() - 0.5) * 1.2;
@@ -241,6 +273,18 @@
 
   function radius() { return Math.max(36, Math.min(85, Math.min(W, H) * (0.095 + Math.random() * 0.03))); }   /* half size */
   var ANGLES_AT = 0, RUSH_AT = 50, lastDir = null;   /* every rune comes in from the sides from the start */
+  function aimClear(p, sp) {         /* pick a heading whose straight path stays clear of the eye */
+    var eb = eyeBox(), ex = eb.hw * 0.92 + p.R * 1.1, ey = eb.hh * 0.75 + p.R * 1.1, best = null, bd = -1;
+    for (var k = 0; k < 40; k++) {
+      var tx = W * (0.1 + Math.random() * 0.8), ty = H * (0.1 + Math.random() * 0.8);
+      var ax = (p.x - eb.x) / ex, ay = (p.y - eb.y) / ey, bx = (tx - eb.x) / ex, by = (ty - eb.y) / ey;
+      var dx = bx - ax, dy = by - ay, L = Math.hypot(dx, dy) || 1, dist = Math.abs(ax * dy - ay * dx) / L;   /* eye centre to the line */
+      if (dist > 1.05) { best = [tx, ty]; break; }
+      if (dist > bd) { bd = dist; best = [tx, ty]; }
+    }
+    var d = Math.hypot(best[0] - p.x, best[1] - p.y) || 1;
+    p.vx = (best[0] - p.x) / d * sp; p.vy = (best[1] - p.y) / d * sp; p.travel = true;
+  }
   function compass() {               /* the four screen-corner diagonals plus the four sides */
     var ca = Math.atan2(H, W), out = [];
     [ca, Math.PI - ca, Math.PI + ca, -ca].forEach(function (a) { out.push({ a: a, corner: true }); });
@@ -281,9 +325,7 @@
       a = best; lastDir = a; p.dir = a;
       var Rs = edgeDist(a, R * 1.3), cx0 = W / 2, cy0 = H / 2;
       p.x = p.sx = cx0 + Math.cos(a) * Rs; p.y = cy0 + Math.sin(a) * Rs; p.cx = p.x; p.cy = p.y;
-      var tx = cx0 + (Math.random() - 0.5) * W * 0.5, ty = cy0 + (Math.random() - 0.5) * H * 0.4, d = Math.hypot(tx - p.x, ty - p.y) || 1;
-      var sp = Math.hypot(W, H) * (0.06 + Math.random() * 0.025) * Math.pow(1.25, Math.min(count, 75) / 25);   /* progressive: +25% every 25 hits, rising a little each hit */
-      p.vx = (tx - p.x) / d * sp; p.vy = (ty - p.y) / d * sp; p.travel = true;
+      aimClear(p, Math.hypot(W, H) * (0.06 + Math.random() * 0.025) * Math.pow(1.25, Math.min(count, 75) / 25));   /* progressive: +25% every 25 hits */
     }
     pats.push(p);
   }
@@ -301,20 +343,19 @@
     /* 4 halves: the pair from opposite corners, a third corner and a side; 5: all four corners plus a side. Slots 0 and 1 (the pair) are opposite corners. */
     var dd = compass(), k0 = Math.floor(Math.random() * 4), k1 = (k0 + (Math.random() < 0.5 ? 1 : 3)) % 4, side = dd[4 + Math.floor(Math.random() * 4)].a;
     var angs = n >= 5 ? [dd[k0].a, dd[(k0 + 2) % 4].a, dd[(k0 + 1) % 4].a, dd[(k0 + 3) % 4].a, side] : [dd[k0].a, dd[(k0 + 2) % 4].a, dd[k1].a, side];
-    var order = [0, 1, 2, 3, 4];
+    var order = [0, 1, 2, 3, 4], seamA = Math.random() * TAU;
     function launch(p, slot) {
       var a = angs[slot] + (Math.random() - 0.5) * 0.2;
       var Re = edgeDist(a, R * 1.3);
       p.x = p.sx = cx0 + Math.cos(a) * Re; p.y = cy0 + Math.sin(a) * Re; p.cx = p.x; p.cy = p.y;
-      var tx = cx0 + (Math.random() - 0.5) * W * 0.5, ty = cy0 + (Math.random() - 0.5) * H * 0.4, d = Math.hypot(tx - p.x, ty - p.y) || 1;
-      p.vx = (tx - p.x) / d * speed; p.vy = (ty - p.y) / d * speed; p.travel = true;
+      aimClear(p, speed);
       pats.push(p);
     }
-    launch(make(m, 0, 0, R, { half: 1, side: 0, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph }), order[0]);
-    launch(make(m, 0, 0, R, { half: 1, side: 1, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph }), order[1]);
+    launch(make(m, 0, 0, R, { half: 1, side: 0, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph, seam: seamA }), order[0]);
+    launch(make(m, 0, 0, R, { half: 1, side: 1, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph, seam: seamA }), order[1]);
     for (i = 2; i < n; i++) {
       var o = pool.splice(Math.floor(Math.random() * pool.length), 1)[0];
-      launch(make(o, 0, 0, R, { half: 1, side: Math.random() < 0.5 ? 0 : 1, vr: vr, pair: -1, wave: id, slow: 1, pal: pal }), order[i]);
+      launch(make(o, 0, 0, R, { half: 1, side: Math.random() < 0.5 ? 0 : 1, vr: vr, pair: -1, wave: id, slow: 1, pal: pal, seam: Math.random() * TAU }), order[i]);
     }
   }
 
@@ -327,12 +368,13 @@
   var converged = false, conv = null, convEl = document.querySelector(".cym-conv"), cardBlob = null;
   function eyeBox() {
     var el = document.querySelector(".eye-stage"), r = el ? el.getBoundingClientRect() : { left: W / 2, top: H / 2, width: 0, height: 0 };
-    return { x: r.left + r.width / 2, y: r.top + r.height / 2, hw: r.width / 2 };
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2, hw: r.width / 2, hh: r.height / 2 };
   }
-  function ringGeom() {
-    var eb = eyeBox(), lim = Math.min(W, H) / 2 - 10;
-    var Rr = Math.min(lim * 0.86, Math.max(eb.hw * 1.12, Math.min(W, H) * 0.38)), rr = Math.min(Rr * 0.17, lim - Rr);
-    return { x: eb.x, y: eb.y, Rr: Rr, r: Math.max(18, rr) };
+  function ringGeom() {                /* an ellipse that clears the eye (which swells ~10%) and fits the screen */
+    var eb = eyeBox(), r = Math.max(18, Math.min(32, Math.min(W, H) * 0.055));
+    var rx = Math.min(W / 2 - r - 8, Math.max(eb.hw * 1.1 + r * 1.3, Math.min(W, H) * 0.38));
+    var ry = Math.min(H / 2 - r - 70, Math.max(eb.hh * 1.1 + r * 1.6, rx));
+    return { x: eb.x, y: eb.y, Rr: rx, rx: rx, ry: ry, r: r };
   }
   function converge() {
     if (converged) return;
@@ -375,7 +417,7 @@
     conv.rot += dt * 0.06;
     var arrived = 0;
     conv.runes.forEach(function (p) {
-      var tx = G0.x + Math.cos(p.ang + conv.rot) * G0.Rr, ty = G0.y + Math.sin(p.ang + conv.rot) * G0.Rr;
+      var tx = G0.x + Math.cos(p.ang + conv.rot) * G0.rx, ty = G0.y + Math.sin(p.ang + conv.rot) * G0.ry;
       if (p.state === 8) {
         var e = Math.max(0, Math.min(1, p.t / 1.7)), k = 1 - Math.pow(1 - e, 3);
         p.cx = p.sx0 + (tx - p.sx0) * k; p.cy = p.sy0 + (ty - p.sy0) * k; p.prog = e;
@@ -392,11 +434,11 @@
     }
     if (conv.chord) conv.lines = Math.min(1, (ct - conv.chordAt) / 1.2);
   }
-  function mandalaPath(ctx, x, y, Rr, rot) {      /* 12-gon through the rune centres, a {12/5} star, two rings */
-    var path = new Path2D(), i, a;
-    function P(k, r) { a = -TAU / 4 + k * TAU / 12 + rot; return [x + Math.cos(a) * r, y + Math.sin(a) * r]; }
+  function mandalaPath(ctx, x, y, Rr, rot, Ry) {  /* 12-gon through the rune centres, a {12/5} star, an outer ring */
+    var path = new Path2D(), i, a, ky = (Ry || Rr) / Rr, ringK = ctx === g ? Math.min(1.12, (W / 2 - 4) / Rr) : 1.22;
+    function P(k, r) { a = -TAU / 4 + k * TAU / 12 + rot; return [x + Math.cos(a) * r, y + Math.sin(a) * r * ky]; }
     for (i = 0; i < 12; i++) { var p0 = P(i, Rr), p1 = P(i + 1, Rr), s1 = P(i + 5, Rr); path.moveTo(p0[0], p0[1]); path.lineTo(p1[0], p1[1]); path.moveTo(p0[0], p0[1]); path.lineTo(s1[0], s1[1]); }
-    for (i = 0; i <= 72; i++) { a = i * TAU / 72; var q = [x + Math.cos(a) * Rr * 1.22, y + Math.sin(a) * Rr * 1.22]; if (i) path.lineTo(q[0], q[1]); else path.moveTo(q[0], q[1]); }
+    for (i = 0; i <= 72; i++) { a = i * TAU / 72; var q = [x + Math.cos(a) * Rr * ringK, y + Math.sin(a) * Rr * ringK * ky]; if (i) path.lineTo(q[0], q[1]); else path.moveTo(q[0], q[1]); }
     return path;
   }
   function neon(ctx, path, col, core, a, w) {
@@ -408,7 +450,7 @@
   function drawMandala() {
     if (!conv || conv.lines <= 0) return;
     var G0 = conv.G, a = conv.lines * 0.55;
-    neon(g, mandalaPath(g, G0.x, G0.y, G0.Rr, conv.rot), "255,170,70", "255,236,200", a, 0.6);
+    neon(g, mandalaPath(g, G0.x, G0.y, G0.rx, conv.rot, G0.ry), "255,170,70", "255,236,200", a, 0.6);
   }
 
   /* ---------- share card: "I've reached Convergence" (1080 x 1350, portrait for social) ---------- */
@@ -512,7 +554,7 @@
       bursts.push({ x: best.cx, y: best.cy, t: 0, R: best.R, pal: best.pal, p: best });   /* light rings ride with the rune */
       var bi = best.idx, bx = best.cx;
       setTimeout(function () { tone(bi, bx, 1); }, 380);                            /* ring the crystal at the snap */
-      if (count === LEVEL2_AT && level === 1) { level = 2; spawnIn = 4.5; showBanner(); }
+      if (count === LEVEL2_AT && level === 1) openGate();
       if (count >= CONVERGE_AT && !converged) setTimeout(converge, 1200);
       return;
     }
@@ -520,7 +562,7 @@
     if (!sel) { sel = best; best.state = 5; best.t = 0; tone(best.idx, best.cx, 0.35); return; }
     var a = sel, b = best; sel = null;
     if (a.pair > 0 && a.pair === b.pair) {
-      var mx = (a.cx + b.cx) / 2, my = (a.cy + b.cy) / 2;
+      var mx = b.cx, my = b.cy;   /* the first half flies to its partner, which is already clear of the eye */
       [a, b].forEach(function (h) { h.state = 4; h.t = 0; h.fx = h.cx; h.fy = h.cy; h.tx = mx; h.ty = my; h.fr = h.rot; });
       a.mate = b; b.mate = a; b.lead = true;
       count++; setScore();
@@ -553,7 +595,7 @@
       for (var z0 = 0; z0 < pats.length; z0++) { var q0 = pats[z0]; if (q0.state === 0 && ((q0.cx > -q0.R && q0.cx < W + q0.R && q0.cy > -q0.R && q0.cy < H + q0.R) || (q0.travel && !q0.entered))) onScreen++; }
       if (onScreen === 0) spawnIn = 0.3;
     }
-    if (spawnIn <= 0 && !conv) {
+    if (spawnIn <= 0 && !conv && !gate) {
       if (level === 1) { spawnOne(); spawnIn = gapFor(count); }
       else {
         var live = 0; for (var z = 0; z < pats.length; z++) if (pats[z].half && (pats[z].state === 0 || pats[z].state === 5 || pats[z].state === 6)) live++;
@@ -616,7 +658,8 @@
     var st = p.state, t = p.t;
     if (st === 8) return Math.pow(1 - (p.prog || 0), 2);
     if (st === 9) return 0;
-    if (st === 0 || st === 5 || st === 6 || st === 7) return p.half ? 0.12 : 1;
+    if (p.lock) return 0;
+    if (st === 0 || st === 5 || st === 6 || st === 7) return 1;
     if (st === 1) { var e = Math.max(0, Math.min(1, (t - p.dl[i]) / 0.42)); return Math.pow(1 - e, 4) - 0.06 * Math.sin(e * Math.PI) ; } /* snap with a tiny overshoot */
     if (st === 4) return 0.12 * Math.pow(1 - Math.min(1, t / 0.5), 3);
     return 0;
