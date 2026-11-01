@@ -314,8 +314,44 @@
     var d = Math.hypot(best[0] - p.x, best[1] - p.y) || 1;
     p.vx = (best[0] - p.x) / d * sp; p.vy = (best[1] - p.y) / d * sp; p.travel = true;
   }
+  /* gravity: the eye pulls like a black hole; runes speed up as they dive in, whip around it and fling out the far side */
+  function gravAt(px, py, eb, GM) {
+    var dx = eb.x - px, dy = eb.y - py, r2 = dx * dx + dy * dy + 400, r = Math.sqrt(r2), f = GM / r2;
+    return [dx / r * f, dy / r * f];
+  }
+  function slingshot(p, a, sp) {
+    var eb = eyeBox(), ex = eb.hw * 0.92 + p.R * 1.1, ey = eb.hh * 0.8 + p.R * 1.1;
+    var S = [p.x, p.y], tx = eb.x - S[0], ty = eb.y - S[1], tl = Math.hypot(tx, ty) || 1, nx = -ty / tl, ny = tx / tl;
+    var rn = Math.hypot(ex * nx, ey * ny);                  /* the eye's size across the line of approach */
+    var GM = sp * sp * rn * 0.8, mE = p.R * 1.6, best = null, bs = -1e9;
+    var bs_ = [1.0, 1.15, 1.3, 1.5, 1.75, 2.0, 2.4];
+    for (var i = 0; i < bs_.length * 2; i++) {
+      var bb = bs_[i >> 1] * rn * (i & 1 ? -1 : 1), ax = eb.x + nx * bb - S[0], ay = eb.y + ny * bb - S[1], al = Math.hypot(ax, ay) || 1;
+      var vx = ax / al * sp, vy = ay / al * sp, x = S[0], y = S[1], minE = 9, inside = [], h = 1 / 60, out = false, entered = false;
+      for (var k = 0; k < 1500; k++) {                   /* simulate the flight */
+        var g0 = gravAt(x, y, eb, GM); vx += g0[0] * h; vy += g0[1] * h; x += vx * h; y += vy * h;
+        minE = Math.min(minE, Math.hypot((x - eb.x) / ex, (y - eb.y) / ey));
+        var on = x >= 0 && x <= W && y >= 0 && y <= H;
+        if (on) { entered = true; inside.push(x < mE || x > W - mE || y < mE || y > H - mE ? 1 : 0); }
+        else if (entered) { out = true; break; }
+      }
+      var mid = inside.slice(Math.floor(inside.length * 0.25), Math.ceil(inside.length * 0.75)), near = 0;
+      for (var z = 0; z < mid.length; z++) near += mid[z];
+      var edge = mid.length ? near / mid.length : 1;
+      /* want: clear of the eye, a close (dramatic) swing, off the edges, actually leaves the screen */
+      var onFrac = inside.length / Math.max(1, k);           /* share of the flight spent on screen */
+      var score = (minE >= 1 ? 3 - (minE - 1) * 1.5 : -6 * (1 - minE)) - edge * 8 - (out ? 0 : 6) - (1 - onFrac) * 4;
+      if (score > bs) { bs = score; best = [ax / al * sp, ay / al * sp]; }
+    }
+    p.vx = best[0]; p.vy = best[1]; p.GM = GM; p.travel = true;
+  }
   function compass() {               /* the four screen-corner diagonals plus the four sides */
     var ca = Math.atan2(H, W), out = [];
+    if (H > W * 1.2) {                /* tall phone: no room beside the eye, so enter from the left/right edges (incl. their corner zones) */
+      [0.42, Math.PI - 0.42, Math.PI + 0.42, -0.42].forEach(function (a) { out.push({ a: a, corner: true }); });
+      [0, Math.PI, 0.2, Math.PI - 0.2].forEach(function (a) { out.push({ a: a, corner: false }); });
+      return out;
+    }
     [ca, Math.PI - ca, Math.PI + ca, -ca].forEach(function (a) { out.push({ a: a, corner: true }); });
     [0, Math.PI / 2, Math.PI, -Math.PI / 2].forEach(function (a) { out.push({ a: a, corner: false }); });
     return out;
@@ -354,7 +390,7 @@
       a = best; lastDir = a; p.dir = a;
       var Rs = edgeDist(a, R * 1.3), cx0 = W / 2, cy0 = H / 2;
       p.x = p.sx = cx0 + Math.cos(a) * Rs; p.y = cy0 + Math.sin(a) * Rs; p.cx = p.x; p.cy = p.y;
-      aimClear(p, Math.hypot(W, H) * (0.06 + Math.random() * 0.025) * 1.3 * Math.pow(1.25, Math.min(count, 75) / 25));   /* 30% faster base, then +25% every 25 hits */
+      slingshot(p, a, Math.hypot(W, H) * (0.06 + Math.random() * 0.025) * 1.3 * Math.pow(1.25, Math.min(count, 75) / 25));   /* 30% faster base, then +25% every 25 hits */
     }
     pats.push(p);
   }
@@ -656,7 +692,10 @@
         }
       } else {
         var slow = p.state >= 2 ? 0.3 : 1;
-        p.y += p.vy * dt * slow; if (p.vx) p.x += p.vx * dt * slow;
+        if (p.GM && p.state === 0) {     /* in free flight: the eye's gravity bends the path */
+          var gE = eyeBox(), steps = Math.max(1, Math.ceil(dt * 120)), hh = dt / steps;
+          for (var st2 = 0; st2 < steps; st2++) { var ga = gravAt(p.x, p.y, gE, p.GM); p.vx += ga[0] * hh; p.vy += ga[1] * hh; p.x += p.vx * hh; p.y += p.vy * hh; }
+        } else { p.y += p.vy * dt * slow; if (p.vx) p.x += p.vx * dt * slow; }
         p.sway += dt * 0.5; p.rot += p.vr * dt;
         p.cx = p.fixed ? p.x : p.x + Math.sin(p.sway) * p.R * 0.1; p.cy = p.y;
         if (p.state === 6) p.cx += Math.sin(p.t * 60) * 4 * Math.max(0, 1 - p.t / 0.5);
@@ -665,7 +704,7 @@
         if (p.state === 2 && p.t > 1.8) { p.state = 3; p.t = 0; }
         var m2 = p.R * 1.8, outside = p.cx < -m2 || p.cx > W + m2 || p.cy < -m2 || p.cy > H + m2;
         if (!outside && p.cx > 0 && p.cx < W && p.cy > 0 && p.cy < H) p.entered = true;
-        var gone = p.travel ? (p.entered && outside) : p.cy - p.R * 1.8 > H;
+        var gone = p.travel ? (p.entered && outside) || p.t > 40 : p.cy - p.R * 1.8 > H;
         if ((p.state === 3 && p.t > 1.6) || (p.state === 7 && p.t > 1.1) || gone) {
           if (p.half && p.pair > 0 && (p.state === 0 || p.state === 5 || p.state === 6)) {   /* the match was missed: clear its wave */
             for (var w = 0; w < pats.length; w++) { var o = pats[w]; if (o !== p && o.half && o.wave === p.wave && (o.state === 0 || o.state === 5 || o.state === 6)) { o.state = 7; o.t = 0; } }
