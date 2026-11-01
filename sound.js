@@ -106,12 +106,15 @@
   /* ---------- screensaver: horizontal volume slider, fades in/out with the exit button ---------- */
   var st2 = document.createElement("style");
   st2.textContent =
-    ".vol{position:fixed;z-index:5;left:max(24px,env(safe-area-inset-left));right:max(24px,env(safe-area-inset-right));bottom:max(22px,env(safe-area-inset-bottom));" +
-    "margin:0 auto;max-width:560px;display:flex;align-items:center;gap:14px;padding:10px 18px 10px 10px;border-radius:999px;" +
+    ".vol{position:fixed;z-index:5;left:max(14px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));" +
+    "box-sizing:border-box;width:44px;height:44px;overflow:hidden;display:flex;align-items:center;gap:10px;padding:0 4px;border-radius:999px;" +
+    "transition:opacity .4s,width .35s cubic-bezier(.2,.8,.2,1),padding .35s;" +
     "background:rgba(13,19,34,.55);border:1px solid rgba(244,242,251,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);" +
     "color:#f4f2fb;opacity:0;pointer-events:none;transition:opacity .4s;touch-action:none}" +
     ".vol.show{opacity:.9;pointer-events:auto}" +
-    ".vol__m{flex:none;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;border:0;padding:0;background:transparent;color:inherit;cursor:pointer}" +
+    ".vol.open{width:min(300px,calc(100vw - 28px));padding:0 18px 0 4px}" +
+    ".vol:not(.open) .vol__r{opacity:0;pointer-events:none}.vol__r{transition:opacity .25s .1s}" +
+    ".vol__m{flex:none;width:34px;height:34px;margin-left:0;display:grid;place-items:center;border-radius:50%;border:0;padding:0;background:transparent;color:inherit;cursor:pointer}" +
     ".vol__m svg{width:20px;height:20px}.vol__m .w{transition:opacity .2s}.vol[data-muted=true] .vol__m .w{opacity:0}.vol__m .x{opacity:0}.vol[data-muted=true] .vol__m .x{opacity:1}" +
     ".vol__r{flex:1;min-width:0;height:34px;margin:0;background:transparent;-webkit-appearance:none;appearance:none;cursor:pointer;--p:100%}" +
     ".vol__r::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(90deg,#6f9bff,#ff9d42) 0/var(--p) 100% no-repeat,rgba(244,242,251,.18)}" +
@@ -143,7 +146,18 @@
     else if (on && master) { master.gain.cancelScheduledValues(ctx.currentTime); master.gain.setTargetAtTime(.9 * vol, ctx.currentTime, .05); }
     paint();
   });
-  mb.addEventListener("click", function () { if (!on && vol < .05) vol = .5; set(!on, true); });
+  /* collapsed: a small round speaker; tap it to slide the volume out. Once open, the speaker mutes / unmutes. */
+  var shut;
+  function open(v) { bar.classList.toggle("open", v); mb.setAttribute("aria-expanded", v ? "true" : "false"); }
+  function holdOpen() { clearTimeout(shut); shut = setTimeout(function () { open(false); }, 4000); }
+  mb.addEventListener("click", function () {
+    if (!bar.classList.contains("open")) { open(true); holdOpen(); return; }
+    if (!on && vol < .05) vol = .5; set(!on, true); holdOpen();
+  });
+  rng.addEventListener("input", holdOpen);
+  document.addEventListener("pointerdown", function (e) { if (!bar.contains(e.target)) open(false); }, true);
+  new MutationObserver(function () { if (!bar.classList.contains("show")) open(false); }).observe(bar, { attributes: true, attributeFilter: ["class"] });
+  open(false);
   label = paint;
   ui = bar;
   }
