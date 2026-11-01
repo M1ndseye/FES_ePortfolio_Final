@@ -289,14 +289,27 @@
 
   function radius() { return Math.max(36, Math.min(85, Math.min(W, H) * (0.095 + Math.random() * 0.03))); }   /* half size */
   var ANGLES_AT = 0, RUSH_AT = 50, lastDir = null;   /* every rune comes in from the sides from the start */
-  function aimClear(p, sp) {         /* pick a heading whose straight path stays clear of the eye */
-    var eb = eyeBox(), ex = eb.hw * 0.92 + p.R * 1.1, ey = eb.hh * 0.75 + p.R * 1.1, best = null, bd = -1;
-    for (var k = 0; k < 40; k++) {
-      var tx = W * (0.1 + Math.random() * 0.8), ty = H * (0.1 + Math.random() * 0.8);
+  function aimClear(p, sp) {         /* pick a heading that stays clear of the eye and doesn't skim along a screen edge */
+    var eb = eyeBox(), ex = eb.hw * 0.92 + p.R * 1.1, ey = eb.hh * 0.75 + p.R * 1.1, best = null, bs = -1e9;
+    var mE = p.R * 1.6;               /* "near the edge" band */
+    for (var k = 0; k < 90; k++) {
+      var tx = W * (0.15 + Math.random() * 0.7), ty = H * (0.15 + Math.random() * 0.7);
       var ax = (p.x - eb.x) / ex, ay = (p.y - eb.y) / ey, bx = (tx - eb.x) / ex, by = (ty - eb.y) / ey;
       var dx = bx - ax, dy = by - ay, L = Math.hypot(dx, dy) || 1, dist = Math.abs(ax * dy - ay * dx) / L;   /* eye centre to the line */
-      if (dist > 1.05) { best = [tx, ty]; break; }
-      if (dist > bd) { bd = dist; best = [tx, ty]; }
+      /* how much of the on-screen path hugs an edge */
+      var ux = tx - p.x, uy = ty - p.y, ul = Math.hypot(ux, uy) || 1, span = Math.hypot(W, H) * 2.2, pts = [];
+      ux /= ul; uy /= ul;
+      for (var s = 0; s < span; s += span / 80) {
+        var qx = p.x + ux * s, qy = p.y + uy * s;
+        if (qx >= 0 && qx <= W && qy >= 0 && qy <= H) pts.push(qx < mE || qx > W - mE || qy < mE || qy > H - mE ? 1 : 0);
+      }
+      /* ignore the entry and exit quarter of the on-screen path: only the middle can "skim" an edge */
+      var inside = pts.length, mid = pts.slice(Math.floor(inside * 0.25), Math.ceil(inside * 0.75)), near = 0;
+      for (var z = 0; z < mid.length; z++) near += mid[z];
+      var edgeFrac = mid.length ? near / mid.length : 1;
+      var score = Math.min(dist, 1.1) * 2 - edgeFrac * 14 - (inside < 12 ? 3 : 0);
+      if (dist > (W < H ? 0.92 : 1.05) && edgeFrac === 0 && inside >= 12) { best = [tx, ty]; break; }
+      if (score > bs) { bs = score; best = [tx, ty]; }
     }
     var d = Math.hypot(best[0] - p.x, best[1] - p.y) || 1;
     p.vx = (best[0] - p.x) / d * sp; p.vy = (best[1] - p.y) / d * sp; p.travel = true;
@@ -341,7 +354,7 @@
       a = best; lastDir = a; p.dir = a;
       var Rs = edgeDist(a, R * 1.3), cx0 = W / 2, cy0 = H / 2;
       p.x = p.sx = cx0 + Math.cos(a) * Rs; p.y = cy0 + Math.sin(a) * Rs; p.cx = p.x; p.cy = p.y;
-      aimClear(p, Math.hypot(W, H) * (0.06 + Math.random() * 0.025) * Math.pow(1.25, Math.min(count, 75) / 25));   /* progressive: +25% every 25 hits */
+      aimClear(p, Math.hypot(W, H) * (0.06 + Math.random() * 0.025) * 1.3 * Math.pow(1.25, Math.min(count, 75) / 25));   /* 30% faster base, then +25% every 25 hits */
     }
     pats.push(p);
   }
