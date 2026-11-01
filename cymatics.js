@@ -241,6 +241,12 @@
 
   function radius() { return Math.max(36, Math.min(85, Math.min(W, H) * (0.095 + Math.random() * 0.03))); }   /* half size */
   var ANGLES_AT = 0, RUSH_AT = 50, lastDir = null;   /* every rune comes in from the sides from the start */
+  function compass() {               /* the four screen-corner diagonals plus the four sides */
+    var ca = Math.atan2(H, W), out = [];
+    [ca, Math.PI - ca, Math.PI + ca, -ca].forEach(function (a) { out.push({ a: a, corner: true }); });
+    [0, Math.PI / 2, Math.PI, -Math.PI / 2].forEach(function (a) { out.push({ a: a, corner: false }); });
+    return out;
+  }
   function gapFor(n) {               /* seconds until the next rune: more overlap as the count climbs */
     var g = 2.3 + Math.random() * 1.15;           /* 1-24: baseline */
     if (n >= 25) g /= 1.3;                        /* 25-49: 30% more frequent */
@@ -264,8 +270,10 @@
       p.x = p.sx = p.cx = best;
     } else {                         /* hits 25-75: enter from a side that no live rune came from */
       best = 0; bestScore = -1;
-      for (k = 0; k < 16; k++) {
-        var a = Math.random() * TAU, gap = 9;
+      var dirs = compass(), wantCorner = Math.random() < 0.6;   /* ~60% corners, ~40% sides */
+      dirs = dirs.filter(function (d) { return d.corner === wantCorner; });
+      for (k = 0; k < 16; k++) {         /* candidates near those compass points, as far as possible from live runes */
+        var cd = dirs[k % 4], a = cd.a + (Math.random() - 0.5) * (cd.corner ? 0.22 : 0.6), gap = 9;
         for (i = 0; i < live.length; i++) if (live[i].dir != null) gap = Math.min(gap, Math.abs(Math.atan2(Math.sin(a - live[i].dir), Math.cos(a - live[i].dir))));
         if (lastDir !== null) gap = Math.min(gap, Math.abs(Math.atan2(Math.sin(a - lastDir), Math.cos(a - lastDir))));
         if (gap > bestScore) { bestScore = gap; best = a; }
@@ -290,9 +298,12 @@
        the matching pair comes from (roughly) opposite sides, so they meet from different angles */
     var base = Math.random() * TAU, cx0 = W / 2, cy0 = H / 2, Rs = Math.hypot(W, H) / 2 + R * 1.6;
     var speed = Math.hypot(W, H) * 0.068;
-    var order = [0], half = Math.floor(n / 2); order.push(half); for (i = 1; i < n; i++) if (i !== half) order.push(i);
+    /* 4 halves: the pair from opposite corners, a third corner and a side; 5: all four corners plus a side. Slots 0 and 1 (the pair) are opposite corners. */
+    var dd = compass(), k0 = Math.floor(Math.random() * 4), k1 = (k0 + (Math.random() < 0.5 ? 1 : 3)) % 4, side = dd[4 + Math.floor(Math.random() * 4)].a;
+    var angs = n >= 5 ? [dd[k0].a, dd[(k0 + 2) % 4].a, dd[(k0 + 1) % 4].a, dd[(k0 + 3) % 4].a, side] : [dd[k0].a, dd[(k0 + 2) % 4].a, dd[k1].a, side];
+    var order = [0, 1, 2, 3, 4];
     function launch(p, slot) {
-      var a = base + slot * TAU / n + (Math.random() - 0.5) * (TAU / n) * 0.5;
+      var a = angs[slot] + (Math.random() - 0.5) * 0.2;
       var Re = edgeDist(a, R * 1.3);
       p.x = p.sx = cx0 + Math.cos(a) * Re; p.y = cy0 + Math.sin(a) * Re; p.cx = p.x; p.cy = p.y;
       var tx = cx0 + (Math.random() - 0.5) * W * 0.5, ty = cy0 + (Math.random() - 0.5) * H * 0.4, d = Math.hypot(tx - p.x, ty - p.y) || 1;
