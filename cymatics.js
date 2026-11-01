@@ -233,7 +233,7 @@
 
   /* ---------- state ---------- */
   var pats = [], bursts = [], count = 0, spawnIn = 0.8, sel = null;
-  var level = /level=2/.test(location.search) ? 2 : 1, gate = false, gateEl = document.querySelector(".cym-gate");
+  var level = /level=2/.test(location.search) ? 2 : 1, gate = false, gateEl = document.querySelector(".cym-gate:not(.cym-intro)");
   function openGate() {               /* pause before the harmony round until the player confirms the directions */
     gate = true; sel = null; setScore();
     if (gateEl) { gateEl.hidden = false; requestAnimationFrame(function () { gateEl.classList.add("on"); }); var b0 = gateEl.querySelector("button"); if (b0) setTimeout(function () { b0.focus(); }, 300); }
