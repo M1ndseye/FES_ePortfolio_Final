@@ -413,7 +413,7 @@
       var a = angs[slot] + (Math.random() - 0.5) * 0.2;
       var Re = edgeDist(a, R * 1.3);
       p.x = p.sx = cx0 + Math.cos(a) * Re; p.y = cy0 + Math.sin(a) * Re; p.cx = p.x; p.cy = p.y;
-      aimClear(p, speed);
+      slingshot(p, a, speed);   /* swing around the eye like the single runes */
       pats.push(p);
     }
     launch(make(m, 0, 0, R, { half: 1, side: 0, rot: rot, vr: vr, pair: id, wave: id, slow: 1, pal: pal, phase: ph, mask: maskA }), order[0]);
