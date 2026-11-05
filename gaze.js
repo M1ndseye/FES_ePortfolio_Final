@@ -47,7 +47,7 @@
       if (play) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause();
     };
   }
-  var courtVideo = lazyVideo(doors.left, "assets/ME_Sizzle_Door.mp4");
+  var courtVideo = lazyVideo(doors.left, "assets/ME_Intersection_Recon.mp4");
   var eduVideo = lazyVideo(doors.right, "assets/ME_Vid_Workbook_Door.mp4");
   [["left", courtVideo], ["right", eduVideo]].forEach(function (d) {
     var door = doors[d[0]], fn = d[1];
