@@ -358,7 +358,7 @@
   }
   function gapFor(n) {               /* seconds until the next rune: more overlap as the count climbs */
     var g = 2.3 + Math.random() * 1.15;           /* 1-24: baseline */
-    if (n >= 25) g /= 1.3;                        /* 25-49: 30% more frequent */
+    if (n >= 25) g /= 1.3;                        /* 25-49: 30% more frequent (and the frame loop tops up to three in play) */
     if (n >= RUSH_AT) g /= 1.3;                   /* 50-75: 30% more again */
     return g;
   }
@@ -659,6 +659,11 @@
       var onScreen = 0;
       for (var z0 = 0; z0 < pats.length; z0++) { var q0 = pats[z0]; if (q0.state === 0 && ((q0.cx > -q0.R && q0.cx < W + q0.R && q0.cy > -q0.R && q0.cy < H + q0.R) || (q0.travel && !q0.entered))) onScreen++; }
       if (onScreen === 0) spawnIn = 0.3;
+    }
+    if (level === 1 && count >= 25 && count < RUSH_AT && !conv && spawnIn > 0.5) {   /* 25-49: keep three runes in play at once */
+      var inPlay = 0;
+      for (var z1 = 0; z1 < pats.length; z1++) { var q1 = pats[z1]; if (q1.state === 0 && !q1.half) inPlay++; }
+      if (inPlay < 3) spawnIn = 0.5;
     }
     if (spawnIn <= 0 && !conv && !gate) {
       if (level === 1) { spawnOne(); spawnIn = gapFor(count); }
