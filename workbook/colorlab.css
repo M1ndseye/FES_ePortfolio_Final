@@ -1,0 +1,55 @@
+/* Color it online: pick a picture, pick a color, tap to fill, share. */
+.colorlab { margin-top: 44px; padding: 28px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); box-shadow: 0 18px 50px rgba(55, 6, 56, .08); }
+.colorlab__head h3 { margin: 0 0 4px; font: 700 clamp(1.5rem, 2.6vw, 2rem)/1.15 "Zilla Slab", serif; color: var(--plum); }
+.colorlab__head p { margin: 0 0 18px; color: var(--muted); max-width: 56ch; }
+.colorlab__rail { position: relative; margin: 0 -4px 18px; }
+.colorlab__scroll { display: flex; gap: 10px; overflow-x: auto; padding: 6px 4px 12px; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+.colorlab__pick { flex: 0 0 auto; width: 92px; padding: 6px 6px 8px; border-radius: 14px; border: 2px solid transparent; background: var(--bg); cursor: pointer; scroll-snap-align: start; font: 500 .78rem/1.2 "Roboto", sans-serif; color: var(--ink); text-align: center; }
+.colorlab__pick img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; border-radius: 8px; background: #fff; }
+.colorlab__pick span { display: block; margin-top: 4px; }
+.colorlab__pick:hover { border-color: rgba(55, 6, 56, .35); }
+.colorlab__pick[aria-pressed="true"] { border-color: var(--plum); background: #fff; box-shadow: 0 4px 14px rgba(55, 6, 56, .18); }
+.colorlab__arrow { position: absolute; top: 38%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: #fff; color: var(--plum); font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.12); display: grid; place-items: center; }
+.colorlab__arrow--prev { left: -8px; } .colorlab__arrow--next { right: -8px; }
+.colorlab__arrow:hover { background: var(--plum); color: #fff; }
+.colorlab__stage { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 24px; align-items: start; }
+.colorlab__paper { position: relative; border-radius: 16px; background: #fff; border: 1px solid var(--line); min-height: 320px; display: grid; place-items: center; padding: 14px; touch-action: manipulation; }
+.colorlab__paper > svg { display: block; width: 100%; height: auto; max-height: 56vh; }
+.colorlab__paper > svg path[data-c]:not([data-k]) { cursor: pointer; }
+.colorlab__paper > svg path[data-k] { pointer-events: none; }
+.colorlab__hint { position: absolute; left: 14px; top: 10px; margin: 0; font-size: .82rem; color: var(--muted); pointer-events: none; transition: opacity .3s; }
+.colorlab__paper.is-touched .colorlab__hint { opacity: 0; }
+.colorlab__tools { display: flex; flex-direction: column; gap: 16px; }
+.colorlab__label { margin: 0; font: 700 .85rem/1 "Roboto", sans-serif; color: var(--plum); }
+.colorlab__swatches { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 8px; }
+.colorlab__swatch { aspect-ratio: 1; border-radius: 50%; border: 2px solid rgba(34, 18, 31, .18); cursor: pointer; padding: 0; background: var(--c); transition: transform .12s; }
+.colorlab__swatch:hover { transform: scale(1.08); }
+.colorlab__swatch[aria-pressed="true"] { outline: 3px solid var(--plum); outline-offset: 2px; transform: scale(1.08); }
+.colorlab__mix { position: relative; overflow: hidden; background: conic-gradient(#e63946, #fcbf49, #2a9d4f, #4cc9f0, #7b4fc9, #e63946); }
+.colorlab__mix input { position: absolute; inset: -8px; width: 160%; height: 160%; opacity: 0; cursor: pointer; }
+.colorlab__row { display: flex; flex-wrap: wrap; gap: 10px; }
+.colorlab__btn { min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: #fff; color: var(--plum); font: 700 .92rem/1 "Roboto", sans-serif; cursor: pointer; }
+.colorlab__btn:hover:not(:disabled) { border-color: var(--plum); }
+.colorlab__btn:disabled { opacity: .4; cursor: default; }
+.colorlab__btn--go { background: var(--plum); color: #fff; border-color: var(--plum); min-height: 52px; flex: 1 1 100%; font-size: 1rem; box-shadow: 0 8px 22px rgba(55, 6, 56, .25); }
+.colorlab__btn--go:hover:not(:disabled) { background: #4d0a4f; }
+.colorlab__note { margin: 0; font-size: .82rem; color: var(--muted); }
+.colorlab__status { min-height: 1.2em; font-size: .85rem; color: var(--plum); margin: 0; }
+@media (max-width: 860px) {
+  .colorlab { padding: 18px 14px; }
+  .colorlab__stage { grid-template-columns: 1fr; }
+  .colorlab__paper > svg { max-height: 46vh; }
+  .colorlab__swatches { grid-template-columns: repeat(8, 1fr); }
+  .colorlab__arrow { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .colorlab__swatch { transition: none; } }
+
+.colorlab__who { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 0 0 18px; }
+.colorlab__who label { font: 700 .95rem/1 "Roboto", sans-serif; color: var(--plum); }
+.colorlab__who input { flex: 0 1 280px; min-height: 48px; padding: 0 16px; border-radius: 12px; border: 2px solid var(--line); background: var(--bg); font: 500 1.1rem/1 "Andika", "Roboto", sans-serif; color: var(--ink); }
+.colorlab__who input:focus { outline: none; border-color: var(--plum); background: #fff; }
+.colorlab__who small { flex: 1 1 100%; color: var(--muted); font-size: .82rem; }
+.colorlab__name { width: 100%; text-align: center; margin-top: 4px; }
+.colorlab__nametext { display: block; margin: 0 auto; width: 100%; max-width: 560px; height: auto; overflow: visible; }
+.colorlab__dots { font: 700 72px/1 "Andika", "Trebuchet MS", Arial, sans-serif; fill: #fff; stroke: var(--plum); stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 0.1 5.6; }
+.colorlab__paper { align-content: center; }

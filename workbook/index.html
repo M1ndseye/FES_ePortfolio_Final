@@ -51,8 +51,9 @@
     <meta property="og:url" content="https://m1ndseye.com/workbook/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="colorlab.css?v=5" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Zilla+Slab:wght@500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Roboto:wght@400;500;700&family=Zilla+Slab:wght@500;700&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -478,6 +479,35 @@
             <a href="#goal-chart">Goal chart</a>
             <a href="#shamrock-maze">Shamrock maze</a>
           </nav>
+          <div class="colorlab" id="colorlab">
+            <div class="colorlab__head">
+              <h3>Color it online.</h3>
+              <p>Pick a picture, pick a color, then tap a part of the picture to fill it. When it looks right, share it or save it.</p>
+            </div>
+            <div class="colorlab__who">
+              <label for="colorlab-name">Child's name</label>
+              <input id="colorlab-name" type="text" data-name maxlength="14" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Type a name to trace" />
+              <small>The name shows under the picture in dotted letters, ready to trace once it is printed. It stays on this device.</small>
+            </div>
+            <div class="colorlab__rail">
+              <button class="colorlab__arrow colorlab__arrow--prev" type="button" data-prev aria-label="Scroll pictures left">‹</button>
+              <div class="colorlab__scroll" role="group" aria-label="Choose a picture to color"></div>
+              <button class="colorlab__arrow colorlab__arrow--next" type="button" data-next aria-label="Scroll pictures right">›</button>
+            </div>
+            <div class="colorlab__stage">
+              <div class="colorlab__paper"><p class="colorlab__hint">Tap a color, then tap the picture.</p><div class="colorlab__name" role="img" hidden></div></div>
+              <div class="colorlab__tools">
+                <div><p class="colorlab__label">Colors</p><div class="colorlab__swatches"></div></div>
+                <div class="colorlab__row">
+                  <button class="colorlab__btn" type="button" data-undo disabled>Undo</button>
+                  <button class="colorlab__btn" type="button" data-reset>Start over</button>
+                  <button class="colorlab__btn colorlab__btn--go" type="button" data-share>Share or save my picture</button>
+                </div>
+                <p class="colorlab__status" role="status" aria-live="polite"></p>
+                <p class="colorlab__note">On a phone this opens your share sheet, with Instagram and Pinterest in it. On a computer the picture saves to your downloads.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -648,5 +678,6 @@
         r.addEventListener("input", set); set();
       })();
     </script>
-</body>
+<script src="colorlab.js?v=3" defer></script>
+  </body>
 </html>
