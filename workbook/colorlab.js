@@ -37,7 +37,7 @@
     s.appendChild(t); box.appendChild(s);
     var w = 300; try { w = t.getComputedTextLength(); } catch (e) {}
     s.setAttribute("viewBox", "-12 0 " + Math.ceil(w + 24) + " 84");
-    s.style.maxWidth = Math.min(560, Math.max(120, Math.round((w + 24) * 0.62))) + "px";
+    s.style.maxWidth = Math.min(620, Math.max(150, Math.round((w + 24) * 0.9))) + "px";
     box.setAttribute("aria-label", label + text);
   }
   function drawName() { dots(nameBox, name, "Name to trace: "); dots(animalBox, animal, "Word to trace: "); }
@@ -147,13 +147,13 @@
         g.beginPath(); (g.roundRect || g.rect).call(g, 60, 80, W - 120, 1000, 36); g.fill(); g.stroke();
         g.drawImage(img, x, y, w, h); URL.revokeObjectURL(url);
         function dotted(txt, base, maxFs) {
-          var fs = maxFs, f = function () { g.font = '700 ' + fs + 'px Andika, "Trebuchet MS", Arial, sans-serif'; }; f();
+          var fs = maxFs, f = function () { g.font = '400 ' + fs + 'px PrintDashed, "Trebuchet MS", Arial, sans-serif'; }; f();
           while (g.measureText(txt).width > 880 && fs > 50) { fs -= 6; f(); }
-          g.textAlign = "center"; g.textBaseline = "alphabetic"; g.fillStyle = "#fff"; g.fillText(txt, W / 2, base);
-          g.strokeStyle = "#370638"; g.lineWidth = Math.max(4, fs / 26); g.lineCap = "round"; g.setLineDash([0.1, Math.max(8, fs / 15)]); g.strokeText(txt, W / 2, base); g.setLineDash([]);
+          g.textAlign = "center"; g.textBaseline = "alphabetic"; g.fillStyle = "#370638"; g.strokeStyle = "#370638"; g.lineWidth = Math.max(1.5, fs / 70); g.lineJoin = "round";
+          g.fillText(txt, W / 2, base); g.strokeText(txt, W / 2, base);
         }
-        if (name) dotted(name, 225, 130);
-        dotted(animal, 995, 120);
+        if (name) dotted(name, 230, 170);
+        dotted(animal, 1000, 160);
         g.fillStyle = "#370638"; g.textAlign = "center";
         g.font = '700 54px "Zilla Slab", Georgia, serif'; g.fillText("Colored by me!", W / 2, 1170);
         g.font = '500 34px Roboto, Arial, sans-serif'; g.fillStyle = "#64545f"; g.fillText("Color yours free at m1ndseye.com/workbook", W / 2, 1230);
@@ -165,7 +165,7 @@
   function track(kind) { try { if (window.gtag) gtag("event", "coloring_" + kind, { picture: cur_id, page: "workbook" }); } catch (e) {} }
   shareBtn.addEventListener("click", function () {
     if (!svg) return; shareBtn.disabled = true; say("Making your picture...");
-    (document.fonts && document.fonts.load ? document.fonts.load('700 100px Andika', name || "A") : Promise.resolve()).catch(function () {}).then(render).then(function (blob) {
+    (document.fonts && document.fonts.load ? document.fonts.load('400 100px PrintDashed', (name || "") + animal || "A") : Promise.resolve()).catch(function () {}).then(render).then(function (blob) {
       var file = new File([blob], "m1ndseye-" + cur_id + ".png", { type: "image/png" });
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         return navigator.share({ files: [file], title: "My M1ndseye coloring", text: "I colored this at m1ndseye.com" }).then(function () { track("shared"); say("Shared!"); }, function (err) { if (err && err.name === "AbortError") say(""); else throw err; });
