@@ -6,7 +6,7 @@
   var scroll = root.querySelector(".colorlab__scroll"), paper = root.querySelector(".colorlab__paper"), swWrap = root.querySelector(".colorlab__swatches");
   var undoBtn = root.querySelector("[data-undo]"), resetBtn = root.querySelector("[data-reset]"), shareBtn = root.querySelector("[data-share]"), status = root.querySelector(".colorlab__status");
   var cur = COLORS[0], svg = null, cur_id = "", history = [], loadTok = 0, items = [], name = "";
-  var nameInput = root.querySelector("[data-name]"), nameBox = root.querySelector(".colorlab__name");
+  var nameInput = root.querySelector("[data-name]"), nameBox = root.querySelector(".colorlab__name--top"), animalBox = root.querySelector(".colorlab__name--animal"), animal = "";
   var NS = "http://www.w3.org/2000/svg", DOT = "dotted";
 
   function say(t) { status.textContent = t || ""; }
@@ -27,18 +27,20 @@
   }
 
   /* the child's name, in dotted print letters under the picture so it can be traced (stays on this device) */
-  function drawName() {
-    nameBox.textContent = "";
-    if (!name) { nameBox.hidden = true; return; }
-    nameBox.hidden = false;
+  function dots(box, text, label) {
+    box.textContent = "";
+    if (!text) { box.hidden = true; return; }
+    box.hidden = false;
     var s = document.createElementNS(NS, "svg"), t = document.createElementNS(NS, "text");
     s.setAttribute("aria-hidden", "true"); s.setAttribute("class", "colorlab__nametext");
-    t.setAttribute("x", "0"); t.setAttribute("y", "64"); t.setAttribute("class", "colorlab__dots"); t.textContent = name;
-    s.appendChild(t); nameBox.appendChild(s);
+    t.setAttribute("x", "0"); t.setAttribute("y", "64"); t.setAttribute("class", "colorlab__dots"); t.textContent = text;
+    s.appendChild(t); box.appendChild(s);
     var w = 300; try { w = t.getComputedTextLength(); } catch (e) {}
     s.setAttribute("viewBox", "-12 0 " + Math.ceil(w + 24) + " 84");
-    nameBox.setAttribute("aria-label", "Name to trace: " + name);
+    s.style.maxWidth = Math.min(560, Math.max(120, Math.round((w + 24) * 0.62))) + "px";
+    box.setAttribute("aria-label", label + text);
   }
+  function drawName() { dots(nameBox, name, "Name to trace: "); dots(animalBox, animal, "Word to trace: "); }
   nameInput.addEventListener("input", function () { name = nameInput.value.replace(/[^A-Za-z\u00C0-\u024F' \-]/g, "").slice(0, 14).trim(); drawName(); });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawName);
 
@@ -66,7 +68,8 @@
       var s = document.importNode(doc, true);
       s.removeAttribute("width"); s.removeAttribute("height"); s.setAttribute("role", "img"); s.setAttribute("aria-label", "Coloring page: " + it.name);
       [].forEach.call(s.querySelectorAll("path[data-c]"), function (p) { p.setAttribute("data-o", p.getAttribute("fill")); });
-      if (svg) svg.remove(); paper.insertBefore(s, paper.firstChild); svg = s; paper.classList.remove("is-touched");
+      if (svg) svg.remove(); paper.insertBefore(s, animalBox); svg = s; paper.classList.remove("is-touched");
+      animal = it.name; drawName();
       link(s);
       s.addEventListener("click", tap);
     }).catch(function () { say("That picture would not load. Try another one."); });
@@ -131,9 +134,8 @@
   /* export: the picture on a 4:5 card (works for Instagram and Pinterest), with a small credit line */
   function render() {
     return new Promise(function (resolve, reject) {
-      var W = 1080, H = 1350, vb = svg.viewBox.baseVal, areaH = name ? 700 : 900, box = Math.min(880, areaH) / Math.max(vb.width, vb.height) * (vb.width > vb.height ? 1 : 1);
-      box = Math.min(880 / vb.width, areaH / vb.height);
-      var w = vb.width * box, h = vb.height * box, x = (W - w) / 2, y = 120 + (areaH - h) / 2;
+      var W = 1080, H = 1350, vb = svg.viewBox.baseVal, artTop = name ? 270 : 130, areaH = 850 - artTop, box = Math.min(880 / vb.width, areaH / vb.height);
+      var w = vb.width * box, h = vb.height * box, x = (W - w) / 2, y = artTop + (areaH - h) / 2;
       var clone = svg.cloneNode(true); clone.setAttribute("width", Math.round(w)); clone.setAttribute("height", Math.round(h));
       clone.setAttribute("xmlns", "http://www.w3.org/2000/svg"); clone.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
       var url = URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(clone)], { type: "image/svg+xml;charset=utf-8" }));
@@ -144,12 +146,14 @@
         g.fillStyle = "#fff"; g.strokeStyle = "rgba(55,6,56,.12)"; g.lineWidth = 3;
         g.beginPath(); (g.roundRect || g.rect).call(g, 60, 80, W - 120, 1000, 36); g.fill(); g.stroke();
         g.drawImage(img, x, y, w, h); URL.revokeObjectURL(url);
-        if (name) {
-          var fs = 150; g.font = '700 ' + fs + 'px Andika, "Trebuchet MS", Arial, sans-serif';
-          while (g.measureText(name).width > 880 && fs > 60) { fs -= 6; g.font = '700 ' + fs + 'px Andika, "Trebuchet MS", Arial, sans-serif'; }
-          g.textAlign = "center"; g.textBaseline = "alphabetic"; g.fillStyle = "#fff"; g.fillText(name, W / 2, 960);
-          g.strokeStyle = "#370638"; g.lineWidth = Math.max(4, fs / 26); g.lineCap = "round"; g.setLineDash([0.1, Math.max(8, fs / 15)]); g.strokeText(name, W / 2, 960); g.setLineDash([]);
+        function dotted(txt, base, maxFs) {
+          var fs = maxFs, f = function () { g.font = '700 ' + fs + 'px Andika, "Trebuchet MS", Arial, sans-serif'; }; f();
+          while (g.measureText(txt).width > 880 && fs > 50) { fs -= 6; f(); }
+          g.textAlign = "center"; g.textBaseline = "alphabetic"; g.fillStyle = "#fff"; g.fillText(txt, W / 2, base);
+          g.strokeStyle = "#370638"; g.lineWidth = Math.max(4, fs / 26); g.lineCap = "round"; g.setLineDash([0.1, Math.max(8, fs / 15)]); g.strokeText(txt, W / 2, base); g.setLineDash([]);
         }
+        if (name) dotted(name, 225, 130);
+        dotted(animal, 995, 120);
         g.fillStyle = "#370638"; g.textAlign = "center";
         g.font = '700 54px "Zilla Slab", Georgia, serif'; g.fillText("Colored by me!", W / 2, 1170);
         g.font = '500 34px Roboto, Arial, sans-serif'; g.fillStyle = "#64545f"; g.fillText("Color yours free at m1ndseye.com/workbook", W / 2, 1230);
