@@ -91,8 +91,8 @@
   function link(s) {
     var ps = [].slice.call(s.querySelectorAll("path[data-c]:not([data-k])")), info = [];
     ps.forEach(function (p, i) {
-      var bb = p.getBBox(), c = hls(p.getAttribute("data-o"));
-      info.push({ p: p, x0: bb.x, y0: bb.y, x1: bb.x + bb.width, y1: bb.y + bb.height, a: bb.width * bb.height, c: c, white: p.getAttribute("data-o") === "#ffffff", root: i });
+      var bb = p.getBBox(), c = hls(p.getAttribute("data-s") || p.getAttribute("data-o"));
+      info.push({ p: p, x0: bb.x, y0: bb.y, x1: bb.x + bb.width, y1: bb.y + bb.height, a: bb.width * bb.height, c: c, white: (p.getAttribute("data-s") || p.getAttribute("data-o")) === "#ffffff", root: i });
     });
     info.forEach(function (d, i) {
       if (d.white) return;
