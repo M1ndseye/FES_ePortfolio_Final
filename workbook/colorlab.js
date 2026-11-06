@@ -62,7 +62,7 @@
   function load(it, btn) {
     var tok = ++loadTok; cur_id = it.id; history = []; undoBtn.disabled = true; say("");
     [].forEach.call(scroll.children, function (x) { x.setAttribute("aria-pressed", x === btn ? "true" : "false"); });
-    fetch("color/art/" + it.id + ".svg").then(function (r) { return r.text(); }).then(function (txt) {
+    fetch("color/art/" + it.id + ".svg?v=2").then(function (r) { return r.text(); }).then(function (txt) {
       if (tok !== loadTok) return;
       var doc = new DOMParser().parseFromString(txt, "image/svg+xml").documentElement;
       var s = document.importNode(doc, true);
@@ -142,7 +142,7 @@
       var img = new Image();
       img.onload = function () {
         var cv = document.createElement("canvas"); cv.width = W; cv.height = H; var g = cv.getContext("2d");
-        g.fillStyle = "#fbf7f2"; g.fillRect(0, 0, W, H);
+        g.fillStyle = "#fff"; g.fillRect(0, 0, W, H);
         g.fillStyle = "#fff"; g.strokeStyle = "rgba(55,6,56,.12)"; g.lineWidth = 3;
         g.beginPath(); (g.roundRect || g.rect).call(g, 60, 80, W - 120, 1000, 36); g.fill(); g.stroke();
         g.drawImage(img, x, y, w, h); URL.revokeObjectURL(url);
