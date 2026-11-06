@@ -1983,3 +1983,39 @@ footer.project-footer .project-footer-nav {
 .ts-page .ts-bridge__text strong { font-size: 1rem; }
 .ts-page .ts-bridge__text strong::after { content: " \2192"; }
 @media (max-width: 560px) { .ts-page .ts-bridge img { width: 88px; height: 50px; } }
+
+/* TrialSupport: full-bleed looping video behind the Production System section */
+.ts-page .case-section--video {
+  position: relative;
+  isolation: isolate;
+  margin-top: clamp(58px, 5.8vw, 88px) !important;
+  padding-block: clamp(90px, 11vw, 170px) !important;
+  min-height: min(86vh, 760px);
+  display: flex;
+  align-items: center;
+}
+.ts-page .case-section--video .ts-bgvideo {
+  position: absolute;
+  inset: 0 auto 0 50%;
+  width: 100vw;
+  margin-left: -50vw;
+  z-index: -1;
+  overflow: hidden;
+  background: #0d0d0d;
+}
+.ts-page .case-section--video .ts-bgvideo video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ts-page .case-section--video .ts-bgvideo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(13,13,13,.9) 0%, rgba(13,13,13,.72) 55%, rgba(13,13,13,.55) 100%),
+    linear-gradient(180deg, #0d0d0d 0%, transparent 18%, transparent 82%, #0d0d0d 100%);
+}
+.ts-page .case-section--video .case-section-head { width: 100%; }
+.ts-page .case-section--video .case-body { color: #d6d6da; }
+@media (prefers-reduced-motion: reduce) { .ts-page .case-section--video .ts-bgvideo video { display: none; } .ts-page .case-section--video .ts-bgvideo { background: #0d0d0d url("assets/ts-production-bg-poster.jpg") center/cover; } }

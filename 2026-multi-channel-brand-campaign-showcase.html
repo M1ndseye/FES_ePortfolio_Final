@@ -35,7 +35,7 @@
       TrialSupport.us — Brand Transformation & Multi-Channel Campaign | 2026
     </title>
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="portfolio-projects.css?v=7" />
+    <link rel="stylesheet" href="portfolio-projects.css?v=8" />
 
     <style>
       :root {
@@ -672,20 +672,18 @@
           </figure>
         </section>
 
-        <section class="case-section">
-          <div class="case-section-head case-section-head--with-media">
-            <figure class="case-image">
-              <img
-                src="./assets/TS_Render_Jams_CC_Double_Screen_Higlighter.jpg"
-                alt="TrialSupport 3D and AI-generated campaign environment"
-                loading="lazy"
-              />
-              <figcaption>
-                Blender-built environments paired with AI-assisted character and
-                campaign imagery
-              </figcaption>
-            </figure>
-
+        <section class="case-section case-section--video">
+          <div class="ts-bgvideo" aria-hidden="true">
+            <video
+              muted
+              loop
+              playsinline
+              preload="none"
+              poster="./assets/ts-production-bg-poster.jpg"
+              data-src="./assets/ts-production-bg.mp4"
+            ></video>
+          </div>
+          <div class="case-section-head">
             <div>
               <p class="eyebrow">02 · Production System</p>
               <h2>
@@ -1039,5 +1037,20 @@
       });
     </script>
   <script src="morework.js?v=1" defer></script>
-  </body>
+      <script>
+      (function () {
+        var v = document.querySelector(".ts-bgvideo video");
+        if (!v || !("IntersectionObserver" in window)) return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        new IntersectionObserver(function (e) {
+          e.forEach(function (x) {
+            if (x.isIntersecting) {
+              if (!v.src) v.src = v.getAttribute("data-src");
+              var p = v.play(); if (p && p.catch) p.catch(function () {});
+            } else if (v.src) v.pause();
+          });
+        }, { rootMargin: "200px" }).observe(v);
+      })();
+    </script>
+</body>
 </html>
