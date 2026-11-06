@@ -154,10 +154,20 @@
         }
         if (name) dotted(name, 230, 170);
         dotted(animal, 1000, 160);
-        g.fillStyle = "#370638"; g.textAlign = "center";
-        g.font = '700 54px "Zilla Slab", Georgia, serif'; g.fillText("Colored by me!", W / 2, 1170);
-        g.font = '500 34px Roboto, Arial, sans-serif'; g.fillStyle = "#64545f"; g.fillText("Color yours free at m1ndseye.com/workbook", W / 2, 1230);
-        cv.toBlob(function (b) { b ? resolve(b) : reject(new Error("blob")); }, "image/png");
+        var qr = new Image();
+        function finish() {
+          g.textAlign = "left"; g.textBaseline = "alphabetic"; g.fillStyle = "#370638";
+          g.font = '700 58px "Zilla Slab", Georgia, serif'; g.fillText("Colored by me!", 80, 1180);
+          g.font = '500 36px Roboto, Arial, sans-serif'; g.fillStyle = "#64545f";
+          g.fillText("More printable fun at", 80, 1245);
+          g.font = '700 44px "Zilla Slab", Georgia, serif'; g.fillStyle = "#370638"; g.fillText("M1ndseye.com", 80, 1300);
+          if (qr.naturalWidth) {
+            g.fillStyle = "#fff"; g.beginPath(); (g.roundRect || g.rect).call(g, 800, 1110, 220, 220, 20); g.fill();
+            g.imageSmoothingEnabled = false; g.drawImage(qr, 810, 1120, 200, 200);
+          }
+          cv.toBlob(function (b) { b ? resolve(b) : reject(new Error("blob")); }, "image/png");
+        }
+        qr.onload = finish; qr.onerror = finish; qr.src = "color/qr.png";
       };
       img.onerror = function () { reject(new Error("img")); }; img.src = url;
     });
