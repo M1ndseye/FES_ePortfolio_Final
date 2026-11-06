@@ -150,8 +150,9 @@
       .b4 .dot { background: var(--plum); } .b5 .dot { background: var(--rose); } .b6 .dot { background: var(--teal); }
 
       /* Video */
-      .section-head--media { max-width: 860px; }
-      .section-head--media .video { margin: 6px 0 32px; }
+      .section-head--media { max-width: none; text-align: center; }
+      .section-head--media .video { width: 100%; margin: 6px auto 32px; }
+      .section-head--media h2 { max-width: 22em; margin-inline: auto; }
       .video { position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; background: var(--plum); box-shadow: 0 24px 60px rgba(55, 6, 56, 0.22); }
       .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
