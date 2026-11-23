@@ -342,3 +342,15 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .ds-pill { padding: 12px 20px; border-radius: 999px; font-weight: 600; background: rgba(244,242,251,.06); border: 1px solid rgba(244,242,251,.16); color: var(--text); }
 .ds-pill:nth-child(odd) { border-color: rgba(111,155,255,.5); } .ds-pill:nth-child(even) { border-color: rgba(255,157,66,.5); }
 @media (max-width: 860px) { .ds-card { grid-template-columns: 1fr; } .ds-card__find { margin-top: 0; gap: 8px; } .ds-pill { padding: 8px 14px; font-size: .88rem; } .ds-eye { top: auto; bottom: 0; width: 100%; height: 62%; opacity: .4; -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 45%); mask-image: linear-gradient(180deg, transparent 0%, #000 45%); } }
+
+/* ---------- case study ---------- */
+.cs__video { margin: 0 0 clamp(28px, 4vw, 48px); }
+.cs__video video { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: var(--radius); background: #000; border: 1px solid var(--line); }
+.cs__video figcaption { margin-top: 12px; color: var(--muted); font-size: .95rem; }
+.cs__days { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; }
+.cs__days li { padding: 18px 20px 4px 0; border-top: 2px solid var(--oi); }
+.cs__days b { display: block; font-size: 1.15rem; margin-bottom: 6px; }
+.cs__days span { color: var(--muted); }
+.cs__note { margin-top: clamp(24px, 3vw, 36px); }
+@media (max-width: 860px) { .cs__days { grid-template-columns: 1fr 1fr; gap: 8px 24px; } }
+@media (max-width: 520px) { .cs__days { grid-template-columns: 1fr; } }
