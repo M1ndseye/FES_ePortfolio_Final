@@ -354,3 +354,5 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .cs__note { margin-top: clamp(24px, 3vw, 36px); }
 @media (max-width: 860px) { .cs__days { grid-template-columns: 1fr 1fr; gap: 8px 24px; } }
 @media (max-width: 520px) { .cs__days { grid-template-columns: 1fr; } }
+.cs__days em { display: block; font-style: normal; color: var(--text); font-weight: 600; margin-bottom: 2px; }
+.cs__note b { color: var(--text); }
