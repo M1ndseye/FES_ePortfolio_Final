@@ -87,6 +87,8 @@ body.engine {
 
 /* ---------- sections ---------- */
 .eng-section { padding: clamp(64px, 10vw, 140px) var(--pad); }
+/* two sections in a row share one gap instead of stacking both paddings */
+.eng-section + .eng-section { padding-top: 0; }
 .eng-wrap { max-width: var(--max); margin: 0 auto; }
 .eng-section__head { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(24px, 6vw, 96px); align-items: end; margin-bottom: clamp(32px, 5vw, 64px); }
 @media (max-width: 860px) { .eng-section__head { grid-template-columns: 1fr; } }
