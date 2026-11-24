@@ -142,6 +142,14 @@ body.engine {
 .scene--right::before { background: linear-gradient(270deg, rgba(6,9,18,.92) 0%, rgba(6,9,18,.7) 46%, rgba(6,9,18,.35) 100%); }
 .scene--right .scene__inner { margin-left: auto; }
 .scene--dim::before { background: linear-gradient(90deg, rgba(6,9,18,.95) 0%, rgba(6,9,18,.9) 45%, rgba(6,9,18,.62) 100%); }
+/* corner layout: painted fade in the bottom-left, card-sized copy sitting in it */
+.scene--corner { align-items: flex-end; min-height: 100vh; min-height: 100svh; padding-bottom: clamp(56px, 7vw, 96px); }
+.scene--corner::before { background: url("assets/ME_Fade_Bk.png") left bottom / 100% 100% no-repeat; }
+.scene--corner .scene__copy { max-width: 460px; }
+.scene--corner .eng-h2 { font-size: clamp(1.8rem, 2.8vw, 2.5rem); line-height: 1.04; max-width: 16ch; }
+.scene--corner .eng-lede { margin-top: 10px; font-size: 1rem; line-height: 1.55; max-width: 38ch; color: rgba(244,242,251,.8); }
+.scene--corner .scene__caption { margin-top: 16px; font-size: .82rem; }
+@media (max-width: 760px) { .scene--corner { padding-bottom: 92px; } .scene--corner::before { background-size: 220% 100%; } }
 .scene__inner { width: 100%; max-width: var(--max); margin: 0 auto; }
 .scene__copy { max-width: 620px; }
 .scene__copy .eng-lede { margin-top: 20px; }
